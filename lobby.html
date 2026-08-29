@@ -91,6 +91,9 @@
       state.mode = 'games';
       render();
       resetSlideshowTimer();
+      const search = document.querySelector('#search');
+      search.placeholder = 'Search Games';
+      search.setAttribute('aria-label', 'Search Games');
     }
   </script>
   <script>
