@@ -1,0 +1,19 @@
+# Local desktop app and conversion tooling
+tools/
+packages/
+*.zip
+*.nupkg
+*.dll
+*.exe
+RyhzeApp.cs
+Ryhze Desktop.cmd
+Launch Ryhze.vbs
+launch-ryhze.ps1
+ryhze-local-app.ps1
+watch-library.ps1
+webview2-versions.json
+h264-check.mp4
+
+# Local media streams are too large for GitHub Pages.
+**/Stream/
+**/Streams/
