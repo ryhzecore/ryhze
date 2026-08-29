@@ -16,7 +16,7 @@
                                                             "type":  ".mp4"
                                                         }
                                                     ],
-                                        "synopsis":  "Universes collide and the Multiverse Saga begins its final chapter in Marvel Studios\u0027 Avengers: Doomsday. Beloved heroes from three distinct universes will be set on a deadly collision course and ultimately face an existential threat unlike anything they\u0027ve ever encountered. This epic film will lay the foundation for the future of the Marvel Cinematic Universe.",
+                                        "synopsis":  "Details coming soon.",
                                         "categories":  [
                                                            "Exclusives",
                                                            "Up \u0026 Coming",
@@ -67,7 +67,7 @@
                                                             "type":  ".mp4"
                                                         }
                                                     ],
-                                        "synopsis":  "Universes collide and the Multiverse Saga begins its final chapter in Marvel Studios\u0027 Avengers: Doomsday. Beloved heroes from three distinct universes will be set on a deadly collision course and ultimately face an existential threat unlike anything they\u0027ve ever encountered. This epic film will lay the foundation for the future of the Marvel Cinematic Universe.",
+                                        "synopsis":  "Details coming soon.",
                                         "categories":  [
                                                            "Exclusives",
                                                            "Up \u0026 Coming",
@@ -118,7 +118,7 @@
                                                             "type":  ".mp4"
                                                         }
                                                     ],
-                                        "synopsis":  "Universes collide and the Multiverse Saga begins its final chapter in Marvel Studios\u0027 Avengers: Doomsday. Beloved heroes from three distinct universes will be set on a deadly collision course and ultimately face an existential threat unlike anything they\u0027ve ever encountered. This epic film will lay the foundation for the future of the Marvel Cinematic Universe.",
+                                        "synopsis":  "Details coming soon.",
                                         "categories":  [
                                                            "Exclusives",
                                                            "Up \u0026 Coming",

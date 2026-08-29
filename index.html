@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Cache-Control" content="no-store" />
+  <script>if(new URLSearchParams(location.search).has('returning'))document.documentElement.classList.add('returning-lobby');</script>
   <title>Ryhze — films & games</title>
   <style>
     :root { --ink:#f8f9ff; --muted:#b8bdcf; --panel:rgba(18,22,39,.55); --line:rgba(255,255,255,.16); --violet:#5500FF; --cyan:#5500FF; }
@@ -31,10 +32,11 @@
     .games-only { display:none; } body.games .films-only { display:none; } body.games .games-only { display:block; } @keyframes slideAway { to { opacity:0; transform:translateX(-75px); } } @keyframes fadeIn { from { opacity:0; } to { opacity:1; } } @keyframes ambientDrift { from { transform:translate3d(-4%,-3%,0) scale(1.03); } to { transform:translate3d(5%,4%,0) scale(1.12); } }
     @media(max-width:700px){ .nav { gap:10px; height:68px; padding:0 12px; } .brand { width:80px; height:35px; margin:0; } .search-wrap { display:none; } .nav-spacer { flex:1; } .hero { min-height:570px; padding:70px 12px; } .description { font-size:15px; } .row { grid-auto-columns:145px; padding:36px 20px 34px; scroll-padding-inline:20px; } .card { min-height:220px; border-radius:20px; } .games-row { grid-auto-columns:270px; } .games-row .card { min-height:0; border-radius:20px; } .section { padding:18px 0; } .section-head { padding-inline:12px; } .footer { padding-inline:12px; } .avatar { display:none; } }
   </style>
+  <style>html.returning-lobby .lobby-fade{opacity:1;transition:none}</style>
 </head>
 <body>
   <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="frosted" primitiveUnits="objectBoundingBox"><feTurbulence type="fractalNoise" baseFrequency=".01 .08" numOctaves="2" seed="6" result="map"/><feGaussianBlur in="SourceGraphic" stdDeviation=".012" result="blur"/><feDisplacementMap in="blur" in2="map" scale="1.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
-  <nav class="nav"><div class="brand"><img src="assets/ryhze-wordmark.png" alt="Ryhze" /><span class="beta">Beta</span></div><div class="switcher"><button class="glass tab active" data-mode="films">Films</button><button class="glass tab" data-mode="games">Games</button></div><div class="nav-spacer"></div><div class="search-wrap"><label class="glass search">⌕ <input id="search" placeholder="Search Ryhze" autocomplete="off" /></label><div class="search-results" id="searchResults"></div></div><button class="glass icon-btn" id="profile" aria-label="Profile">☰</button><div class="avatar">R</div></nav>
+  <nav class="nav"><div class="brand"><img src="assets/ryhze-wordmark.png" alt="Ryhze" /><span class="beta">Beta</span></div><div class="switcher"><button class="glass tab active" data-mode="films">Films</button><button class="glass tab" data-mode="games">Games</button></div><div class="nav-spacer"></div><div class="search-wrap"><label class="glass search">⌕ <input id="search" placeholder="Search Films" aria-label="Search Films" autocomplete="off" /></label><div class="search-results" id="searchResults"></div></div><button class="glass icon-btn" id="profile" aria-label="Profile">☰</button><div class="avatar">R</div></nav>
   <audio id="menuMusic" src="assets/audio/menu-loop.mp3" loop preload="auto"></audio><div class="lobby-fade" id="lobbyFade"></div>
   <main>
     <section class="hero"><div class="hero-image"></div><div class="hero-copy" id="heroCopy"></div><div class="exclusive-dots" id="exclusiveDots" aria-label="Exclusive slides"></div></section>
@@ -68,6 +70,21 @@
     setInterval(()=>{const updatedScript=document.createElement('script');updatedScript.src=`library-data.js?v=${Date.now()}`;updatedScript.onload=()=>{if(JSON.stringify(window.RyhzeLibrary)!==librarySignature)location.reload();updatedScript.remove();};updatedScript.onerror=()=>updatedScript.remove();document.head.append(updatedScript);},3000);
     resetSlideshowTimer();
     render();
+  </script>
+  <script>
+    (()=>{
+      const input=document.querySelector('#search'), results=document.querySelector('#searchResults'), fade=document.querySelector('#lobbyFade'), key='ryhze-search-history';
+      const updateSearchTitle=()=>{const label=`Search ${document.body.classList.contains('games')?'Games':'Films'}`;input.placeholder=label;input.setAttribute('aria-label',label)};
+      const getRecent=()=>{try{return JSON.parse(localStorage.getItem(key)||'[]').slice(0,3)}catch{return[]}};
+      const saveRecent=result=>{const current=getRecent(),entry={title:result.dataset.title,meta:result.dataset.meta||'',synopsis:decodeURIComponent(result.dataset.synopsis||'')};localStorage.setItem(key,JSON.stringify([entry,...current.filter(item=>item.title!==entry.title)].slice(0,3)))};
+      const recentButton=item=>`<button class="search-result" data-title="${item.title}" data-meta="${item.meta||''}" data-synopsis="${encodeURIComponent(item.synopsis||'')}">${item.title}</button>`;
+      const showRecent=()=>{const recent=getRecent();results.innerHTML=recent.length?recent.map(recentButton).join(''):'<div class="search-empty">No recent searches</div>';results.classList.add('open')};
+      updateSearchTitle();
+      document.addEventListener('click',event=>{if(event.target.closest('.tab'))setTimeout(updateSearchTitle);const result=event.target.closest('.search-result');if(result)saveRecent(result)});
+      input.addEventListener('focus',()=>{if(!input.value.trim())showRecent()});
+      input.addEventListener('input',()=>{if(!input.value.trim())showRecent()});
+      if(document.documentElement.classList.contains('returning-lobby'))setTimeout(()=>{fade.classList.add('show');document.documentElement.classList.remove('returning-lobby');requestAnimationFrame(()=>requestAnimationFrame(()=>fade.classList.remove('show')))},100);
+    })();
   </script>
 </body>
 </html>
