@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta http-equiv="Cache-Control" content="no-store">
+  <title>Ryhze — Film</title>
+  <style>html,body,iframe{width:100%;height:100%;margin:0;border:0;background:#000}iframe{display:block}</style>
+</head>
+<body>
+  <iframe id="player" title="Ryhze Player" allow="fullscreen"></iframe>
+  <script>
+    const params = new URLSearchParams(location.search);
+    const title = params.get('title') || 'Film';
+    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'film';
+    document.title = `${title} — Ryhze`;
+    document.querySelector('#player').src = `../../player.html?${params.toString()}`;
+    if (location.protocol !== 'file:') history.replaceState(null, '', `./${slug}/`);
+  </script>
+</body>
+</html>

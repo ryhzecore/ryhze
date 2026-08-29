@@ -109,5 +109,40 @@
       }, 90);
     }
   </script>
+  <script>
+    document.addEventListener('click', event => {
+      const tab = event.target.closest('.tab');
+      if (!tab) return;
+      const destination = new URL(`menu/${tab.dataset.mode}/index.html`, location.href).href;
+      if (window.top !== window) window.top.location.href = destination;
+      else location.href = destination;
+    });
+
+    openFilm = function (item) {
+      if (document.querySelector('.thumbnail-transition')) return;
+      const source = item.getBoundingClientRect(), transition = document.createElement('div');
+      transition.className = 'thumbnail-transition';
+      transition.style.cssText = `left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;
+      document.body.append(transition);
+      void transition.offsetWidth;
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        transition.style.transition = '';
+        transition.style.left = '0'; transition.style.top = '0';
+        transition.style.width = '100vw'; transition.style.height = '100vh'; transition.style.borderRadius = '0';
+      }));
+      setTimeout(() => transition.classList.add('to-black'), 1300);
+      setTimeout(() => {
+        const query = new URLSearchParams({
+          title: item.dataset.title,
+          synopsis: decodeURIComponent(item.dataset.synopsis || ''),
+          image: item.dataset.image || '',
+          streams: item.dataset.streams || ''
+        });
+        const destination = new URL(`menu/films/player.html?${query}`, location.href).href;
+        if (window.top !== window) window.top.location.href = destination;
+        else location.href = destination;
+      }, 1800);
+    };
+  </script>
 </body>
 </html>
