@@ -4,6 +4,9 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta http-equiv="Cache-Control" content="no-store" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
   <script>if(new URLSearchParams(location.search).has('returning'))document.documentElement.classList.add('returning-lobby');</script>
   <title>Ryhze — films & games</title>
   <style>
@@ -32,7 +35,7 @@
     .games-only { display:none; } body.games .films-only { display:none; } body.games .games-only { display:block; } @keyframes slideAway { to { opacity:0; transform:translateX(-75px); } } @keyframes fadeIn { from { opacity:0; } to { opacity:1; } } @keyframes ambientDrift { from { transform:translate3d(-4%,-3%,0) scale(1.03); } to { transform:translate3d(5%,4%,0) scale(1.12); } }
     @media(max-width:700px){ .nav { gap:10px; height:68px; padding:0 12px; } .brand { width:80px; height:35px; margin:0; } .search-wrap { display:none; } .nav-spacer { flex:1; } .hero { min-height:570px; padding:70px 12px; } .description { font-size:15px; } .row { grid-auto-columns:145px; padding:36px 20px 34px; scroll-padding-inline:20px; } .card { min-height:220px; border-radius:20px; } .games-row { grid-auto-columns:270px; } .games-row .card { min-height:0; border-radius:20px; } .section { padding:18px 0; } .section-head { padding-inline:12px; } .footer { padding-inline:12px; } .avatar { display:none; } }
   </style>
-  <style>html.returning-lobby .lobby-fade{opacity:1;transition:none}</style>
+  <style>html.returning-lobby .lobby-fade{opacity:1;transition:none}body,button,input,textarea,select{font-family:'Space Grotesk',system-ui,sans-serif!important}</style>
 </head>
 <body>
   <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="frosted" primitiveUnits="objectBoundingBox"><feTurbulence type="fractalNoise" baseFrequency=".01 .08" numOctaves="2" seed="6" result="map"/><feGaussianBlur in="SourceGraphic" stdDeviation=".012" result="blur"/><feDisplacementMap in="blur" in2="map" scale="1.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
