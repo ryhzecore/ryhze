@@ -11,17 +11,20 @@
                                                                 "Films/Avengers%20Doomsday/Images/images2.png"
                                                             ],
                                         "streams":  [
-                                                        {
-                                                            "url":  "Films/Avengers%20Doomsday/Streams/Steams1.mp4",
-                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Steams1.mp4",
-                                                            "type":  ".mp4"
-                                                        }
+
                                                     ],
                                         "synopsis":  "Details coming soon.",
                                         "release":  "Coming soon",
                                         "mediaType":  "Series",
                                         "seasons":  [
-
+                                                        {
+                                                            "title":  "Season 1",
+                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                        },
+                                                        {
+                                                            "title":  "Season 2",
+                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                        }
                                                     ],
                                         "categories":  [
                                                            "Exclusives",
@@ -73,17 +76,20 @@
                                                                 "Films/Avengers%20Doomsday/Images/images2.png"
                                                             ],
                                         "streams":  [
-                                                        {
-                                                            "url":  "Films/Avengers%20Doomsday/Streams/Steams1.mp4",
-                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Steams1.mp4",
-                                                            "type":  ".mp4"
-                                                        }
+
                                                     ],
                                         "synopsis":  "Details coming soon.",
                                         "release":  "Coming soon",
                                         "mediaType":  "Series",
                                         "seasons":  [
-
+                                                        {
+                                                            "title":  "Season 1",
+                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                        },
+                                                        {
+                                                            "title":  "Season 2",
+                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                        }
                                                     ],
                                         "categories":  [
                                                            "Exclusives",
@@ -135,17 +141,20 @@
                                                                 "Films/Avengers%20Doomsday/Images/images2.png"
                                                             ],
                                         "streams":  [
-                                                        {
-                                                            "url":  "Films/Avengers%20Doomsday/Streams/Steams1.mp4",
-                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Steams1.mp4",
-                                                            "type":  ".mp4"
-                                                        }
+
                                                     ],
                                         "synopsis":  "Details coming soon.",
                                         "release":  "Coming soon",
                                         "mediaType":  "Series",
                                         "seasons":  [
-
+                                                        {
+                                                            "title":  "Season 1",
+                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                        },
+                                                        {
+                                                            "title":  "Season 2",
+                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                        }
                                                     ],
                                         "categories":  [
                                                            "Exclusives",

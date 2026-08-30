@@ -64,9 +64,23 @@ function Get-RyhzeTitles([string]$LibraryType) {
         $seasons = @()
         if ($mediaType -eq 'Series' -and $streamPath) {
           $seasons = @(Get-ChildItem -LiteralPath $streamPath -Directory | Sort-Object Name | ForEach-Object {
+            $seasonFolder = $_
+            $episodeFolders = @(Get-ChildItem -LiteralPath $seasonFolder.FullName -Directory | Sort-Object Name)
             [PSCustomObject]@{
-              title = $_.Name
-              episodes = @(Get-StreamItems (Get-ChildItem -LiteralPath $_.FullName -File))
+              title = $seasonFolder.Name
+              episodes = if ($episodeFolders.Count) {
+                @($episodeFolders | ForEach-Object {
+                  [PSCustomObject]@{
+                    title = $_.Name
+                    streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $_.FullName -File -Recurse))
+                  }
+                })
+              } else {
+                @([PSCustomObject]@{
+                  title = 'Episode 1'
+                  streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $seasonFolder.FullName -File -Recurse))
+                })
+              }
             }
           })
         }
