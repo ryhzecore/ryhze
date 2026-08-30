@@ -10,6 +10,7 @@
 <body>
   <iframe id="menu" title="Ryhze Menu" allow="fullscreen"></iframe>
   <script>
+    if (sessionStorage.getItem('ryhze-access') !== 'granted') location.replace('../index.html');
     const mode = new URLSearchParams(location.search).get('mode') === 'games' ? 'games' : 'films';
     document.querySelector('#menu').src = `../lobby.html?mode=${mode}`;
     if (location.protocol !== 'file:') history.replaceState(null, '', './');
