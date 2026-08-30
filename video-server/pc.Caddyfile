@@ -1,0 +1,9 @@
+# Local Caddy on the Windows PC. It only serves the media library over WireGuard.
+:8080 {
+  root * C:/Test123
+  @media path /Films/* /Games/*
+  file_server @media
+
+  @health path /health
+  respond @health "ok" 200
+}

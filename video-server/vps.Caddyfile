@@ -1,0 +1,24 @@
+# Public relay on the VPS. WireGuard exposes the PC as 10.8.0.2.
+video.ryhze.com {
+  @health path /health
+  handle @health {
+    header Access-Control-Allow-Origin "https://ryhzecore.github.io"
+    header Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+    respond "ok" 200
+  }
+
+  @preflight method OPTIONS
+  handle @preflight {
+    header Access-Control-Allow-Origin "https://ryhzecore.github.io"
+    header Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+    header Access-Control-Allow-Headers "Range, Content-Type"
+    respond "" 204
+  }
+
+  header {
+    Access-Control-Allow-Origin "https://ryhzecore.github.io"
+    Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+    Access-Control-Expose-Headers "Accept-Ranges, Content-Length, Content-Range"
+  }
+  reverse_proxy 10.8.0.2:8080
+}
