@@ -21,8 +21,12 @@
     <main class="hero"><div class="hero-inner"><p class="eyebrow">Next-gen multimedia platform</p><h1>Entertainment Has<br>No Limits<sup>©</sup></h1><p class="copy">One next-generation multimedia platform for the films, games, and worlds you love.</p><div class="actions"><a class="action primary" href="menu/index.html">Try Ryhze</a><a class="action secondary" href="menu/index.html?mode=games">Explore games</a></div><p class="note">A Ryhze experience</p></div></main>
     <footer class="footer"><span>© 2026 Ryhze. All rights reserved.</span><span><a href="privacy.html">Privacy</a> · <a href="contact.html">Contact</a></span></footer>
   </div>
-  <script>
+  <!-- <script>
     (()=>{const gate=document.querySelector('#accessGate'),form=document.querySelector('#accessForm'),error=document.querySelector('#accessError'),accounts=new Map([['Leo','AndruDummy0199'],['Yassine','AndruDummy0199']]);const grant=()=>{sessionStorage.setItem('ryhze-access','granted');gate.classList.add('hidden')};if(sessionStorage.getItem('ryhze-access')==='granted')grant();form.addEventListener('submit',event=>{event.preventDefault();const user=document.querySelector('#accessUser').value.trim();const password=document.querySelector('#accessPassword').value;if(accounts.get(user)===password){error.textContent='';grant()}else error.textContent='Incorrect user ID or password.'});document.querySelector('.join').addEventListener('click',()=>{sessionStorage.removeItem('ryhze-access');gate.classList.remove('hidden');document.querySelector('#accessUser').focus()})})();
+  </script> -->
+  <script type="text/plain">
+    (()=>{const gate=document.querySelector('#accessGate'),form=document.querySelector('#accessForm'),error=document.querySelector('#accessError'),userInput=document.querySelector('#accessUser'),passwordInput=document.querySelector('#accessPassword'),accounts=new Map([['Leo','AndruDummy0199'],['Yassine','AndruDummy0199']]),accessKey='ryhze-access',userKey='ryhze-user';const grant=user=>{localStorage.setItem(accessKey,'granted');localStorage.setItem(userKey,user);gate.classList.add('hidden')};const savedUser=localStorage.getItem(userKey);if(localStorage.getItem(accessKey)==='granted'&&accounts.has(savedUser))grant(savedUser);form.addEventListener('submit',event=>{event.preventDefault();const user=userInput.value.trim(),password=passwordInput.value;if(accounts.get(user)===password){error.textContent='';grant(user)}else error.textContent='Incorrect user ID or password.'});document.querySelector('.join').addEventListener('click',()=>{localStorage.removeItem(accessKey);localStorage.removeItem(userKey);gate.classList.remove('hidden');userInput.focus()})})();
   </script>
+  <script src="auth.js"></script>
 </body>
 </html>
