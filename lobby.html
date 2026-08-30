@@ -132,7 +132,7 @@
         transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border:${getComputedStyle(item).border};border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;
         activeSource=item;activeLabel=label;activeTransition=transition;frameReady=false;item.classList.add('opening-player');item.append(label);document.body.append(transition);
         const query=new URLSearchParams({embedded:'1',title:item.dataset.title,synopsis:decodeURIComponent(item.dataset.synopsis||''),image:item.dataset.image||'',streams:item.dataset.streams||'',seasons:item.dataset.seasons||'[]',type:item.dataset.type||'Movie'});
-        frame.src=`player.html?${query}`;
+        frame.src=`player.html?${query}&v=${Date.now()}`;
         void transition.offsetWidth;
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
           label.classList.add('show');transition.style.transition='';
@@ -151,7 +151,7 @@
         transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border:2px solid rgba(175,145,255,.58);border-radius:0;background-image:${getComputedStyle(document.querySelector('.hero-image')).backgroundImage};transition:none`;
         activeSource=document.querySelector('.hero-copy');activeLabel=label;activeTransition=transition;frameReady=false;activeSource.classList.add('opening-player');transition.append(label);document.body.append(transition);
         const query=new URLSearchParams({embedded:'1',title:item.title,synopsis:item.synopsis||'',image:item.image||'',streams:JSON.stringify(item.streams||[]),seasons:JSON.stringify(item.seasons||[]),type:item.mediaType||'Movie'});
-        frame.src=`player.html?${query}`;
+        frame.src=`player.html?${query}&v=${Date.now()}`;
         void transition.offsetWidth;
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
           label.classList.add('show');
