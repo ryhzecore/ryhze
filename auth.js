@@ -16,8 +16,8 @@
   const setAccess = user => {
     localStorage.setItem(accessKey, 'granted');
     localStorage.setItem(userKey, user);
-    document.cookie = `${cookieKey}; Max-Age=31536000; Path=/; SameSite=Lax`;
-    document.cookie = `${cookieUserKey}${encodeURIComponent(user)}; Max-Age=31536000; Path=/; SameSite=Lax`;
+    document.cookie = `${cookieKey}; Max-Age=31536000; Path=/; Domain=.ryhze.com; SameSite=Lax`;
+    document.cookie = `${cookieUserKey}${encodeURIComponent(user)}; Max-Age=31536000; Path=/; Domain=.ryhze.com; SameSite=Lax`;
   };
 
   const grant = user => {
@@ -46,8 +46,8 @@
   document.querySelector('.join').addEventListener('click', () => {
     localStorage.removeItem(accessKey);
     localStorage.removeItem(userKey);
-    document.cookie = `${cookieKey}; Max-Age=0; Path=/; SameSite=Lax`;
-    document.cookie = `${cookieUserKey}; Max-Age=0; Path=/; SameSite=Lax`;
+    document.cookie = `${cookieKey}; Max-Age=0; Path=/; Domain=.ryhze.com; SameSite=Lax`;
+    document.cookie = `${cookieUserKey}; Max-Age=0; Path=/; Domain=.ryhze.com; SameSite=Lax`;
     gate.classList.remove('hidden');
     userInput.focus();
   });
