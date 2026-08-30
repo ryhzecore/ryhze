@@ -112,7 +112,7 @@ function Group-RyhzeTitles($Titles) {
       $groups[$category].Add($title) | Out-Null
     }
   }
-  @($groups.GetEnumerator() | ForEach-Object { [PSCustomObject]@{ title = $_.Key; items = @($_.Value) } })
+  @($groups.GetEnumerator() | ForEach-Object { [PSCustomObject]@{ title = $_.Key; items = $_.Value.ToArray() } })
 }
 
 $library = [PSCustomObject]@{
