@@ -1,4 +1,5 @@
 Synopsis: Details coming soon.
+Type: Movie
 Release: Coming soon
 Categories: Exclusives, Up & Coming
 Search Tags: Dune, Part Two, Arrakis

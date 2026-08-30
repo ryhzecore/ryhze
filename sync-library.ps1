@@ -74,6 +74,7 @@ function Get-RyhzeTitles([string]$LibraryType) {
           streams = @($streamFiles)
           synopsis = Get-NoteValue $notes 'Synopsis'
           release = Get-NoteValue $notes 'Release'
+          mediaType = if ((Get-NoteValue $notes 'Type') -eq 'Series') { 'Series' } else { 'Movie' }
           categories = @($categories)
           searchTags = @($searchTags)
         }
