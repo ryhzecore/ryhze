@@ -20,6 +20,18 @@ function Get-RelativeUrl([string]$FilePath) {
   return (($relativePath -split '[\\/]') | ForEach-Object { [uri]::EscapeDataString($_) }) -join '/'
 }
 
+function Get-StreamItems([System.IO.FileInfo[]]$Files) {
+  @($Files | Where-Object { $streamExtensions -contains $_.Extension.ToLowerInvariant() } |
+    Sort-Object Name | ForEach-Object {
+      $localUrl = Get-RelativeUrl $_.FullName
+      [PSCustomObject]@{
+        url = $localUrl
+        publicUrl = "$VideoBaseUrl/$localUrl"
+        type = $_.Extension.ToLowerInvariant()
+      }
+    })
+}
+
 function Get-RyhzeTitles([string]$LibraryType) {
   $libraryPath = Join-Path $Root $LibraryType
   if (-not (Test-Path -LiteralPath $libraryPath)) { return @() }
@@ -45,26 +57,19 @@ function Get-RyhzeTitles([string]$LibraryType) {
           Join-Path $titleFolder.FullName 'Stream'
           Join-Path $titleFolder.FullName 'Streams'
         ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
-        $streamFiles = if ($streamPath) {
-          Get-ChildItem -LiteralPath $streamPath -File |
-            Where-Object { $streamExtensions -contains $_.Extension.ToLowerInvariant() } |
-            Sort-Object @{ Expression = {
-              switch ($_.Extension.ToLowerInvariant()) {
-                '.mp4' { 1 }; '.webm' { 2 }; '.ogv' { 3 }; '.ogg' { 4 }; '.m4v' { 5 }
-                '.mkv' { 6 }; '.mp3' { 7 }; '.m4a' { 8 }; '.wav' { 9 }; default { 10 }
-              }
-            } }, Name |
-            ForEach-Object {
-              $localUrl = Get-RelativeUrl $_.FullName
-              [PSCustomObject]@{
-                url = $localUrl
-                publicUrl = "$VideoBaseUrl/$localUrl"
-                type = $_.Extension.ToLowerInvariant()
-              }
-            }
-        } else { @() }
         $notesPath = Join-Path $titleFolder.FullName 'notes.txt'
         $notes = if (Test-Path -LiteralPath $notesPath) { Get-Content -LiteralPath $notesPath } else { @() }
+        $mediaType = if ((Get-NoteValue $notes 'Type') -eq 'Series') { 'Series' } else { 'Movie' }
+        $streamFiles = if ($streamPath) { Get-StreamItems (Get-ChildItem -LiteralPath $streamPath -File) } else { @() }
+        $seasons = @()
+        if ($mediaType -eq 'Series' -and $streamPath) {
+          $seasons = @(Get-ChildItem -LiteralPath $streamPath -Directory | Sort-Object Name | ForEach-Object {
+            [PSCustomObject]@{
+              title = $_.Name
+              episodes = @(Get-StreamItems (Get-ChildItem -LiteralPath $_.FullName -File))
+            }
+          })
+        }
         $categories = (Get-NoteValue $notes 'Categories') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
         $searchTags = (Get-NoteValue $notes 'Search Tags') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
         [PSCustomObject]@{
@@ -74,7 +79,8 @@ function Get-RyhzeTitles([string]$LibraryType) {
           streams = @($streamFiles)
           synopsis = Get-NoteValue $notes 'Synopsis'
           release = Get-NoteValue $notes 'Release'
-          mediaType = if ((Get-NoteValue $notes 'Type') -eq 'Series') { 'Series' } else { 'Movie' }
+          mediaType = $mediaType
+          seasons = @($seasons)
           categories = @($categories)
           searchTags = @($searchTags)
         }
