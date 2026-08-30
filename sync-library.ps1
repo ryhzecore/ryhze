@@ -69,21 +69,18 @@ function Get-RyhzeTitles([string]$LibraryType) {
             $episodeFolders = @(Get-ChildItem -LiteralPath $seasonFolder.FullName -Directory | Sort-Object Name)
             if ($episodeFolders.Count) {
               foreach ($episodeFolder in $episodeFolders) {
-                $episodeItems.Add([PSCustomObject]@{
-                  title = $episodeFolder.Name
-                  streams = [object[]](Get-StreamItems (Get-ChildItem -LiteralPath $episodeFolder.FullName -File -Recurse))
-                })
+                $episodeObject = [PSCustomObject]@{ title = $episodeFolder.Name; streams = $null }
+                $episodeObject.streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $episodeFolder.FullName -File -Recurse))
+                $episodeItems.Add($episodeObject) | Out-Null
               }
             } else {
-              $episodeItems.Add([PSCustomObject]@{
-                title = 'Episode 1'
-                streams = [object[]](Get-StreamItems (Get-ChildItem -LiteralPath $seasonFolder.FullName -File -Recurse))
-              })
+              $episodeObject = [PSCustomObject]@{ title = 'Episode 1'; streams = $null }
+              $episodeObject.streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $seasonFolder.FullName -File -Recurse))
+              $episodeItems.Add($episodeObject) | Out-Null
             }
-            $seasonItems.Add([PSCustomObject]@{
-              title = $seasonFolder.Name
-              episodes = [object[]]$episodeItems.ToArray()
-            })
+            $seasonObject = [PSCustomObject]@{ title = $seasonFolder.Name; episodes = $null }
+            $seasonObject.episodes = @($episodeItems.ToArray())
+            $seasonItems.Add($seasonObject) | Out-Null
           }
           $seasons = @($seasonItems)
         }
