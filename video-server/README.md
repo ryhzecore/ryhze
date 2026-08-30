@@ -1,23 +1,22 @@
 # Ryhze video hosting
 
-The public site is hosted on GitHub Pages. The direct-home option uses Caddy on
-the Windows PC and your router forwards HTTPS to that PC. `video.ryhze.com`
-points to your current public IPv4 address. This avoids a VPS, but it does mean
-your public IP is discoverable through DNS and the PC/router must stay online.
+The public site is hosted on GitHub Pages. The Cloudflare Tunnel option uses
+Caddy on the Windows PC and cloudflared publishes it at `video.ryhze.com`.
+The router does not need inbound port forwarding; the PC only needs outbound
+connectivity to Cloudflare.
 
 The earlier tunnel files (`vps.Caddyfile` and `pc.Caddyfile`) remain available
 if you later decide to return to the private-IP design.
 
 ## Pieces
 
-- PC: Caddy using `direct.Caddyfile`.
-- Router: reserve the PC LAN address, then forward TCP 443 → that address's
-  TCP 443. Forward TCP 80 as well if you want Caddy's HTTP→HTTPS redirect.
-- DNS: an `A` record `video.ryhze.com` pointing to the home public IPv4 address.
-- If the public IP changes, use a DNS provider's DDNS updater or change the A
-  record; a hostname alone cannot keep a changing address up to date.
+- PC: Caddy using `local.Caddyfile`, listening on `http://127.0.0.1:80`.
+- PC: cloudflared using `C:\Users\crnjl\.cloudflared\config.yml`.
+- DNS: a Cloudflare-managed CNAME for `video.ryhze.com` created with
+  `cloudflared tunnel route dns`.
+- Router: no inbound 80/443 forwarding is required.
 
-Caddy automatically obtains and renews HTTPS certificates after DNS resolves.
+Caddy serves HTTP only on the local side; Cloudflare terminates public HTTPS.
 Its file server supports HTTP range requests, so seeking in the browser video
 player works normally.
 

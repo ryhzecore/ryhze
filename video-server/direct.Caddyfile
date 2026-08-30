@@ -1,6 +1,6 @@
 # Direct home-hosting configuration. Run Caddy on the Windows PC and forward
 # TCP 443 (and optionally TCP 80) from the router to this PC's LAN address.
-video.ryhze.com {
+video.ryhze.com:9080 {
   root * C:/Test123
 
   @health path /health
