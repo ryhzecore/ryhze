@@ -71,18 +71,18 @@ function Get-RyhzeTitles([string]$LibraryType) {
               foreach ($episodeFolder in $episodeFolders) {
                 $episodeItems.Add([PSCustomObject]@{
                   title = $episodeFolder.Name
-                  streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $episodeFolder.FullName -File -Recurse))
+                  streams = [object[]](Get-StreamItems (Get-ChildItem -LiteralPath $episodeFolder.FullName -File -Recurse))
                 })
               }
             } else {
               $episodeItems.Add([PSCustomObject]@{
                 title = 'Episode 1'
-                streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $seasonFolder.FullName -File -Recurse))
+                streams = [object[]](Get-StreamItems (Get-ChildItem -LiteralPath $seasonFolder.FullName -File -Recurse))
               })
             }
             $seasonItems.Add([PSCustomObject]@{
               title = $seasonFolder.Name
-              episodes = @($episodeItems)
+              episodes = [object[]]$episodeItems.ToArray()
             })
           }
           $seasons = @($seasonItems)
