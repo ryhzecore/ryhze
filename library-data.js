@@ -156,7 +156,7 @@
 
                                                     ],
                                         "synopsis":  "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clydeâ€“style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media cultureâ€”relying entirely on mutual trust to survive.",
-                                        "release":  "",
+                                        "release":  "Coming soon",
                                         "categories":  [
                                                            "Exclusives",
                                                            "Up \u0026 Coming"
@@ -193,7 +193,7 @@
 
                                                     ],
                                         "synopsis":  "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clydeâ€“style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media cultureâ€”relying entirely on mutual trust to survive.",
-                                        "release":  "",
+                                        "release":  "Coming soon",
                                         "categories":  [
                                                            "Exclusives",
                                                            "Up \u0026 Coming"
