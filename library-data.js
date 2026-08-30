@@ -19,11 +19,11 @@
                                         "seasons":  [
                                                         {
                                                             "title":  "Season 1",
-                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                            "episodes":  ""
                                                         },
                                                         {
                                                             "title":  "Season 2",
-                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                            "episodes":  ""
                                                         }
                                                     ],
                                         "categories":  [
@@ -84,11 +84,11 @@
                                         "seasons":  [
                                                         {
                                                             "title":  "Season 1",
-                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                            "episodes":  ""
                                                         },
                                                         {
                                                             "title":  "Season 2",
-                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                            "episodes":  ""
                                                         }
                                                     ],
                                         "categories":  [
@@ -149,11 +149,11 @@
                                         "seasons":  [
                                                         {
                                                             "title":  "Season 1",
-                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                            "episodes":  ""
                                                         },
                                                         {
                                                             "title":  "Season 2",
-                                                            "episodes":  "@{title=Episode 1; streams=System.Object[]}"
+                                                            "episodes":  ""
                                                         }
                                                     ],
                                         "categories":  [

@@ -63,27 +63,29 @@ function Get-RyhzeTitles([string]$LibraryType) {
         $streamFiles = if ($streamPath) { Get-StreamItems (Get-ChildItem -LiteralPath $streamPath -File) } else { @() }
         $seasons = @()
         if ($mediaType -eq 'Series' -and $streamPath) {
-          $seasons = @(Get-ChildItem -LiteralPath $streamPath -Directory | Sort-Object Name | ForEach-Object {
-            $seasonFolder = $_
+          $seasonItems = [System.Collections.Generic.List[object]]::new()
+          foreach ($seasonFolder in (Get-ChildItem -LiteralPath $streamPath -Directory | Sort-Object Name)) {
+            $episodeItems = [System.Collections.Generic.List[object]]::new()
             $episodeFolders = @(Get-ChildItem -LiteralPath $seasonFolder.FullName -Directory | Sort-Object Name)
-            $episodes = if ($episodeFolders.Count) {
-              @($episodeFolders | ForEach-Object {
-                [PSCustomObject]@{
-                  title = $_.Name
-                  streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $_.FullName -File -Recurse))
-                }
-              })
+            if ($episodeFolders.Count) {
+              foreach ($episodeFolder in $episodeFolders) {
+                $episodeItems.Add([PSCustomObject]@{
+                  title = $episodeFolder.Name
+                  streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $episodeFolder.FullName -File -Recurse))
+                })
+              }
             } else {
-              @([PSCustomObject]@{
+              $episodeItems.Add([PSCustomObject]@{
                 title = 'Episode 1'
                 streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $seasonFolder.FullName -File -Recurse))
               })
             }
-            [PSCustomObject]@{
+            $seasonItems.Add([PSCustomObject]@{
               title = $seasonFolder.Name
-              episodes = $episodes
-            }
-          })
+              episodes = @($episodeItems)
+            })
+          }
+          $seasons = @($seasonItems)
         }
         $categories = (Get-NoteValue $notes 'Categories') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
         $searchTags = (Get-NoteValue $notes 'Search Tags') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
