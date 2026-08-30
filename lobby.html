@@ -35,7 +35,7 @@
     .games-only { display:none; } body.games .films-only { display:none; } body.games .games-only { display:block; } @keyframes slideAway { to { opacity:0; transform:translateX(-75px); } } @keyframes fadeIn { from { opacity:0; } to { opacity:1; } } @keyframes ambientDrift { from { transform:translate3d(-4%,-3%,0) scale(1.03); } to { transform:translate3d(5%,4%,0) scale(1.12); } }
     @media(max-width:700px){ .nav { gap:10px; height:68px; padding:0 12px; } .brand { width:80px; height:35px; margin:0; } .search-wrap { display:none; } .nav-spacer { flex:1; } .hero { min-height:570px; padding:70px 12px; } .description { font-size:15px; } .row { grid-auto-columns:145px; padding:36px 20px 34px; scroll-padding-inline:20px; } .card { min-height:220px; border-radius:20px; } .games-row { grid-auto-columns:270px; } .games-row .card { min-height:0; border-radius:20px; } .section { padding:18px 0; } .section-head { padding-inline:12px; } .footer { padding-inline:12px; } .avatar { display:none; } }
   </style>
-  <style>html.returning-lobby .lobby-fade{opacity:1;transition:none}body,button,input,textarea,select{font-family:'Space Grotesk',system-ui,sans-serif!important}</style>
+  <style>html.returning-lobby .lobby-fade{opacity:1;transition:none}body,button,input,textarea,select{font-family:'Space Grotesk',system-ui,sans-serif!important}.menu-player{position:fixed;z-index:180;left:50%;top:50%;width:min(1120px,88vw);height:min(700px,76vh);transform:translate(-50%,-50%);overflow:hidden;border:1px solid rgba(201,181,255,.42);border-radius:28px;background:#080510;box-shadow:0 34px 90px rgba(0,0,0,.62);visibility:hidden;opacity:0;pointer-events:none;transition:opacity .28s ease}.menu-player.open{visibility:visible;opacity:1;pointer-events:auto}.menu-player iframe{display:block;width:100%;height:100%;border:0;background:#080510}.menu-player-transition{position:fixed;z-index:181;pointer-events:none;overflow:hidden;background:#080510 center/cover no-repeat;box-shadow:0 30px 76px rgba(0,0,0,.56);transition:left .9s cubic-bezier(.18,.82,.2,1),top .9s cubic-bezier(.18,.82,.2,1),width .9s cubic-bezier(.18,.82,.2,1),height .9s cubic-bezier(.18,.82,.2,1),border-radius .9s cubic-bezier(.18,.82,.2,1)}@media(max-width:700px){.menu-player{width:94vw;height:66vh;border-radius:22px}}</style>
 </head>
 <body>
   <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="frosted" primitiveUnits="objectBoundingBox"><feTurbulence type="fractalNoise" baseFrequency=".01 .08" numOctaves="2" seed="6" result="map"/><feGaussianBlur in="SourceGraphic" stdDeviation=".012" result="blur"/><feDisplacementMap in="blur" in2="map" scale="1.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
@@ -110,39 +110,30 @@
     }
   </script>
   <script>
-    document.addEventListener('click', event => {
-      const tab = event.target.closest('.tab');
-      if (!tab) return;
-      const destination = new URL(`menu/${tab.dataset.mode}/index.html`, location.href).href;
-      if (window.top !== window) window.top.location.href = destination;
-      else location.href = destination;
-    });
-
-    openFilm = function (item) {
-      if (document.querySelector('.thumbnail-transition')) return;
-      const source = item.getBoundingClientRect(), transition = document.createElement('div');
-      transition.className = 'thumbnail-transition';
-      transition.style.cssText = `left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;
-      document.body.append(transition);
-      void transition.offsetWidth;
-      requestAnimationFrame(() => requestAnimationFrame(() => {
-        transition.style.transition = '';
-        transition.style.left = '0'; transition.style.top = '0';
-        transition.style.width = '100vw'; transition.style.height = '100vh'; transition.style.borderRadius = '0';
-      }));
-      setTimeout(() => transition.classList.add('to-black'), 1300);
-      setTimeout(() => {
-        const query = new URLSearchParams({
-          title: item.dataset.title,
-          synopsis: decodeURIComponent(item.dataset.synopsis || ''),
-          image: item.dataset.image || '',
-          streams: item.dataset.streams || ''
-        });
-        const destination = new URL(`menu/films/player.html?${query}`, location.href).href;
-        if (window.top !== window) window.top.location.href = destination;
-        else location.href = destination;
-      }, 1800);
-    };
+    (() => {
+      document.body.insertAdjacentHTML('beforeend','<section class="menu-player" id="menuPlayer" aria-label="Ryhze player"><iframe id="menuPlayerFrame" title="Ryhze player" allow="fullscreen"></iframe></section>');
+      const panel=document.querySelector('#menuPlayer'),frame=document.querySelector('#menuPlayerFrame');
+      let opening=false;
+      const closePlayer=()=>{panel.classList.remove('open');setTimeout(()=>{if(!panel.classList.contains('open'))frame.src='about:blank'},280)};
+      addEventListener('message',event=>{if(event.data?.type==='ryhze-close-player')closePlayer()});
+      openFilm=function(item){
+        if(opening||document.querySelector('.menu-player-transition'))return;
+        opening=true;
+        const source=item.getBoundingClientRect(),target=panel.getBoundingClientRect(),transition=document.createElement('div');
+        transition.className='menu-player-transition';
+        transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;
+        document.body.append(transition);
+        const query=new URLSearchParams({embedded:'1',title:item.dataset.title,synopsis:decodeURIComponent(item.dataset.synopsis||''),image:item.dataset.image||'',streams:item.dataset.streams||''});
+        frame.src=`player.html?${query}`;
+        void transition.offsetWidth;
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          transition.style.transition='';
+          transition.style.left=`${target.left}px`;transition.style.top=`${target.top}px`;
+          transition.style.width=`${target.width}px`;transition.style.height=`${target.height}px`;transition.style.borderRadius=getComputedStyle(panel).borderRadius;
+        }));
+        setTimeout(()=>{transition.remove();panel.classList.add('open');opening=false},920);
+      };
+    })();
   </script>
 </body>
 </html>

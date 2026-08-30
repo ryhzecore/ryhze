@@ -8,25 +8,6 @@
   <style>html,body,iframe{width:100%;height:100%;margin:0;border:0;background:#000}iframe{display:block}</style>
 </head>
 <body>
-  <iframe id="player" title="Ryhze Player" allow="fullscreen"></iframe>
-  <script src="../../library-data.js"></script>
-  <script>
-    const params = new URLSearchParams(location.search);
-    const slugify = value => String(value || '').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'');
-    const requestedTitle = params.get('title') || 'Film';
-    const titles = (window.RyhzeLibrary?.films || []).flatMap(category => category.items || []);
-    const item = titles.find(candidate => slugify(candidate.title) === slugify(requestedTitle));
-    if (item) {
-      params.set('title', item.title);
-      params.set('synopsis', item.synopsis || '');
-      params.set('image', item.image || '');
-      params.set('streams', JSON.stringify(item.streams || []));
-    }
-    const title = params.get('title') || 'Film';
-    const slug = title.toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/(^-|-$)/g,'') || 'film';
-    document.title = `${title} — Ryhze`;
-    document.querySelector('#player').src = `../../player.html?${params.toString()}`;
-    if (location.protocol !== 'file:') history.replaceState(null, '', `./${slug}/`);
-  </script>
+  <script>location.replace('../index.html');</script>
 </body>
 </html>

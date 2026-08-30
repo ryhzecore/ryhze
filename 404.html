@@ -4,11 +4,6 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Ryhze</title>
 <script>
-  const path = location.pathname.replace(/\/+$/, '');
-  const filmRoute = path.match(/^(.*\/)menu\/films\/([^/]+)$/);
-  if (filmRoute) {
-    location.replace(`${filmRoute[1]}menu/films/player.html?title=${encodeURIComponent(filmRoute[2])}`);
-  } else {
-    location.replace('./');
-  }
+  const prefix = location.pathname.match(/^(.*?)(?:menu\/|$)/)?.[1] || './';
+  location.replace(`${prefix}menu/`);
 </script>
