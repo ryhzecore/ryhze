@@ -1,206 +1,221 @@
-window.RyhzeLibrary = {
-  "films": [
-    {
-      "title": "Exclusives",
-      "items": [
-        {
-          "title": "Avengers Doomsday",
-          "image": "Films/Avengers%20Doomsday/Thumbnail/OfficialImage.png",
-          "exclusiveImages": [
-            "Films/Avengers%20Doomsday/Images/images.png",
-            "Films/Avengers%20Doomsday/Images/images2.png"
-          ],
-          "streams": [
-            {
-              "url": "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-              "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-              "type": ".mp4"
-            }
-          ],
-          "synopsis": "Details coming soon.",
-          "categories": [
-            "Exclusives",
-            "Up & Coming",
-            "Marvel"
-          ],
-          "searchTags": [
-            "Avengers",
-            "Doomsday",
-            "Marvel"
-          ]
-        },
-        {
-          "title": "Dune Part Two",
-          "image": "Films/Dune%20Part%20Two/Thumbnail/OfficialImage.png",
-          "exclusiveImages": [
-            "Films/Dune%20Part%20Two/Images/images.png",
-            "Films/Dune%20Part%20Two/Images/images2.png"
-          ],
-          "streams": [],
-          "synopsis": "Details coming soon.",
-          "categories": [
-            "Exclusives",
-            "Up & Coming"
-          ],
-          "searchTags": [
-            "Dune",
-            "Part Two",
-            "Arrakis"
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Up & Coming",
-      "items": [
-        {
-          "title": "Avengers Doomsday",
-          "image": "Films/Avengers%20Doomsday/Thumbnail/OfficialImage.png",
-          "exclusiveImages": [
-            "Films/Avengers%20Doomsday/Images/images.png",
-            "Films/Avengers%20Doomsday/Images/images2.png"
-          ],
-          "streams": [
-            {
-              "url": "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-              "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-              "type": ".mp4"
-            }
-          ],
-          "synopsis": "Details coming soon.",
-          "categories": [
-            "Exclusives",
-            "Up & Coming",
-            "Marvel"
-          ],
-          "searchTags": [
-            "Avengers",
-            "Doomsday",
-            "Marvel"
-          ]
-        },
-        {
-          "title": "Dune Part Two",
-          "image": "Films/Dune%20Part%20Two/Thumbnail/OfficialImage.png",
-          "exclusiveImages": [
-            "Films/Dune%20Part%20Two/Images/images.png",
-            "Films/Dune%20Part%20Two/Images/images2.png"
-          ],
-          "streams": [],
-          "synopsis": "Details coming soon.",
-          "categories": [
-            "Exclusives",
-            "Up & Coming"
-          ],
-          "searchTags": [
-            "Dune",
-            "Part Two",
-            "Arrakis"
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Marvel",
-      "items": [
-        {
-          "title": "Avengers Doomsday",
-          "image": "Films/Avengers%20Doomsday/Thumbnail/OfficialImage.png",
-          "exclusiveImages": [
-            "Films/Avengers%20Doomsday/Images/images.png",
-            "Films/Avengers%20Doomsday/Images/images2.png"
-          ],
-          "streams": [
-            {
-              "url": "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-              "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-              "type": ".mp4"
-            }
-          ],
-          "synopsis": "Details coming soon.",
-          "categories": [
-            "Exclusives",
-            "Up & Coming",
-            "Marvel"
-          ],
-          "searchTags": [
-            "Avengers",
-            "Doomsday",
-            "Marvel"
-          ]
-        }
-      ]
-    }
-  ],
-  "games": [
-    {
-      "title": "Exclusives",
-      "items": [
-        {
-          "title": "Grand Theft Auto VI",
-          "image": "Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png",
-          "exclusiveImages": [
-            "Games/Grand%20Theft%20Auto%20VI/Images/images.png",
-            "Games/Grand%20Theft%20Auto%20VI/Images/images2.png"
-          ],
-          "streams": [],
-          "synopsis": "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clyde–style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media culture—relying entirely on mutual trust to survive.",
-          "categories": [
-            "Exclusives",
-            "Up & Coming"
-          ],
-          "searchTags": [
-            "Grand Theft Auto",
-            "GrandTheftAuto",
-            "Grand Theft Auto VI",
-            "GrandTheftAutoVI",
-            "GrandTheftAuto VI",
-            "GTA",
-            "GTAVI VI",
-            "Grand Theft Auto 6",
-            "GrandTheftAuto6",
-            "GrandTheftAuto 6",
-            "GTA",
-            "GTA6",
-            "6"
-          ]
-        }
-      ]
-    },
-    {
-      "title": "Up & Coming",
-      "items": [
-        {
-          "title": "Grand Theft Auto VI",
-          "image": "Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png",
-          "exclusiveImages": [
-            "Games/Grand%20Theft%20Auto%20VI/Images/images.png",
-            "Games/Grand%20Theft%20Auto%20VI/Images/images2.png"
-          ],
-          "streams": [],
-          "synopsis": "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clyde–style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media culture—relying entirely on mutual trust to survive.",
-          "categories": [
-            "Exclusives",
-            "Up & Coming"
-          ],
-          "searchTags": [
-            "Grand Theft Auto",
-            "GrandTheftAuto",
-            "Grand Theft Auto VI",
-            "GrandTheftAutoVI",
-            "GrandTheftAuto VI",
-            "GTA",
-            "GTAVI VI",
-            "Grand Theft Auto 6",
-            "GrandTheftAuto6",
-            "GrandTheftAuto 6",
-            "GTA",
-            "GTA6",
-            "6"
-          ]
-        }
-      ]
-    }
-  ]
+﻿window.RyhzeLibrary = {
+    "films":  [
+                  {
+                      "title":  "Exclusives",
+                      "items":  [
+                                    {
+                                        "title":  "Avengers Doomsday",
+                                        "image":  "Films/Avengers%20Doomsday/Thumbnail/OfficialImage.png",
+                                        "exclusiveImages":  [
+                                                                "Films/Avengers%20Doomsday/Images/images.png",
+                                                                "Films/Avengers%20Doomsday/Images/images2.png"
+                                                            ],
+                                        "streams":  [
+                                                        {
+                                                            "url":  "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "type":  ".mp4"
+                                                        }
+                                                    ],
+                                        "synopsis":  "Details coming soon.",
+                                        "release":  "Coming soon",
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming",
+                                                           "Marvel"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Avengers",
+                                                           "Doomsday",
+                                                           "Marvel"
+                                                       ]
+                                    },
+                                    {
+                                        "title":  "Dune Part Two",
+                                        "image":  "Films/Dune%20Part%20Two/Thumbnail/OfficialImage.png",
+                                        "exclusiveImages":  [
+                                                                "Films/Dune%20Part%20Two/Images/images.png",
+                                                                "Films/Dune%20Part%20Two/Images/images2.png"
+                                                            ],
+                                        "streams":  [
+
+                                                    ],
+                                        "synopsis":  "Details coming soon.",
+                                        "release":  "Coming soon",
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Dune",
+                                                           "Part Two",
+                                                           "Arrakis"
+                                                       ]
+                                    }
+                                ]
+                  },
+                  {
+                      "title":  "Up \u0026 Coming",
+                      "items":  [
+                                    {
+                                        "title":  "Avengers Doomsday",
+                                        "image":  "Films/Avengers%20Doomsday/Thumbnail/OfficialImage.png",
+                                        "exclusiveImages":  [
+                                                                "Films/Avengers%20Doomsday/Images/images.png",
+                                                                "Films/Avengers%20Doomsday/Images/images2.png"
+                                                            ],
+                                        "streams":  [
+                                                        {
+                                                            "url":  "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "type":  ".mp4"
+                                                        }
+                                                    ],
+                                        "synopsis":  "Details coming soon.",
+                                        "release":  "Coming soon",
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming",
+                                                           "Marvel"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Avengers",
+                                                           "Doomsday",
+                                                           "Marvel"
+                                                       ]
+                                    },
+                                    {
+                                        "title":  "Dune Part Two",
+                                        "image":  "Films/Dune%20Part%20Two/Thumbnail/OfficialImage.png",
+                                        "exclusiveImages":  [
+                                                                "Films/Dune%20Part%20Two/Images/images.png",
+                                                                "Films/Dune%20Part%20Two/Images/images2.png"
+                                                            ],
+                                        "streams":  [
+
+                                                    ],
+                                        "synopsis":  "Details coming soon.",
+                                        "release":  "Coming soon",
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Dune",
+                                                           "Part Two",
+                                                           "Arrakis"
+                                                       ]
+                                    }
+                                ]
+                  },
+                  {
+                      "title":  "Marvel",
+                      "items":  [
+                                    {
+                                        "title":  "Avengers Doomsday",
+                                        "image":  "Films/Avengers%20Doomsday/Thumbnail/OfficialImage.png",
+                                        "exclusiveImages":  [
+                                                                "Films/Avengers%20Doomsday/Images/images.png",
+                                                                "Films/Avengers%20Doomsday/Images/images2.png"
+                                                            ],
+                                        "streams":  [
+                                                        {
+                                                            "url":  "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "type":  ".mp4"
+                                                        }
+                                                    ],
+                                        "synopsis":  "Details coming soon.",
+                                        "release":  "Coming soon",
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming",
+                                                           "Marvel"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Avengers",
+                                                           "Doomsday",
+                                                           "Marvel"
+                                                       ]
+                                    }
+                                ]
+                  }
+              ],
+    "games":  [
+                  {
+                      "title":  "Exclusives",
+                      "items":  [
+                                    {
+                                        "title":  "Grand Theft Auto VI",
+                                        "image":  "Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png",
+                                        "exclusiveImages":  [
+                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images.png",
+                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images2.png"
+                                                            ],
+                                        "streams":  [
+
+                                                    ],
+                                        "synopsis":  "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clydeâ€“style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media cultureâ€”relying entirely on mutual trust to survive.",
+                                        "release":  "",
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Grand Theft Auto",
+                                                           "GrandTheftAuto",
+                                                           "Grand Theft Auto VI",
+                                                           "GrandTheftAutoVI",
+                                                           "GrandTheftAuto VI",
+                                                           "GTA",
+                                                           "GTAVI VI",
+                                                           "Grand Theft Auto 6",
+                                                           "GrandTheftAuto6",
+                                                           "GrandTheftAuto 6",
+                                                           "GTA",
+                                                           "GTA6",
+                                                           "6"
+                                                       ]
+                                    }
+                                ]
+                  },
+                  {
+                      "title":  "Up \u0026 Coming",
+                      "items":  [
+                                    {
+                                        "title":  "Grand Theft Auto VI",
+                                        "image":  "Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png",
+                                        "exclusiveImages":  [
+                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images.png",
+                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images2.png"
+                                                            ],
+                                        "streams":  [
+
+                                                    ],
+                                        "synopsis":  "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clydeâ€“style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media cultureâ€”relying entirely on mutual trust to survive.",
+                                        "release":  "",
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Grand Theft Auto",
+                                                           "GrandTheftAuto",
+                                                           "Grand Theft Auto VI",
+                                                           "GrandTheftAutoVI",
+                                                           "GrandTheftAuto VI",
+                                                           "GTA",
+                                                           "GTAVI VI",
+                                                           "Grand Theft Auto 6",
+                                                           "GrandTheftAuto6",
+                                                           "GrandTheftAuto 6",
+                                                           "GTA",
+                                                           "GTA6",
+                                                           "6"
+                                                       ]
+                                    }
+                                ]
+                  }
+              ]
 };
 

@@ -73,6 +73,7 @@ function Get-RyhzeTitles([string]$LibraryType) {
           exclusiveImages = @($exclusiveImages)
           streams = @($streamFiles)
           synopsis = Get-NoteValue $notes 'Synopsis'
+          release = Get-NoteValue $notes 'Release'
           categories = @($categories)
           searchTags = @($searchTags)
         }
