@@ -120,6 +120,6 @@ $library = [PSCustomObject]@{
   games = @(Group-RyhzeTitles (Get-RyhzeTitles 'Games'))
 }
 
-$json = $library | ConvertTo-Json -Depth 6
+$json = $library | ConvertTo-Json -Depth 10
 Set-Content -LiteralPath (Join-Path $Root 'library-data.js') -Value "window.RyhzeLibrary = $json;`n" -Encoding utf8
 Write-Host 'Ryhze library data updated.'

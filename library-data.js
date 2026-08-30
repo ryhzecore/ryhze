@@ -19,11 +19,33 @@
                                         "seasons":  [
                                                         {
                                                             "title":  "Season 1",
-                                                            "episodes":  ""
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
                                                         },
                                                         {
                                                             "title":  "Season 2",
-                                                            "episodes":  ""
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
                                                         }
                                                     ],
                                         "categories":  [
@@ -84,11 +106,33 @@
                                         "seasons":  [
                                                         {
                                                             "title":  "Season 1",
-                                                            "episodes":  ""
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
                                                         },
                                                         {
                                                             "title":  "Season 2",
-                                                            "episodes":  ""
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
                                                         }
                                                     ],
                                         "categories":  [
@@ -149,11 +193,33 @@
                                         "seasons":  [
                                                         {
                                                             "title":  "Season 1",
-                                                            "episodes":  ""
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
                                                         },
                                                         {
                                                             "title":  "Season 2",
-                                                            "episodes":  ""
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
                                                         }
                                                     ],
                                         "categories":  [
