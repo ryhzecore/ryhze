@@ -15,7 +15,7 @@
     }
     if (localStorage.getItem('ryhze-access') !== 'granted' && !document.cookie.split('; ').includes('ryhze_access=granted')) location.replace('../index.html');
     const mode = new URLSearchParams(location.search).get('mode') === 'games' ? 'games' : 'films';
-    document.querySelector('#menu').src = `../lobby.html?mode=${mode}`;
+    document.querySelector('#menu').src = `../lobby.html?mode=${mode}&v=${Date.now()}`;
     if (location.protocol !== 'file:') history.replaceState(null, '', './');
   </script>
 </body>
