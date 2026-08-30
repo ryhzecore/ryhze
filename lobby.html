@@ -113,9 +113,10 @@
     (() => {
       document.body.insertAdjacentHTML('beforeend','<div class="menu-player-backdrop" id="menuPlayerBackdrop"></div><section class="menu-player" id="menuPlayer" aria-label="Ryhze player"><iframe id="menuPlayerFrame" title="Ryhze player" allow="fullscreen"></iframe></section>');
       const panel=document.querySelector('#menuPlayer'),backdrop=document.querySelector('#menuPlayerBackdrop'),frame=document.querySelector('#menuPlayerFrame');
-      let opening=false,fullscreen=false,activeSource=null,activeLabel=null,activeTransition=null,frameLoaded=false;
+      let opening=false,fullscreen=false,activeSource=null,activeLabel=null,activeTransition=null,frameReady=false;
       const revealPlayer=transition=>{if(!transition)return;transition.classList.add('reveal');setTimeout(()=>{if(transition.parentNode)transition.remove()},480)};
-      frame.addEventListener('load',()=>{frameLoaded=true;if(panel.classList.contains('open')){revealPlayer(activeTransition);activeTransition=null}});
+      const revealWhenReady=()=>{if(!panel.classList.contains('open')||!frameReady||!activeTransition)return;requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{if(!panel.classList.contains('open'))return;revealPlayer(activeTransition);activeTransition=null},260)}))};
+      frame.addEventListener('load',()=>{frameReady=false});
       const closePlayer=()=>{fullscreen=false;panel.classList.remove('fullscreen','open');backdrop.classList.remove('open');document.body.classList.remove('player-open');if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}setTimeout(()=>{if(!panel.classList.contains('open'))frame.src='about:blank'},280)};
       const setFullscreen=next=>{fullscreen=next;panel.classList.toggle('fullscreen',fullscreen);setTimeout(()=>frame.contentWindow?.postMessage({type:'ryhze-embed-fullscreen',fullscreen},'*'),60)};
       addEventListener('message',event=>{if(event.data?.type==='ryhze-close-player')closePlayer();if(event.data?.type==='ryhze-toggle-player-fullscreen')setFullscreen(!fullscreen)});
@@ -126,7 +127,7 @@
         transition.className='menu-player-transition';
         const label=document.createElement('span');label.className='source-player-label card-player-label';label.innerHTML='<span>Showing in player</span>';
         transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;
-        activeSource=item;activeLabel=label;activeTransition=transition;frameLoaded=false;item.classList.add('opening-player');item.append(label);document.body.append(transition);
+        activeSource=item;activeLabel=label;activeTransition=transition;frameReady=false;item.classList.add('opening-player');item.append(label);document.body.append(transition);
         const query=new URLSearchParams({embedded:'1',title:item.dataset.title,synopsis:decodeURIComponent(item.dataset.synopsis||''),image:item.dataset.image||'',streams:item.dataset.streams||''});
         frame.src=`player.html?${query}`;
         void transition.offsetWidth;
@@ -135,7 +136,7 @@
           transition.style.left=`${target.left}px`;transition.style.top=`${target.top}px`;
           transition.style.width=`${target.width}px`;transition.style.height=`${target.height}px`;transition.style.borderRadius=getComputedStyle(panel).borderRadius;
         }));
-        setTimeout(()=>{backdrop.classList.add('open');panel.classList.add('open');document.body.classList.add('player-open');opening=false;if(frameLoaded){revealPlayer(activeTransition);activeTransition=null}},920);
+        setTimeout(()=>{backdrop.classList.add('open');panel.classList.add('open');document.body.classList.add('player-open');opening=false;revealWhenReady()},920);
       };
       openExclusive=function(item){
         if(opening||panel.classList.contains('open')||document.querySelector('.menu-player-transition'))return;
@@ -144,7 +145,7 @@
         transition.className='menu-player-transition';
         const label=document.createElement('span');label.className='source-player-label';label.innerHTML='<span>Showing in player</span>';label.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px`;
         transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border-radius:0;background-image:${getComputedStyle(document.querySelector('.hero-image')).backgroundImage};transition:none`;
-        activeSource=document.querySelector('.hero-copy');activeLabel=label;activeTransition=transition;frameLoaded=false;activeSource.classList.add('opening-player');document.body.append(transition,label);
+        activeSource=document.querySelector('.hero-copy');activeLabel=label;activeTransition=transition;frameReady=false;activeSource.classList.add('opening-player');document.body.append(transition,label);
         const query=new URLSearchParams({embedded:'1',title:item.title,synopsis:item.synopsis||'',image:item.image||'',streams:JSON.stringify(item.streams||[])});
         frame.src=`player.html?${query}`;
         void transition.offsetWidth;
@@ -154,7 +155,7 @@
           transition.style.left=`${target.left}px`;transition.style.top=`${target.top}px`;
           transition.style.width=`${target.width}px`;transition.style.height=`${target.height}px`;transition.style.borderRadius=getComputedStyle(panel).borderRadius;
         }));
-        setTimeout(()=>{backdrop.classList.add('open');panel.classList.add('open');document.body.classList.add('player-open');opening=false;if(frameLoaded){revealPlayer(activeTransition);activeTransition=null}},920);
+        setTimeout(()=>{backdrop.classList.add('open');panel.classList.add('open');document.body.classList.add('player-open');opening=false;revealWhenReady()},920);
       };
     })();
   </script>
