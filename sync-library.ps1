@@ -109,7 +109,7 @@ function Group-RyhzeTitles($Titles) {
     $categories = if ($title.categories.Count) { $title.categories } else { @('Uncategorized') }
     foreach ($category in $categories) {
       if (-not $groups.Contains($category)) { $groups[$category] = [System.Collections.Generic.List[object]]::new() }
-      $groups[$category].Add($title)
+      $groups[$category].Add($title) | Out-Null
     }
   }
   @($groups.GetEnumerator() | ForEach-Object { [PSCustomObject]@{ title = $_.Key; items = @($_.Value) } })
