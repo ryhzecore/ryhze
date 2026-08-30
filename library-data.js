@@ -12,8 +12,8 @@
                                                             ],
                                         "streams":  [
                                                         {
-                                                            "url":  "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "url":  "Films/Avengers%20Doomsday/Streams/Steams1.mp4",
+                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Steams1.mp4",
                                                             "type":  ".mp4"
                                                         }
                                                     ],
@@ -66,8 +66,8 @@
                                                             ],
                                         "streams":  [
                                                         {
-                                                            "url":  "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "url":  "Films/Avengers%20Doomsday/Streams/Steams1.mp4",
+                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Steams1.mp4",
                                                             "type":  ".mp4"
                                                         }
                                                     ],
@@ -120,8 +120,8 @@
                                                             ],
                                         "streams":  [
                                                         {
-                                                            "url":  "Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
-                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Stream1-browser.mp4",
+                                                            "url":  "Films/Avengers%20Doomsday/Streams/Steams1.mp4",
+                                                            "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Steams1.mp4",
                                                             "type":  ".mp4"
                                                         }
                                                     ],
