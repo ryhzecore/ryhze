@@ -93,6 +93,7 @@ function Get-RyhzeTitles([string]$LibraryType) {
           streams = @($streamFiles)
           synopsis = Get-NoteValue $notes 'Synopsis'
           release = Get-NoteValue $notes 'Release'
+          licensor = Get-NoteValue $notes 'Licensor'
           mediaType = $mediaType
           seasons = @($seasons)
           categories = @($categories)

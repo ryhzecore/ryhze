@@ -3,3 +3,4 @@ Type: Movie
 Release: Coming soon
 Categories: Exclusives, Up & Coming
 Search Tags: Dune, Part Two, Arrakis
+Licensor: Not specified

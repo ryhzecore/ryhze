@@ -28,6 +28,8 @@ while ($true) {
 
   if ($pending -and ((Get-Date) - $lastChange).TotalMilliseconds -ge 1200) {
     $pending = $false
+    & (Join-Path $Root 'sync-library.ps1') -Root $Root
+    if ($LASTEXITCODE -ne 0) { throw "Library synchronization failed." }
     git add -A
     git diff --cached --quiet
     if ($LASTEXITCODE -ne 0) {

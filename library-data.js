@@ -15,6 +15,7 @@
                                                     ],
                                         "synopsis":  "Details coming soon.",
                                         "release":  "Coming soon",
+                                        "licensor":  "Marvel",
                                         "mediaType":  "Series",
                                         "seasons":  [
                                                         {
@@ -46,6 +47,21 @@
                                                                                              ]
                                                                              }
                                                                          ]
+                                                        },
+                                                        {
+                                                            "title":  "Season 3",
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%203/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%203/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
                                                         }
                                                     ],
                                         "categories":  [
@@ -71,6 +87,7 @@
                                                     ],
                                         "synopsis":  "Details coming soon.",
                                         "release":  "Coming soon",
+                                        "licensor":  "Not specified",
                                         "mediaType":  "Movie",
                                         "seasons":  [
 
@@ -102,6 +119,7 @@
                                                     ],
                                         "synopsis":  "Details coming soon.",
                                         "release":  "Coming soon",
+                                        "licensor":  "Marvel",
                                         "mediaType":  "Series",
                                         "seasons":  [
                                                         {
@@ -133,6 +151,21 @@
                                                                                              ]
                                                                              }
                                                                          ]
+                                                        },
+                                                        {
+                                                            "title":  "Season 3",
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%203/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%203/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
                                                         }
                                                     ],
                                         "categories":  [
@@ -158,6 +191,7 @@
                                                     ],
                                         "synopsis":  "Details coming soon.",
                                         "release":  "Coming soon",
+                                        "licensor":  "Not specified",
                                         "mediaType":  "Movie",
                                         "seasons":  [
 
@@ -189,6 +223,7 @@
                                                     ],
                                         "synopsis":  "Details coming soon.",
                                         "release":  "Coming soon",
+                                        "licensor":  "Marvel",
                                         "mediaType":  "Series",
                                         "seasons":  [
                                                         {
@@ -215,6 +250,21 @@
                                                                                                  {
                                                                                                      "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steams1.mp4",
                                                                                                      "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             }
+                                                                         ]
+                                                        },
+                                                        {
+                                                            "title":  "Season 3",
+                                                            "episodes":  [
+                                                                             {
+                                                                                 "title":  "Episode 1",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%203/Episode%201/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%203/Episode%201/Steams1.mp4",
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
@@ -252,6 +302,7 @@
                                                     ],
                                         "synopsis":  "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clydeâ€“style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media cultureâ€”relying entirely on mutual trust to survive.",
                                         "release":  "Coming soon",
+                                        "licensor":  "",
                                         "mediaType":  "Movie",
                                         "seasons":  [
 
@@ -293,6 +344,7 @@
                                                     ],
                                         "synopsis":  "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clydeâ€“style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media cultureâ€”relying entirely on mutual trust to survive.",
                                         "release":  "Coming soon",
+                                        "licensor":  "",
                                         "mediaType":  "Movie",
                                         "seasons":  [
 
