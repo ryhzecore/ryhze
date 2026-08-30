@@ -53,39 +53,63 @@ function Get-RyhzeTitles([string]$LibraryType) {
             Where-Object { $imageExtensions -contains $_.Extension.ToLowerInvariant() } |
             ForEach-Object { Get-RelativeUrl $_.FullName }
         } else { @() }
+        
         $streamPath = @(
           Join-Path $titleFolder.FullName 'Stream'
           Join-Path $titleFolder.FullName 'Streams'
         ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
+        
         $notesPath = Join-Path $titleFolder.FullName 'notes.txt'
         $notes = if (Test-Path -LiteralPath $notesPath) { Get-Content -LiteralPath $notesPath } else { @() }
-        $mediaType = if ((Get-NoteValue $notes 'Type') -eq 'Series') { 'Series' } else { 'Movie' }
-        $streamFiles = if ($streamPath) { Get-StreamItems (Get-ChildItem -LiteralPath $streamPath -File) } else { @() }
+        
+        # Check if sub-directories exist inside Streams folder
+        $hasSubdirectories = if ($streamPath) { (Get-ChildItem -LiteralPath $streamPath -Directory).Count -gt 0 } else { $false }
+        $noteType = Get-NoteValue $notes 'Type'
+        
+        # Automatically mark as Series if notes explicitly say so OR if subfolders exist
+        $mediaType = if ($noteType -eq 'Series' -or $hasSubdirectories) { 'Series' } else { 'Movie' }
+        
+        $streamFiles = if ($streamPath -and $mediaType -eq 'Movie') { Get-StreamItems (Get-ChildItem -LiteralPath $streamPath -File) } else { @() }
         $seasons = @()
+        
         if ($mediaType -eq 'Series' -and $streamPath) {
           $seasonItems = @()
           foreach ($seasonFolder in (Get-ChildItem -LiteralPath $streamPath -Directory | Sort-Object Name)) {
             $episodeItems = @()
             $episodeFolders = @(Get-ChildItem -LiteralPath $seasonFolder.FullName -Directory | Sort-Object Name)
-            if ($episodeFolders.Count) {
+            
+            if ($episodeFolders.Count -gt 0) {
               foreach ($episodeFolder in $episodeFolders) {
                 $episodeObject = [PSCustomObject]@{ title = $episodeFolder.Name; streams = $null }
                 $episodeObject.streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $episodeFolder.FullName -File -Recurse))
                 $episodeItems += $episodeObject
               }
             } else {
-              $episodeObject = [PSCustomObject]@{ title = 'Episode 1'; streams = $null }
-              $episodeObject.streams = @(Get-StreamItems (Get-ChildItem -LiteralPath $seasonFolder.FullName -File -Recurse))
-              $episodeItems += $episodeObject
+              # Fallback: create individual episodes from files directly inside the season folder
+              $seasonFiles = @(Get-ChildItem -LiteralPath $seasonFolder.FullName -File | Sort-Object Name)
+              if ($seasonFiles.Count -gt 0) {
+                $epIndex = 1
+                foreach ($file in $seasonFiles) {
+                  if ($streamExtensions -contains $file.Extension.ToLowerInvariant()) {
+                    $episodeObject = [PSCustomObject]@{ title = "Episode $epIndex"; streams = $null }
+                    $episodeObject.streams = @(Get-StreamItems @($file))
+                    $episodeItems += $episodeObject
+                    $epIndex++
+                  }
+                }
+              }
             }
+            
             $seasonObject = [PSCustomObject]@{ title = $seasonFolder.Name; episodes = $null }
             $seasonObject.episodes = $episodeItems
             $seasonItems += $seasonObject
           }
           $seasons = @($seasonItems)
         }
+        
         $categories = (Get-NoteValue $notes 'Categories') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
         $searchTags = (Get-NoteValue $notes 'Search Tags') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+        
         [PSCustomObject]@{
           title = $titleFolder.Name
           image = Get-RelativeUrl $thumbnail.FullName
@@ -123,4 +147,4 @@ $library = [PSCustomObject]@{
 
 $json = $library | ConvertTo-Json -Depth 10
 Set-Content -LiteralPath (Join-Path $Root 'library-data.js') -Value "window.RyhzeLibrary = $json;`n" -Encoding utf8
-Write-Host 'Ryhze library data updated.'
+Write-Host 'Ryhze library data updated successfully.'
