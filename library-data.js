@@ -60,6 +60,16 @@
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
+                                                                             },
+                                                                             {
+                                                                                 "title":  "Episode 2",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%203/Episode%202/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%203/Episode%202/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
                                                                              }
                                                                          ]
                                                         }
@@ -164,6 +174,16 @@
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
+                                                                             },
+                                                                             {
+                                                                                 "title":  "Episode 2",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%203/Episode%202/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%203/Episode%202/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
                                                                              }
                                                                          ]
                                                         }
@@ -265,6 +285,16 @@
                                                                                                  {
                                                                                                      "url":  "Films/Avengers%20Doomsday/Streams/Season%203/Episode%201/Steams1.mp4",
                                                                                                      "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%203/Episode%201/Steams1.mp4",
+                                                                                                     "type":  ".mp4"
+                                                                                                 }
+                                                                                             ]
+                                                                             },
+                                                                             {
+                                                                                 "title":  "Episode 2",
+                                                                                 "streams":  [
+                                                                                                 {
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%203/Episode%202/Steams1.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%203/Episode%202/Steams1.mp4",
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]

@@ -150,7 +150,7 @@
         const label=document.createElement('span');label.className='source-player-label transition-player-label';label.innerHTML='<span>Showing in player</span>';
         transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border:2px solid rgba(175,145,255,.58);border-radius:0;background-image:${getComputedStyle(document.querySelector('.hero-image')).backgroundImage};transition:none`;
         activeSource=document.querySelector('.hero-copy');activeLabel=label;activeTransition=transition;frameReady=false;activeSource.classList.add('opening-player');transition.append(label);document.body.append(transition);
-        const query=new URLSearchParams({embedded:'1',title:item.title,synopsis:item.synopsis||'',image:item.image||'',streams:JSON.stringify(item.streams||[]),seasons:JSON.stringify(item.seasons||[]),type:item.mediaType||'Movie'});
+        const query=new URLSearchParams({embedded:'1',title:item.title,synopsis:item.synopsis||'',image:item.image||'',streams:JSON.stringify(item.streams||[]),seasons:JSON.stringify(item.seasons||[]),type:item.mediaType||'Movie',licensor:item.licensor||'Not specified'});
         frame.src=`player.html?${query}&v=${Date.now()}`;
         void transition.offsetWidth;
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
