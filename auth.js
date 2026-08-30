@@ -29,6 +29,8 @@
   const cookieGranted = document.cookie.split('; ').includes(cookieKey);
   if ((localStorage.getItem(accessKey) === 'granted' || cookieGranted) && accounts.has(savedUser)) {
     grant(savedUser);
+  } else {
+    document.documentElement.classList.remove('has-saved-access');
   }
 
   form.addEventListener('submit', event => {
