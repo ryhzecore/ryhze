@@ -1,0 +1,20 @@
+# Direct home-hosting configuration. Run Caddy on the Windows PC and forward
+# TCP 443 (and optionally TCP 80) from the router to this PC's LAN address.
+video.ryhze.com {
+  root * C:/Test123
+
+  @health path /health
+  handle @health {
+    header Access-Control-Allow-Origin "https://ryhzecore.github.io"
+    header Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+    respond "ok" 200
+  }
+
+  @media path /Films/* /Games/*
+  handle @media {
+    header Access-Control-Allow-Origin "https://ryhzecore.github.io"
+    header Access-Control-Allow-Methods "GET, HEAD, OPTIONS"
+    header Access-Control-Expose-Headers "Accept-Ranges, Content-Length, Content-Range"
+    file_server
+  }
+}
