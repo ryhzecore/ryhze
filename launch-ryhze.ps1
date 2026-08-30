@@ -1,5 +1,17 @@
 $site = Join-Path $PSScriptRoot 'index.html'
 $app = Join-Path $PSScriptRoot 'Ryhze.exe'
+$watcher = Join-Path $PSScriptRoot 'watch-github.ps1'
+
+if (Test-Path -LiteralPath $watcher) {
+  $runningWatcher = Get-CimInstance Win32_Process | Where-Object {
+    $_.CommandLine -match [regex]::Escape($watcher)
+  }
+  if (-not $runningWatcher) {
+    Start-Process -FilePath 'powershell.exe' -WindowStyle Hidden -ArgumentList @(
+      '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $watcher
+    )
+  }
+}
 
 if (-not (Test-Path -LiteralPath $site)) {
   Add-Type -AssemblyName PresentationFramework
