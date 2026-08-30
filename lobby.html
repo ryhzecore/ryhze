@@ -119,12 +119,13 @@
       const revealWhenReady=()=>{if(!panel.classList.contains('open')||!frameReady||!activeTransition||!activeTransition.classList.contains('landed'))return;requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{if(!panel.classList.contains('open'))return;revealPlayer(activeTransition);activeTransition=null},260)}))};
       const beginLanding=()=>{if(!activeTransition)return;const imageRect=getPlayerImageRect();if(imageRect){activeTransition.style.left=`${imageRect.left}px`;activeTransition.style.top=`${imageRect.top}px`;activeTransition.style.width=`${imageRect.width}px`;activeTransition.style.height=`${imageRect.height}px`;activeTransition.style.borderRadius=imageRect.radius;activeTransition.style.border=imageRect.border;activeTransition.style.boxShadow=imageRect.shadow}activeTransition.querySelector('.transition-loader')?.classList.add('hidden');activeTransition.style.transition='';requestAnimationFrame(()=>requestAnimationFrame(()=>{activeTransition.classList.add('landed');revealWhenReady()}))};
       addEventListener('message',event=>{if(event.data?.type==='ryhze-player-ready'){frameReady=true;revealWhenReady()}});
-      const closePlayer=()=>{fullscreen=false;panel.classList.remove('fullscreen','open');backdrop.classList.remove('open');document.body.classList.remove('player-open');if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}setTimeout(()=>{if(!panel.classList.contains('open'))frame.src='about:blank'},280)};
+      const closePlayer=()=>{fullscreen=false;panel.classList.remove('fullscreen','open');backdrop.classList.remove('open');document.body.classList.remove('player-open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}setTimeout(()=>{if(!panel.classList.contains('open'))frame.src='about:blank'},280)};
       const setFullscreen=next=>{fullscreen=next;panel.classList.toggle('fullscreen',fullscreen);setTimeout(()=>frame.contentWindow?.postMessage({type:'ryhze-embed-fullscreen',fullscreen},'*'),60)};
       addEventListener('message',event=>{if(event.data?.type==='ryhze-close-player')closePlayer();if(event.data?.type==='ryhze-toggle-player-fullscreen')setFullscreen(!fullscreen)});
       openFilm=function(item){
         if(opening||panel.classList.contains('open')||document.querySelector('.menu-player-transition'))return;
         opening=true;
+        menuMusic.pause();
         const source=item.getBoundingClientRect(),panelRect=panel.getBoundingClientRect(),target={left:panelRect.left+panel.clientLeft,top:panelRect.top+panel.clientTop,width:panel.clientWidth,height:panel.clientHeight},transition=document.createElement('div');
         transition.className='menu-player-transition';
         transition.innerHTML='<span class="transition-loader" aria-label="Loading"></span>';
@@ -144,6 +145,7 @@
       openExclusive=function(item){
         if(opening||panel.classList.contains('open')||document.querySelector('.menu-player-transition'))return;
         opening=true;
+        menuMusic.pause();
         const source=document.querySelector('.hero-image').getBoundingClientRect(),panelRect=panel.getBoundingClientRect(),target={left:panelRect.left+panel.clientLeft,top:panelRect.top+panel.clientTop,width:panel.clientWidth,height:panel.clientHeight},transition=document.createElement('div');
         transition.className='menu-player-transition';
         transition.innerHTML='<span class="transition-loader" aria-label="Loading"></span>';
