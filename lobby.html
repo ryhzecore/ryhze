@@ -113,11 +113,12 @@
     (() => {
       document.body.insertAdjacentHTML('beforeend','<section class="menu-player" id="menuPlayer" aria-label="Ryhze player"><iframe id="menuPlayerFrame" title="Ryhze player" allow="fullscreen"></iframe></section>');
       const panel=document.querySelector('#menuPlayer'),frame=document.querySelector('#menuPlayerFrame');
-      let opening=false;
-      const closePlayer=()=>{panel.classList.remove('open');setTimeout(()=>{if(!panel.classList.contains('open'))frame.src='about:blank'},280)};
-      addEventListener('message',event=>{if(event.data?.type==='ryhze-close-player')closePlayer()});
+      let opening=false,fullscreen=false;
+      const closePlayer=()=>{fullscreen=false;panel.classList.remove('fullscreen','open');setTimeout(()=>{if(!panel.classList.contains('open'))frame.src='about:blank'},280)};
+      const setFullscreen=next=>{fullscreen=next;panel.classList.toggle('fullscreen',fullscreen);setTimeout(()=>frame.contentWindow?.postMessage({type:'ryhze-embed-fullscreen',fullscreen},'*'),60)};
+      addEventListener('message',event=>{if(event.data?.type==='ryhze-close-player')closePlayer();if(event.data?.type==='ryhze-toggle-player-fullscreen')setFullscreen(!fullscreen)});
       openFilm=function(item){
-        if(opening||document.querySelector('.menu-player-transition'))return;
+        if(opening||panel.classList.contains('open')||document.querySelector('.menu-player-transition'))return;
         opening=true;
         const source=item.getBoundingClientRect(),target=panel.getBoundingClientRect(),transition=document.createElement('div');
         transition.className='menu-player-transition';
