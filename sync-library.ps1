@@ -1,6 +1,9 @@
 param(
-  [string]$Root = $PSScriptRoot
+  [string]$Root = $PSScriptRoot,
+  [string]$VideoBaseUrl = $(if ($env:RYHZE_VIDEO_BASE_URL) { $env:RYHZE_VIDEO_BASE_URL } else { 'https://video.ryhze.com' })
 )
+
+$VideoBaseUrl = $VideoBaseUrl.TrimEnd('/')
 
 $imageExtensions = @('.png', '.jpg', '.jpeg', '.webp', '.avif')
 $streamExtensions = @('.mp4', '.webm', '.ogv', '.ogg', '.m4v', '.mkv', '.mp3', '.m4a', '.wav', '.aac')
@@ -51,7 +54,14 @@ function Get-RyhzeTitles([string]$LibraryType) {
                 '.mkv' { 6 }; '.mp3' { 7 }; '.m4a' { 8 }; '.wav' { 9 }; default { 10 }
               }
             } }, Name |
-            ForEach-Object { [PSCustomObject]@{ url = Get-RelativeUrl $_.FullName; type = $_.Extension.ToLowerInvariant() } }
+            ForEach-Object {
+              $localUrl = Get-RelativeUrl $_.FullName
+              [PSCustomObject]@{
+                url = $localUrl
+                publicUrl = "$VideoBaseUrl/$localUrl"
+                type = $_.Extension.ToLowerInvariant()
+              }
+            }
         } else { @() }
         $notesPath = Join-Path $titleFolder.FullName 'notes.txt'
         $notes = if (Test-Path -LiteralPath $notesPath) { Get-Content -LiteralPath $notesPath } else { @() }
