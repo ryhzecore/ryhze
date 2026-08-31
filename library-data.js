@@ -13,8 +13,8 @@
                                         "streams":  [
 
                                                     ],
-                                        "synopsis":  "Details coming soon.",
-                                        "release":  "Coming soon",
+                                        "synopsis":  "Set in a vibrant 1960s retro-futuristic universe, Marvelâ€™s First Family must balance their tight-knit bond with saving their world from the planet-devouring cosmic god Galactus and his herald, the Silver Surfer.",
+                                        "release":  "25 July 2025",
                                         "licensor":  "Not specified",
                                         "mediaType":  "Movie",
                                         "seasons":  [
@@ -25,9 +25,43 @@
                                                            "Up \u0026 Coming"
                                                        ],
                                         "searchTags":  [
-                                                           "Dune",
-                                                           "Part Two",
-                                                           "Arrakis"
+                                                           "Fantastic Four First Steps",
+                                                           "The Fantastic Four First Steps",
+                                                           "Fantastic Four",
+                                                           "The Fantastic Four",
+                                                           "F4 First Steps",
+                                                           "Fantastic Four 2025",
+                                                           "Marvel Cinematic Universe",
+                                                           "MCU Phase 6",
+                                                           "Marvel Studios",
+                                                           "MCU Multiverse Saga",
+                                                           "Pedro Pascal",
+                                                           "Reed Richards",
+                                                           "Vanessa Kirby",
+                                                           "Sue Storm",
+                                                           "Joseph Quinn",
+                                                           "Johnny Storm",
+                                                           "Ebon Moss Bachrach",
+                                                           "Ben Grimm",
+                                                           "Ralph Ineson",
+                                                           "Galactus",
+                                                           "Julia Garner",
+                                                           "Silver Surfer",
+                                                           "Mister Fantastic",
+                                                           "Invisible Woman",
+                                                           "Human Torch",
+                                                           "The Thing",
+                                                           "HERBIE",
+                                                           "Retro Futuristic",
+                                                           "Baxter Building",
+                                                           "Fantastic Car",
+                                                           "Cosmic Radiation",
+                                                           "Trailer Breakdown",
+                                                           "MCU Theory",
+                                                           "MarvelTok",
+                                                           "ComicTok",
+                                                           "Fantastic Four Edit",
+                                                           "Pedro Pascal Marvel"
                                                        ]
                                     },
                                     {
@@ -159,8 +193,8 @@
                                         "streams":  [
 
                                                     ],
-                                        "synopsis":  "Details coming soon.",
-                                        "release":  "Coming soon",
+                                        "synopsis":  "Set in a vibrant 1960s retro-futuristic universe, Marvelâ€™s First Family must balance their tight-knit bond with saving their world from the planet-devouring cosmic god Galactus and his herald, the Silver Surfer.",
+                                        "release":  "25 July 2025",
                                         "licensor":  "Not specified",
                                         "mediaType":  "Movie",
                                         "seasons":  [
@@ -171,9 +205,43 @@
                                                            "Up \u0026 Coming"
                                                        ],
                                         "searchTags":  [
-                                                           "Dune",
-                                                           "Part Two",
-                                                           "Arrakis"
+                                                           "Fantastic Four First Steps",
+                                                           "The Fantastic Four First Steps",
+                                                           "Fantastic Four",
+                                                           "The Fantastic Four",
+                                                           "F4 First Steps",
+                                                           "Fantastic Four 2025",
+                                                           "Marvel Cinematic Universe",
+                                                           "MCU Phase 6",
+                                                           "Marvel Studios",
+                                                           "MCU Multiverse Saga",
+                                                           "Pedro Pascal",
+                                                           "Reed Richards",
+                                                           "Vanessa Kirby",
+                                                           "Sue Storm",
+                                                           "Joseph Quinn",
+                                                           "Johnny Storm",
+                                                           "Ebon Moss Bachrach",
+                                                           "Ben Grimm",
+                                                           "Ralph Ineson",
+                                                           "Galactus",
+                                                           "Julia Garner",
+                                                           "Silver Surfer",
+                                                           "Mister Fantastic",
+                                                           "Invisible Woman",
+                                                           "Human Torch",
+                                                           "The Thing",
+                                                           "HERBIE",
+                                                           "Retro Futuristic",
+                                                           "Baxter Building",
+                                                           "Fantastic Car",
+                                                           "Cosmic Radiation",
+                                                           "Trailer Breakdown",
+                                                           "MCU Theory",
+                                                           "MarvelTok",
+                                                           "ComicTok",
+                                                           "Fantastic Four Edit",
+                                                           "Pedro Pascal Marvel"
                                                        ]
                                     },
                                     {
@@ -499,5 +567,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '61604bf';
+window.RyhzeBuild = '8c8ac53';
 
