@@ -1,0 +1,13 @@
+{
+  "$schema": "../node_modules/wrangler/config-schema.json",
+  "name": "ryhze-live-insights",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-31",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ryhze-live-sessions",
+      "database_id": "5ce4d629-424f-43c5-9788-18288c75a466"
+    }
+  ]
+}
