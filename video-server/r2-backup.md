@@ -22,8 +22,17 @@ The bucket is currently ready to receive objects. The upload step below is still
 ## One-time Cloudflare setup
 
 1. The bucket, custom domain, and CORS policy are already configured.
-2. On this PC, run `npx wrangler login` once and complete the Cloudflare authorization in the browser.
-3. Run `./sync-r2-streams.ps1` from the project root whenever you want to refresh the backup library.
+2. Create an R2 API token with **Object Read & Write** permission scoped to `ryhze-streams`. Wrangler OAuth is enough for bucket administration, but large video uploads use the S3-compatible API (the Wrangler object command is limited to 300 MiB).
+3. Set the S3 credentials locally (never commit them):
+
+   ```powershell
+   $env:R2_ACCESS_KEY_ID = '...'
+   $env:R2_SECRET_ACCESS_KEY = '...'
+   ```
+
+4. Upload the library with an S3-compatible client (for example AWS CLI, rclone, or the Cloudflare S3 SDK), using endpoint `https://<account-id>.r2.cloudflarestorage.com` and region `auto`. Keep the object keys identical to the local `Films/...` and `Games/...` paths.
+
+For small test assets, `./sync-r2-streams.ps1` can still use Wrangler. Wrangler’s object command rejects files larger than 300 MiB, so it is not suitable for the feature-length videos.
 
 The upload script uses Wrangler's remote R2 upload path, so no router changes or inbound ports are needed. It preserves the same `Films/...` and `Games/...` object paths used by the player, including the generated `-web.mp4` files when they are present.
 
