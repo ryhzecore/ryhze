@@ -96,9 +96,9 @@
                                                                                  "title":  "Episode 6",
                                                                                  "streams":  [
                                                                                                  {
-                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
+                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
@@ -356,9 +356,9 @@
                                                                                  "title":  "Episode 6",
                                                                                  "streams":  [
                                                                                                  {
-                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
+                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
@@ -616,9 +616,9 @@
                                                                                  "title":  "Episode 6",
                                                                                  "streams":  [
                                                                                                  {
-                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
+                                                                                                     "url":  "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
+                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1-web.mp4",
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
