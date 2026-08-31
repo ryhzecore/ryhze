@@ -4,11 +4,11 @@
                       "title":  "Exclusives",
                       "items":  [
                                     {
-                                        "title":  "Fanstastic 4",
-                                        "image":  "Films/Fanstastic%204/Thumbnail/OfficialImage.png",
+                                        "title":  "Fanstastic Four First Steps",
+                                        "image":  "Films/Fanstastic%20Four%20First%20Steps/Thumbnail/OfficialImage.png",
                                         "exclusiveImages":  [
-                                                                "Films/Fanstastic%204/Images/images.png",
-                                                                "Films/Fanstastic%204/Images/images2.png"
+                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images.png",
+                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images2.png"
                                                             ],
                                         "streams":  [
 
@@ -150,11 +150,11 @@
                       "title":  "Up \u0026 Coming",
                       "items":  [
                                     {
-                                        "title":  "Fanstastic 4",
-                                        "image":  "Films/Fanstastic%204/Thumbnail/OfficialImage.png",
+                                        "title":  "Fanstastic Four First Steps",
+                                        "image":  "Films/Fanstastic%20Four%20First%20Steps/Thumbnail/OfficialImage.png",
                                         "exclusiveImages":  [
-                                                                "Films/Fanstastic%204/Images/images.png",
-                                                                "Films/Fanstastic%204/Images/images2.png"
+                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images.png",
+                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images2.png"
                                                             ],
                                         "streams":  [
 
@@ -499,5 +499,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '6ab06d6';
+window.RyhzeBuild = 'afe103f';
 
