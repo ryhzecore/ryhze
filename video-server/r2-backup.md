@@ -33,10 +33,10 @@ The bucket is currently ready to receive objects. The upload step below is still
 4. Upload the library with the included multipart uploader. From the project root, set the two credentials and run:
 
    ```powershell
-   $env:R2_ACCESS_KEY_ID = '...'
-   $env:R2_SECRET_ACCESS_KEY = '...'
-   node .\sync-r2-s3.mjs
+   .\setup-r2-upload.ps1
    ```
+
+   The helper prompts locally for both values (the secret is hidden) and clears them from the process after the upload.
 
    It uses the S3 endpoint `https://<account-id>.r2.cloudflarestorage.com`, region `auto`, and 64 MiB multipart chunks so feature-length files work reliably.
 
