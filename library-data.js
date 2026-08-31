@@ -567,5 +567,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '05b8744';
+window.RyhzeBuild = '2500cab';
 
