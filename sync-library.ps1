@@ -23,7 +23,10 @@ function Get-RelativeUrl([string]$FilePath) {
 }
 
 function Get-StreamItems($Files) {
-  @($Files | Where-Object { $_ -and $streamExtensions -contains $_.Extension.ToLowerInvariant() } |
+  $mediaFiles = @($Files | Where-Object { $_ -and $streamExtensions -contains $_.Extension.ToLowerInvariant() })
+  $browserFiles = @($mediaFiles | Where-Object { $_.BaseName -match '-web$' })
+  if ($browserFiles.Count) { $mediaFiles = $browserFiles }
+  @($mediaFiles |
     Sort-Object Name | ForEach-Object {
       $localUrl = Get-RelativeUrl $_.FullName
       [PSCustomObject]@{
