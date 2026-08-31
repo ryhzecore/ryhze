@@ -146,9 +146,9 @@
                                                                                  "title":  "Episode 5",
                                                                                  "streams":  [
                                                                                                  {
-                                                                                                     "url":  "Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
+                                                                                                     "url":  "Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
@@ -326,9 +326,9 @@
                                                                                  "title":  "Episode 5",
                                                                                  "streams":  [
                                                                                                  {
-                                                                                                     "url":  "Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
+                                                                                                     "url":  "Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
@@ -445,9 +445,9 @@
                                                                                  "title":  "Episode 5",
                                                                                  "streams":  [
                                                                                                  {
-                                                                                                     "url":  "Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
+                                                                                                     "url":  "Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                                                                                                     "publicUrl":  "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                                                                                                     "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1-web.mp4",
                                                                                                      "type":  ".mp4"
                                                                                                  }
                                                                                              ]
@@ -567,5 +567,5 @@
                   }
               ]
 };
-window.RyhzeBuild = 'd88778d';
+window.RyhzeBuild = '8f91e99';
 
