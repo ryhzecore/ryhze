@@ -18,3 +18,5 @@ h264-check.mp4
 # Local media streams are too large for GitHub Pages.
 **/Stream/
 **/Streams/
+
+mobile-conversion*.log
