@@ -152,5 +152,7 @@ $library = [PSCustomObject]@{
 }
 
 $json = $library | ConvertTo-Json -Depth 10
-Set-Content -LiteralPath (Join-Path $Root 'library-data.js') -Value "window.RyhzeLibrary = $json;`n" -Encoding utf8
+$build = (git rev-parse --short HEAD 2>$null)
+if (-not $build) { $build = 'local' }
+Set-Content -LiteralPath (Join-Path $Root 'library-data.js') -Value "window.RyhzeLibrary = $json;`nwindow.RyhzeBuild = '$build';`n" -Encoding utf8
 Write-Host 'Ryhze library data updated successfully.'
