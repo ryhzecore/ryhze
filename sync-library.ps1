@@ -1,7 +1,7 @@
 param(
   [string]$Root = $PSScriptRoot,
   [string]$VideoBaseUrl = $(if ($env:RYHZE_VIDEO_BASE_URL) { $env:RYHZE_VIDEO_BASE_URL } else { 'https://video.ryhze.com' }),
-  [string]$R2VideoBaseUrl = $(if ($env:RYHZE_R2_VIDEO_BASE_URL) { $env:RYHZE_R2_VIDEO_BASE_URL } else { 'https://r2-video.ryhze.com' })
+  [string]$R2VideoBaseUrl = $(if ($env:RYHZE_R2_VIDEO_BASE_URL) { $env:RYHZE_R2_VIDEO_BASE_URL } else { 'https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev' })
 )
 
 $VideoBaseUrl = $VideoBaseUrl.TrimEnd('/')

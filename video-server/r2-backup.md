@@ -2,7 +2,7 @@
 
 The primary stream remains `https://video.ryhze.com`, served from this PC through Cloudflare Tunnel and Caddy.
 
-The backup host is `https://r2-video.ryhze.com`, attached to the `ryhze-streams` R2 bucket. It uses the same object paths as the local project, such as:
+The backup bucket is attached to `https://r2-video.ryhze.com`. For browser seeking, the generated library currently uses Cloudflare's managed R2 endpoint (`pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev`), which has verified `206 Partial Content` range responses. The custom domain remains available as an alias.
 
 `Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4`
 

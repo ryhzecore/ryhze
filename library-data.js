@@ -23,9 +23,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 1",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -39,9 +39,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 1",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -50,9 +50,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 2",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -61,9 +61,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 3",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -72,9 +72,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 4",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -83,9 +83,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 5",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -96,7 +96,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -160,7 +160,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -176,7 +176,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -187,7 +187,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -198,7 +198,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -209,7 +209,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -220,7 +220,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -231,7 +231,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -275,9 +275,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 1",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -291,9 +291,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 1",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -302,9 +302,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 2",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -313,9 +313,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 3",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -324,9 +324,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 4",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -335,9 +335,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 5",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -348,7 +348,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -412,7 +412,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -428,7 +428,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -439,7 +439,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -450,7 +450,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -461,7 +461,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -472,7 +472,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -483,7 +483,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -527,9 +527,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 1",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%201/Episode%201/Steam1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -543,9 +543,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 1",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%201/Steam1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -554,9 +554,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 2",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%202/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -565,9 +565,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 3",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%203/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -576,9 +576,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 4",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%204/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -587,9 +587,9 @@ window.RyhzeLibrary = {
                   "title": "Episode 5",
                   "streams": [
                     {
-                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1.mp4",
+                      "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                      "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%205/Stream1-web.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -600,7 +600,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Avengers%20Doomsday/Streams/Season%202/Episode%206/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -641,7 +641,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%201/Episode%201/Steam1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -657,7 +657,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%201/Steam1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -668,7 +668,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%202/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -679,7 +679,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%203/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -690,7 +690,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%204/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -701,7 +701,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%205/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
@@ -712,7 +712,7 @@ window.RyhzeLibrary = {
                     {
                       "url": "Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
                       "publicUrl": "https://video.ryhze.com/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
-                      "backupPublicUrl": "https://r2-video.ryhze.com/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
+                      "backupPublicUrl": "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Loki/Streams/Season%202/Episode%206/Stream1.mp4",
                       "type": ".mp4"
                     }
                   ]
