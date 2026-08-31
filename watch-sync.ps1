@@ -2,7 +2,7 @@ param([string]$Root = $PSScriptRoot)
 
 $ErrorActionPreference = 'Continue'
 Set-Location -LiteralPath $Root
-$watchPaths = @('Films', 'Games', 'assets', 'menu') | ForEach-Object { Join-Path $Root $_ } | Where-Object { Test-Path -LiteralPath $_ }
+$watchPaths = @($Root)
 $watchers = foreach ($path in $watchPaths) {
   $w = [System.IO.FileSystemWatcher]::new($path)
   $w.IncludeSubdirectories = $true
