@@ -14,7 +14,7 @@
 
                                                     ],
                                         "synopsis":  "Set in a vibrant 1960s retro-futuristic universe, Marvelâ€™s First Family must balance their tight-knit bond with saving their world from the planet-devouring cosmic god Galactus and his herald, the Silver Surfer.",
-                                        "release":  "25 July 2025",
+                                        "release":  "July 25, 2025",
                                         "licensor":  "Not specified",
                                         "mediaType":  "Movie",
                                         "seasons":  [
@@ -194,7 +194,7 @@
 
                                                     ],
                                         "synopsis":  "Set in a vibrant 1960s retro-futuristic universe, Marvelâ€™s First Family must balance their tight-knit bond with saving their world from the planet-devouring cosmic god Galactus and his herald, the Silver Surfer.",
-                                        "release":  "25 July 2025",
+                                        "release":  "July 25, 2025",
                                         "licensor":  "Not specified",
                                         "mediaType":  "Movie",
                                         "seasons":  [
@@ -567,5 +567,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '62bb75f';
+window.RyhzeBuild = 'ca243cd';
 
