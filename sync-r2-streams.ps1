@@ -4,6 +4,13 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$s3Uploader = Join-Path $Root 'sync-r2-s3.mjs'
+if ($env:R2_ACCESS_KEY_ID -and $env:R2_SECRET_ACCESS_KEY -and (Test-Path -LiteralPath $s3Uploader)) {
+  Write-Host 'Using multipart S3 uploader for large R2 objects.'
+  node $s3Uploader $Root
+  exit $LASTEXITCODE
+}
+
 $mediaExtensions = @('.mp4', '.webm', '.m4v', '.mov', '.ogv', '.ogg', '.m4a', '.mp3', '.wav', '.aac')
 $ffprobe = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffprobe.exe'
 
