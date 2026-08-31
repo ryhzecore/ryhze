@@ -7,7 +7,8 @@
   const userInput = document.querySelector('#accessUser');
   const accounts = new Map([
     ['Leo', 'AndruDummy0199'],
-    ['Yassine', 'AndruDummy0199']
+    ['Yassine', 'AndruDummy0199'],
+    ['Andru', 'AndruDummy0199']
   ]);
   const accessKey = 'ryhze-access';
   const userKey = 'ryhze-user';
