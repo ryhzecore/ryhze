@@ -1,0 +1,7 @@
+name = "ryhze-video-fallback"
+main = "r2-fallback-worker.js"
+compatibility_date = "2026-08-31"
+
+[[r2_buckets]]
+binding = "R2_BUCKET"
+bucket_name = "ryhze-streams"
