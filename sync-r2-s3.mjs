@@ -11,6 +11,9 @@ const secretAccessKey = process.env.R2_SECRET_ACCESS_KEY;
 if (!accessKeyId || !secretAccessKey) {
   throw new Error('Set R2_ACCESS_KEY_ID and R2_SECRET_ACCESS_KEY before uploading.');
 }
+if (accessKeyId === accountId || /^https?:\/\//i.test(secretAccessKey)) {
+  throw new Error('These are not R2 S3 credentials. R2_ACCESS_KEY_ID must be the token Access Key ID (not the account ID), and R2_SECRET_ACCESS_KEY must be the token Secret Access Key (not a URL).');
+}
 
 const client = new S3Client({
   region: 'auto',
