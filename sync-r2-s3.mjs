@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { S3Client } from '@aws-sdk/client-s3';
+import { S3Client, HeadObjectCommand } from '@aws-sdk/client-s3';
 import { Upload } from '@aws-sdk/lib-storage';
 
 const root = process.argv[2] ? path.resolve(process.argv[2]) : process.cwd();
@@ -41,6 +41,15 @@ for (const file of files) {
   const key = path.relative(root, file).replaceAll('\\', '/');
   const size = fs.statSync(file).size;
   if (!size) continue;
+  try {
+    const remote = await client.send(new HeadObjectCommand({ Bucket: bucket, Key: key }));
+    if (Number(remote.ContentLength) === size) {
+      process.stdout.write(`Already uploaded ${key}; skipping.\n`);
+      continue;
+    }
+  } catch (error) {
+    if (error?.$metadata?.httpStatusCode !== 404 && error?.name !== 'NotFound') throw error;
+  }
   process.stdout.write(`Uploading ${key} (${(size / 1073741824).toFixed(2)} GiB)\n`);
   await new Upload({
     client,
