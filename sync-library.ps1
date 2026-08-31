@@ -1,9 +1,11 @@
 param(
   [string]$Root = $PSScriptRoot,
-  [string]$VideoBaseUrl = $(if ($env:RYHZE_VIDEO_BASE_URL) { $env:RYHZE_VIDEO_BASE_URL } else { 'https://video.ryhze.com' })
+  [string]$VideoBaseUrl = $(if ($env:RYHZE_VIDEO_BASE_URL) { $env:RYHZE_VIDEO_BASE_URL } else { 'https://video.ryhze.com' }),
+  [string]$R2VideoBaseUrl = $(if ($env:RYHZE_R2_VIDEO_BASE_URL) { $env:RYHZE_R2_VIDEO_BASE_URL } else { 'https://r2-video.ryhze.com' })
 )
 
 $VideoBaseUrl = $VideoBaseUrl.TrimEnd('/')
+$R2VideoBaseUrl = $R2VideoBaseUrl.TrimEnd('/')
 
 $imageExtensions = @('.png', '.jpg', '.jpeg', '.webp', '.avif')
 $streamExtensions = @('.mp4', '.webm', '.ogv', '.ogg', '.m4v', '.mkv', '.mp3', '.m4a', '.wav', '.aac')
@@ -27,6 +29,7 @@ function Get-StreamItems($Files) {
       [PSCustomObject]@{
         url = $localUrl
         publicUrl = "$VideoBaseUrl/$localUrl"
+        backupPublicUrl = "$R2VideoBaseUrl/$localUrl"
         type = $_.Extension.ToLowerInvariant()
       }
     })
