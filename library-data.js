@@ -567,5 +567,5 @@
                   }
               ]
 };
-window.RyhzeBuild = 'daca3c2';
+window.RyhzeBuild = 'ee12754';
 
