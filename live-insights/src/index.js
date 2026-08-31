@@ -27,12 +27,12 @@ export default {
     const cutoff = Date.now() - 30000;
     await env.DB.prepare('DELETE FROM sessions WHERE updated_at < ?').bind(cutoff).run();
 
-    if (url.pathname === '/sessions' && request.method === 'GET') {
+    if (url.pathname.endsWith('/sessions') && request.method === 'GET') {
       const { results } = await env.DB.prepare('SELECT client_id, user_id, title, updated_at FROM sessions WHERE updated_at >= ? ORDER BY updated_at DESC').bind(cutoff).all();
       return json(request, { sessions: results });
     }
 
-    if (url.pathname === '/session' && request.method === 'POST') {
+    if (url.pathname.endsWith('/session') && request.method === 'POST') {
       let body;
       try { body = await request.json(); } catch { return json(request, { error: 'Invalid request.' }, 400); }
       const clientId = clean(body.clientId), userId = clean(body.userId), title = clean(body.title);

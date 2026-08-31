@@ -9,5 +9,11 @@
       "database_name": "ryhze-live-sessions",
       "database_id": "5ce4d629-424f-43c5-9788-18288c75a466"
     }
+  ],
+  "routes": [
+    {
+      "pattern": "video.ryhze.com/live-insights/*",
+      "zone_name": "ryhze.com"
+    }
   ]
 }
