@@ -4,11 +4,11 @@
                       "title":  "Exclusives",
                       "items":  [
                                     {
-                                        "title":  "Dune Part Two",
-                                        "image":  "Films/Dune%20Part%20Two/Thumbnail/OfficialImage.png",
+                                        "title":  "Fanstastic 4",
+                                        "image":  "Films/Fanstastic%204/Thumbnail/OfficialImage.png",
                                         "exclusiveImages":  [
-                                                                "Films/Dune%20Part%20Two/Images/images.png",
-                                                                "Films/Dune%20Part%20Two/Images/images2.png"
+                                                                "Films/Fanstastic%204/Images/images.png",
+                                                                "Films/Fanstastic%204/Images/images2.png"
                                                             ],
                                         "streams":  [
 
@@ -150,11 +150,11 @@
                       "title":  "Up \u0026 Coming",
                       "items":  [
                                     {
-                                        "title":  "Dune Part Two",
-                                        "image":  "Films/Dune%20Part%20Two/Thumbnail/OfficialImage.png",
+                                        "title":  "Fanstastic 4",
+                                        "image":  "Films/Fanstastic%204/Thumbnail/OfficialImage.png",
                                         "exclusiveImages":  [
-                                                                "Films/Dune%20Part%20Two/Images/images.png",
-                                                                "Films/Dune%20Part%20Two/Images/images2.png"
+                                                                "Films/Fanstastic%204/Images/images.png",
+                                                                "Films/Fanstastic%204/Images/images2.png"
                                                             ],
                                         "streams":  [
 
@@ -499,5 +499,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '34936c6';
+window.RyhzeBuild = '035c1f3';
 
