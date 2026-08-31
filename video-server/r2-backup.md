@@ -45,3 +45,7 @@ For small test assets, `./sync-r2-streams.ps1` can still use Wrangler. Wranglerâ
 The upload script uses Wrangler's remote R2 upload path, so no router changes or inbound ports are needed. It preserves the same `Films/...` and `Games/...` object paths used by the player, including the generated `-web.mp4` files when they are present.
 
 R2 is only used after the primary PC stream fails. No router ports need to be opened for the fallback.
+
+## Automatic synchronization
+
+`start-video-services.ps1` now starts `watch-sync.ps1` in the background. It watches local library folders, pushes settled changes to GitHub, polls GitHub for remote changes, and uploads to R2 when `R2_ACCESS_KEY_ID` and `R2_SECRET_ACCESS_KEY` are set in the environment. Keep those credentials configured on the PC that should perform automatic R2 uploads.

@@ -19,3 +19,11 @@ Start-Sleep -Seconds 5
 if (-not (Get-Process cloudflared -ErrorAction SilentlyContinue)) {
   Start-Process -FilePath $cloudflared -ArgumentList @('tunnel', '--config', $tunnelConfig, 'run') -WindowStyle Hidden
 }
+
+# Keep GitHub, the local library index, and R2 synchronized in the background.
+$syncScript = 'C:\Test123\watch-sync.ps1'
+$syncRunning = Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
+  Where-Object { $_.CommandLine -like "*$syncScript*" }
+if (-not $syncRunning) {
+  Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $syncScript) -WindowStyle Hidden
+}
