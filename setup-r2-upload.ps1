@@ -1,4 +1,4 @@
-param([string]$Root = $PSScriptRoot)
+param([string]$Root = $PSScriptRoot, [switch]$Persist)
 
 $ErrorActionPreference = 'Stop'
 $access = Read-Host 'R2 Access Key ID'
@@ -12,10 +12,16 @@ if ([string]::IsNullOrWhiteSpace($access) -or [string]::IsNullOrWhiteSpace($secr
 }
 $env:R2_ACCESS_KEY_ID = $access
 $env:R2_SECRET_ACCESS_KEY = $secret
+if ($Persist) {
+  [Environment]::SetEnvironmentVariable('R2_ACCESS_KEY_ID', $access, 'User')
+  [Environment]::SetEnvironmentVariable('R2_SECRET_ACCESS_KEY', $secret, 'User')
+}
 Push-Location $Root
 try { node .\sync-r2-s3.mjs }
 finally {
-  Remove-Item Env:R2_ACCESS_KEY_ID -ErrorAction SilentlyContinue
-  Remove-Item Env:R2_SECRET_ACCESS_KEY -ErrorAction SilentlyContinue
+  if (-not $Persist) {
+    Remove-Item Env:R2_ACCESS_KEY_ID -ErrorAction SilentlyContinue
+    Remove-Item Env:R2_SECRET_ACCESS_KEY -ErrorAction SilentlyContinue
+  }
   Pop-Location
 }
