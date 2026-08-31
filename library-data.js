@@ -567,5 +567,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '7bd9900';
+window.RyhzeBuild = '31d3a28';
 
