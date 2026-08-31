@@ -40,6 +40,10 @@
 <style>.search-wrap{width:40px;transition:width .35s cubic-bezier(.2,.8,.2,1)}.search-wrap.open{width:min(220px,24vw)}.search-toggle{position:absolute;inset:0 auto auto 0;z-index:2;transition:transform .22s ease,opacity .25s ease}.search-wrap.open .search-toggle{opacity:0;transform:scale(.78);pointer-events:none}.search{position:relative;opacity:0;transform:scale(.82);transform-origin:right center;transition:opacity .25s ease,transform .35s ease}.search-wrap.open .search{opacity:1;transform:scale(1)}.search-toggle:hover{transform:scale(1.1)}
  .update-status{position:relative;color:#d8ffe9}.update-status::before{background:#43e58c;box-shadow:0 0 10px rgba(67,229,140,.8)}.update-status #updateButton{display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);width:19px;height:19px;padding:0;border:0;border-radius:50%;background:#fff;color:#5500ff;font:800 13px/19px system-ui;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.24)}.update-status.available{color:#fff1b0}.update-status.available::before{background:#ffd45c;box-shadow:0 0 10px rgba(255,212,92,.75)}.update-status.available #updateButton{display:block}
 </style>
+<style>
+.video-status { min-width: 340px; padding-right: 42px; color: #fff; }
+.update-status, .update-status.available { color: #fff; }
+</style>
 </head>
 <body>
   <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="frosted" primitiveUnits="objectBoundingBox"><feTurbulence type="fractalNoise" baseFrequency=".01 .08" numOctaves="2" seed="6" result="map"/><feGaussianBlur in="SourceGraphic" stdDeviation=".012" result="blur"/><feDisplacementMap in="blur" in2="map" scale="1.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
