@@ -33,10 +33,10 @@ The bucket is currently ready to receive objects. The upload step below is still
 4. Upload the library with the included multipart uploader. From the project root, set the two credentials and run:
 
    ```powershell
-   .\setup-r2-upload.ps1
+   .\setup-r2-upload.ps1 -Persist
    ```
 
-   The helper prompts locally for both values (the secret is hidden) and clears them from the process after the upload.
+   The helper prompts locally for both values (the secret is hidden). `-Persist` stores them as Windows user environment variables so the background watcher can upload automatically.
 
    It uses the S3 endpoint `https://<account-id>.r2.cloudflarestorage.com`, region `auto`, and 64 MiB multipart chunks so feature-length files work reliably.
 
