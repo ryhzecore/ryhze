@@ -1,6 +1,7 @@
 # Local desktop app and conversion tooling
 tools/
 packages/
+node_modules/
 *.zip
 *.nupkg
 *.dll
