@@ -30,7 +30,15 @@ The bucket is currently ready to receive objects. The upload step below is still
    $env:R2_SECRET_ACCESS_KEY = '...'
    ```
 
-4. Upload the library with an S3-compatible client (for example AWS CLI, rclone, or the Cloudflare S3 SDK), using endpoint `https://<account-id>.r2.cloudflarestorage.com` and region `auto`. Keep the object keys identical to the local `Films/...` and `Games/...` paths.
+4. Upload the library with the included multipart uploader. From the project root, set the two credentials and run:
+
+   ```powershell
+   $env:R2_ACCESS_KEY_ID = '...'
+   $env:R2_SECRET_ACCESS_KEY = '...'
+   node .\sync-r2-s3.mjs
+   ```
+
+   It uses the S3 endpoint `https://<account-id>.r2.cloudflarestorage.com`, region `auto`, and 64 MiB multipart chunks so feature-length files work reliably.
 
 For small test assets, `./sync-r2-streams.ps1` can still use Wrangler. Wrangler’s object command rejects files larger than 300 MiB, so it is not suitable for the feature-length videos.
 
