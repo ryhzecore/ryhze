@@ -1,2 +1,2 @@
-window.RyhzeSiteVersion = 'local';
+window.RyhzeSiteVersion = 'fded960';
 
