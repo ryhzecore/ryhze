@@ -44,6 +44,15 @@ function Invoke-Publish {
       Start-Process -FilePath 'node.exe' -ArgumentList @($r2Script, $Root) -WorkingDirectory $Root -WindowStyle Hidden
     }
   }
+
+  # Create browser-playable copies outside the publish loop. Once a conversion
+  # completes, the watcher indexes and publishes the new -web.mp4 automatically.
+  $conversionScript = Join-Path $Root 'ensure-web-media.ps1'
+  $conversionRunning = Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
+    Where-Object { $_.CommandLine -like "*$conversionScript*" }
+  if (-not $conversionRunning -and (Test-Path -LiteralPath $conversionScript)) {
+    Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile','-ExecutionPolicy','Bypass','-File',$conversionScript,'-Root',$Root) -WindowStyle Hidden
+  }
 }
 
 # Reconcile once on launch, so changes made while the PC or watcher was stopped are published too.
