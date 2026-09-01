@@ -21,3 +21,5 @@ h264-check.mp4
 
 mobile-conversion*.log
 watch-sync.log
+bin/
+obj/
