@@ -11,7 +11,12 @@
                                                                 "Films/Fanstastic%20Four%20First%20Steps/Images/images2.png?v=639237839224245930"
                                                             ],
                                         "streams":  [
-
+                                                        {
+                                                            "url":  "Films/Fanstastic%20Four%20First%20Steps/Streams/Stream1.mp4",
+                                                            "publicUrl":  "https://video.ryhze.com/Films/Fanstastic%20Four%20First%20Steps/Streams/Stream1.mp4",
+                                                            "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Fanstastic%20Four%20First%20Steps/Streams/Stream1.mp4",
+                                                            "type":  ".mp4"
+                                                        }
                                                     ],
                                         "synopsis":  "Set in a vibrant 1960s retro-futuristic universe, Marvelâ€™s First Family must balance their tight-knit bond with saving their world from the planet-devouring cosmic god Galactus and his herald, the Silver Surfer.",
                                         "release":  "July 25, 2025",
@@ -225,7 +230,12 @@
                                                                 "Films/Fanstastic%20Four%20First%20Steps/Images/images2.png?v=639237839224245930"
                                                             ],
                                         "streams":  [
-
+                                                        {
+                                                            "url":  "Films/Fanstastic%20Four%20First%20Steps/Streams/Stream1.mp4",
+                                                            "publicUrl":  "https://video.ryhze.com/Films/Fanstastic%20Four%20First%20Steps/Streams/Stream1.mp4",
+                                                            "backupPublicUrl":  "https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev/Films/Fanstastic%20Four%20First%20Steps/Streams/Stream1.mp4",
+                                                            "type":  ".mp4"
+                                                        }
                                                     ],
                                         "synopsis":  "Set in a vibrant 1960s retro-futuristic universe, Marvelâ€™s First Family must balance their tight-knit bond with saving their world from the planet-devouring cosmic god Galactus and his herald, the Silver Surfer.",
                                         "release":  "July 25, 2025",
@@ -754,5 +764,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '1d62052';
+window.RyhzeBuild = 'b6314f9';
 
