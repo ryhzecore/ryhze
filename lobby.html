@@ -130,14 +130,16 @@
       const closePlayer=()=>{
         if(closing||!panel.classList.contains('open'))return;
         closing=true;
-        const source=activeSource,sourceRect=source?.getBoundingClientRect(),sourceBackground=source?.style?.backgroundImage||(source?.dataset?.image?`url("${source.dataset.image}")`:getComputedStyle(document.querySelector('.hero-image')).backgroundImage);
-        // Always use the visible outer frame as the return origin. Internal iframe content may be scrolled.
-        const panelRect=panel.getBoundingClientRect(),stageRect={left:panelRect.left,top:panelRect.top,width:panelRect.width,height:panelRect.height,radius:getComputedStyle(panel).borderRadius,border:'1px solid rgba(170,136,255,.34)',shadow:'0 30px 76px rgba(0,0,0,.56)'};
+        const source=activeSource,sourceRect=source?.getBoundingClientRect();
+        // Use a frozen copy of the actual frame. This works whether the iframe is a film player or a scrollable game page.
+        const panelRect=panel.getBoundingClientRect();
         let returnTransition=null;
         if(source&&sourceRect&&sourceRect.width&&sourceRect.height){
           returnTransition=document.createElement('div');
           returnTransition.className='menu-player-transition';
-          returnTransition.style.cssText=`left:${stageRect.left}px;top:${stageRect.top}px;width:${stageRect.width}px;height:${stageRect.height}px;border:${stageRect.border};border-radius:${stageRect.radius};box-shadow:${stageRect.shadow};background-image:${sourceBackground};transition:none`;
+          const frozenFrame=frame.cloneNode(true);frozenFrame.removeAttribute('id');frozenFrame.style.cssText='display:block;width:100%;height:100%;border:0;pointer-events:none;background:#080510';
+          returnTransition.append(frozenFrame);
+          returnTransition.style.cssText=`left:${panelRect.left}px;top:${panelRect.top}px;width:${panelRect.width}px;height:${panelRect.height}px;border:1px solid rgba(170,136,255,.34);border-radius:${getComputedStyle(panel).borderRadius};box-shadow:0 30px 76px rgba(0,0,0,.56);transition:none`;
           document.body.append(returnTransition);
           void returnTransition.offsetWidth;
         }
@@ -147,7 +149,7 @@
         if(returnTransition){
           const targetStyle=getComputedStyle(source);
           const animation=returnTransition.animate([
-            {left:`${stageRect.left}px`,top:`${stageRect.top}px`,width:`${stageRect.width}px`,height:`${stageRect.height}px`,borderRadius:stageRect.radius,border:stageRect.border,boxShadow:stageRect.shadow,opacity:1},
+            {left:`${panelRect.left}px`,top:`${panelRect.top}px`,width:`${panelRect.width}px`,height:`${panelRect.height}px`,borderRadius:getComputedStyle(panel).borderRadius,border:'1px solid rgba(170,136,255,.34)',boxShadow:'0 30px 76px rgba(0,0,0,.56)',opacity:1},
             {left:`${sourceRect.left}px`,top:`${sourceRect.top}px`,width:`${sourceRect.width}px`,height:`${sourceRect.height}px`,borderRadius:targetStyle.borderRadius,border:targetStyle.border,boxShadow:targetStyle.boxShadow,opacity:1}
           ],{duration:900,easing:'cubic-bezier(.18,.82,.2,1)',fill:'forwards'});
           animation.finished.then(finish).catch(finish);
