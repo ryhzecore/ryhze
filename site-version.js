@@ -1,2 +1,2 @@
-window.RyhzeSiteVersion = '2210391';
+window.RyhzeSiteVersion = '2249b20';
 
