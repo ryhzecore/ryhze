@@ -142,11 +142,17 @@
           void returnTransition.offsetWidth;
         }
         fullscreen=false;panel.classList.remove('fullscreen','open');document.body.classList.remove('player-open');
+        let finished=false;
+        const finish=()=>{if(finished)return;finished=true;backdrop.classList.remove('open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}returnTransition?.remove();if(!panel.classList.contains('open'))frame.src='about:blank';closing=false};
         if(returnTransition){
-          requestAnimationFrame(()=>requestAnimationFrame(()=>{returnTransition.style.transition='';returnTransition.style.left=`${sourceRect.left}px`;returnTransition.style.top=`${sourceRect.top}px`;returnTransition.style.width=`${sourceRect.width}px`;returnTransition.style.height=`${sourceRect.height}px`;returnTransition.style.borderRadius=getComputedStyle(source).borderRadius;returnTransition.style.border=getComputedStyle(source).border;returnTransition.style.boxShadow=getComputedStyle(source).boxShadow}));
-        }
-        const finish=()=>{backdrop.classList.remove('open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}returnTransition?.remove();if(!panel.classList.contains('open'))frame.src='about:blank';closing=false};
-        setTimeout(finish,returnTransition?940:280);
+          const targetStyle=getComputedStyle(source);
+          const animation=returnTransition.animate([
+            {left:`${stageRect.left}px`,top:`${stageRect.top}px`,width:`${stageRect.width}px`,height:`${stageRect.height}px`,borderRadius:stageRect.radius,border:stageRect.border,boxShadow:stageRect.shadow,opacity:1},
+            {left:`${sourceRect.left}px`,top:`${sourceRect.top}px`,width:`${sourceRect.width}px`,height:`${sourceRect.height}px`,borderRadius:targetStyle.borderRadius,border:targetStyle.border,boxShadow:targetStyle.boxShadow,opacity:1}
+          ],{duration:900,easing:'cubic-bezier(.18,.82,.2,1)',fill:'forwards'});
+          animation.finished.then(finish).catch(finish);
+          setTimeout(finish,1150);
+        }else setTimeout(finish,280);
       };
       const setFullscreen=next=>{fullscreen=next;panel.classList.toggle('fullscreen',fullscreen);setTimeout(()=>frame.contentWindow?.postMessage({type:'ryhze-embed-fullscreen',fullscreen},'*'),60)};
       addEventListener('message',event=>{if(event.data?.type==='ryhze-close-player')closePlayer();if(event.data?.type==='ryhze-toggle-player-fullscreen')setFullscreen(!fullscreen)});
