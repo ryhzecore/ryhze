@@ -9,6 +9,7 @@ $R2VideoBaseUrl = $R2VideoBaseUrl.TrimEnd('/')
 
 $imageExtensions = @('.png', '.jpg', '.jpeg', '.webp', '.avif')
 $streamExtensions = @('.mp4', '.webm', '.ogv', '.ogg', '.m4v', '.mkv', '.mp3', '.m4a', '.wav', '.aac')
+$installerExtensions = @('.exe', '.msi', '.msix', '.appx')
 
 function Get-NoteValue([string[]]$Notes, [string]$Label) {
   $pattern = '^\s*' + [regex]::Escape($Label) + '\s*:\s*(.*)$'
@@ -42,6 +43,16 @@ function Get-StreamItems($Files) {
         type = $_.Extension.ToLowerInvariant()
       }
     })
+}
+
+function Get-InstallerItem([string]$TitleFolder) {
+  $downloadPath = Join-Path $TitleFolder 'Download'
+  if (-not (Test-Path -LiteralPath $downloadPath)) { return $null }
+  $file = Get-ChildItem -LiteralPath $downloadPath -File -Recurse |
+    Where-Object { $installerExtensions -contains $_.Extension.ToLowerInvariant() } |
+    Select-Object -First 1
+  if (-not $file) { return $null }
+  [PSCustomObject]@{ name = $file.Name; url = Get-RelativeUrl $file.FullName }
 }
 
 function Get-RyhzeTitles([string]$LibraryType) {
@@ -121,6 +132,7 @@ function Get-RyhzeTitles([string]$LibraryType) {
         
         $categories = (Get-NoteValue $notes 'Categories') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
         $searchTags = (Get-NoteValue $notes 'Search Tags') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
+        $installer = if ($LibraryType -eq 'Games') { Get-InstallerItem $titleFolder.FullName } else { $null }
         
         [PSCustomObject]@{
           title = $titleFolder.Name
@@ -134,6 +146,7 @@ function Get-RyhzeTitles([string]$LibraryType) {
           seasons = @($seasons)
           categories = @($categories)
           searchTags = @($searchTags)
+          installer = $installer
         }
       }
     }

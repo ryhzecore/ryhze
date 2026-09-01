@@ -62,7 +62,8 @@
                                                            "ComicTok",
                                                            "Fantastic Four Edit",
                                                            "Pedro Pascal Marvel"
-                                                       ]
+                                                       ],
+                                        "installer":  null
                                     },
                                     {
                                         "title":  "Loki",
@@ -208,7 +209,8 @@
                                                            "MCU Theory",
                                                            "MarvelTok",
                                                            "ComicTok"
-                                                       ]
+                                                       ],
+                                        "installer":  null
                                     }
                                 ]
                   },
@@ -274,7 +276,8 @@
                                                            "ComicTok",
                                                            "Fantastic Four Edit",
                                                            "Pedro Pascal Marvel"
-                                                       ]
+                                                       ],
+                                        "installer":  null
                                     },
                                     {
                                         "title":  "Loki",
@@ -420,7 +423,8 @@
                                                            "MCU Theory",
                                                            "MarvelTok",
                                                            "ComicTok"
-                                                       ]
+                                                       ],
+                                        "installer":  null
                                     }
                                 ]
                   },
@@ -571,7 +575,8 @@
                                                            "MCU Theory",
                                                            "MarvelTok",
                                                            "ComicTok"
-                                                       ]
+                                                       ],
+                                        "installer":  null
                                     }
                                 ]
                   }
@@ -615,7 +620,8 @@
                                                            "GTA",
                                                            "GTA6",
                                                            "6"
-                                                       ]
+                                                       ],
+                                        "installer":  null
                                     },
                                     {
                                         "title":  "Valorant",
@@ -652,7 +658,11 @@
                                                            "GTA",
                                                            "GTA6",
                                                            "6"
-                                                       ]
+                                                       ],
+                                        "installer":  {
+                                                          "name":  "Install.exe",
+                                                          "url":  "Games/Valorant/Download/Install.exe"
+                                                      }
                                     }
                                 ]
                   },
@@ -694,7 +704,8 @@
                                                            "GTA",
                                                            "GTA6",
                                                            "6"
-                                                       ]
+                                                       ],
+                                        "installer":  null
                                     },
                                     {
                                         "title":  "Valorant",
@@ -731,11 +742,15 @@
                                                            "GTA",
                                                            "GTA6",
                                                            "6"
-                                                       ]
+                                                       ],
+                                        "installer":  {
+                                                          "name":  "Install.exe",
+                                                          "url":  "Games/Valorant/Download/Install.exe"
+                                                      }
                                     }
                                 ]
                   }
               ]
 };
-window.RyhzeBuild = 'd8e03ed';
+window.RyhzeBuild = 'bad07b0';
 
