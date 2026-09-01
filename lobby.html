@@ -127,34 +127,41 @@
       const revealWhenReady=()=>{if(!panel.classList.contains('open')||!frameReady||!activeTransition||!activeTransition.classList.contains('landed'))return;requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{if(!panel.classList.contains('open'))return;revealPlayer(activeTransition);activeTransition=null},260)}))};
       const beginLanding=()=>{if(!activeTransition)return;const imageRect=getPlayerImageRect();if(imageRect){activeTransition.style.left=`${imageRect.left}px`;activeTransition.style.top=`${imageRect.top}px`;activeTransition.style.width=`${imageRect.width}px`;activeTransition.style.height=`${imageRect.height}px`;activeTransition.style.borderRadius=imageRect.radius;activeTransition.style.border=imageRect.border;activeTransition.style.boxShadow=imageRect.shadow}activeTransition.querySelector('.transition-loader')?.classList.add('hidden');activeTransition.style.transition='';requestAnimationFrame(()=>requestAnimationFrame(()=>{activeTransition.classList.add('landed');revealWhenReady()}))};
       addEventListener('message',event=>{if(event.data?.type==='ryhze-player-ready'||event.data?.type==='ryhze-game-ready'){frameReady=true;revealWhenReady()}});
-      const closePlayer=()=>{
+      const closePlayer=async()=>{
         if(closing||!panel.classList.contains('open'))return;
         closing=true;
         const source=activeSource,sourceRect=source?.getBoundingClientRect();
-        // Use a frozen copy of the actual frame. This works whether the iframe is a film player or a scrollable game page.
+        // Restore the game page artwork before measuring it; a game page may have been scrolled below its image.
+        try{frame.contentWindow?.scrollTo(0,0)}catch{}
+        await new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve)));
         const panelRect=panel.getBoundingClientRect();
+        const imageRect=getPlayerImageRect()||panelRect;
         let returnTransition=null;
         if(source&&sourceRect&&sourceRect.width&&sourceRect.height){
           returnTransition=document.createElement('div');
           returnTransition.className='menu-player-transition';
-          // Move the live iframe instead of cloning it, so its current visible frame stays intact during the return.
-          frame.style.cssText='display:block;width:100%;height:100%;border:0;pointer-events:none;background:#080510';
-          returnTransition.append(frame);
-          returnTransition.style.cssText=`left:${panelRect.left}px;top:${panelRect.top}px;width:${panelRect.width}px;height:${panelRect.height}px;border:1px solid rgba(170,136,255,.34);border-radius:${getComputedStyle(panel).borderRadius};box-shadow:0 30px 76px rgba(0,0,0,.56);transition:none`;
+          const artwork=source.dataset?.image||'';
+          returnTransition.style.cssText=`z-index:250;left:${panelRect.left}px;top:${panelRect.top}px;width:${panelRect.width}px;height:${panelRect.height}px;border:1px solid rgba(170,136,255,.34);border-radius:${getComputedStyle(panel).borderRadius};box-shadow:0 30px 76px rgba(0,0,0,.56);background-image:url("${artwork}");transition:none`;
           document.body.append(returnTransition);
           void returnTransition.offsetWidth;
         }
         fullscreen=false;panel.classList.remove('fullscreen','open');document.body.classList.remove('player-open');
         let finished=false;
-        const finish=()=>{if(finished)return;finished=true;backdrop.classList.remove('open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}if(returnTransition?.contains(frame))panel.append(frame);returnTransition?.remove();if(!panel.classList.contains('open'))frame.src='about:blank';closing=false};
+        const finish=()=>{if(finished)return;finished=true;backdrop.classList.remove('open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}returnTransition?.remove();if(!panel.classList.contains('open'))frame.src='about:blank';closing=false};
         if(returnTransition){
           const targetStyle=getComputedStyle(source);
-          const animation=returnTransition.animate([
+          const settle=returnTransition.animate([
             {left:`${panelRect.left}px`,top:`${panelRect.top}px`,width:`${panelRect.width}px`,height:`${panelRect.height}px`,borderRadius:getComputedStyle(panel).borderRadius,border:'1px solid rgba(170,136,255,.34)',boxShadow:'0 30px 76px rgba(0,0,0,.56)',opacity:1},
-            {left:`${sourceRect.left}px`,top:`${sourceRect.top}px`,width:`${sourceRect.width}px`,height:`${sourceRect.height}px`,borderRadius:targetStyle.borderRadius,border:targetStyle.border,boxShadow:targetStyle.boxShadow,opacity:1}
-          ],{duration:900,easing:'cubic-bezier(.18,.82,.2,1)',fill:'forwards'});
-          animation.finished.then(finish).catch(finish);
-          setTimeout(finish,1150);
+            {left:`${imageRect.left}px`,top:`${imageRect.top}px`,width:`${imageRect.width}px`,height:`${imageRect.height}px`,borderRadius:imageRect.radius||'28px',border:imageRect.border||'1px solid rgba(170,136,255,.34)',boxShadow:imageRect.shadow||'0 25px 55px rgba(0,0,0,.48)',opacity:1}
+          ],{duration:430,easing:'cubic-bezier(.18,.82,.2,1)',fill:'forwards'});
+          settle.finished.then(()=>{
+            const shrink=returnTransition.animate([
+              {left:`${imageRect.left}px`,top:`${imageRect.top}px`,width:`${imageRect.width}px`,height:`${imageRect.height}px`,borderRadius:imageRect.radius||'28px',opacity:1},
+              {left:`${sourceRect.left}px`,top:`${sourceRect.top}px`,width:`${sourceRect.width}px`,height:`${sourceRect.height}px`,borderRadius:targetStyle.borderRadius,opacity:1}
+            ],{duration:620,easing:'cubic-bezier(.18,.82,.2,1)',fill:'forwards'});
+            shrink.finished.then(finish).catch(finish);
+          }).catch(finish);
+          setTimeout(finish,1400);
         }else setTimeout(finish,280);
       };
       const setFullscreen=next=>{fullscreen=next;panel.classList.toggle('fullscreen',fullscreen);setTimeout(()=>frame.contentWindow?.postMessage({type:'ryhze-embed-fullscreen',fullscreen},'*'),60)};
