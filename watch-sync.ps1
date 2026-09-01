@@ -4,6 +4,7 @@ $ErrorActionPreference = 'Continue'
 Set-Location -LiteralPath $Root
 $logPath = Join-Path $Root 'watch-sync.log'
 $heartbeatPath = Join-Path $Root 'watch-sync.heartbeat'
+Set-Content -LiteralPath $heartbeatPath -Value (Get-Date).ToString('o') -Encoding ascii
 $watchPaths = @($Root)
 $watchers = foreach ($path in $watchPaths) {
   $w = [System.IO.FileSystemWatcher]::new($path)
