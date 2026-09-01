@@ -7,243 +7,1550 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <script>if(new URLSearchParams(location.search).has('returning'))document.documentElement.classList.add('returning-lobby');</script>
+  
+  <script>
+    if (new URLSearchParams(location.search).has('returning')) {
+      document.documentElement.classList.add('returning-lobby');
+    }
+  </script>
+
   <title>Ryhze — films & games</title>
+
   <style>
-    :root { --ink:#f8f9ff; --muted:#b8bdcf; --panel:rgba(18,22,39,.55); --line:rgba(170,136,255,.34); --violet:#5500FF; --cyan:#5500FF; }
-    * { box-sizing:border-box; } html { scroll-behavior:smooth; } body { margin:0; color:var(--ink); background:#080a12; font:500 15px/1.45 Inter, ui-sans-serif, system-ui, sans-serif; overflow-x:hidden; } body.player-open { overflow:hidden; }
-    body::before { content:""; position:fixed; inset:-160px -100px; pointer-events:none; z-index:-2; background:radial-gradient(circle at 20% -10%,#382c6c 0,transparent 29%),radial-gradient(circle at 100% 15%,#35007f 0,transparent 26%),linear-gradient(150deg,#080a12 15%,#101326 100%); transform:translateY(var(--ambient-shift,0px)); transition:transform .7s ease-out; will-change:transform; }
-    .nav { position:fixed; top:0; right:0; left:0; z-index:10; height:76px; display:flex; align-items:center; gap:22px; padding:0 clamp(12px,2vw,28px); border:0; background:transparent; isolation:isolate; }
-    .nav::before { content:""; position:absolute; z-index:-1; inset:0 0 -34px; background:linear-gradient(180deg,rgba(7,10,20,.55) 0%,rgba(8,13,27,.30) 50%,rgba(8,13,27,0) 100%); box-shadow:0 18px 36px rgba(0,0,0,.34); backdrop-filter:blur(21px); -webkit-backdrop-filter:blur(21px); -webkit-mask-image:linear-gradient(to bottom,#000 0%,#000 58%,transparent 100%); mask-image:linear-gradient(to bottom,#000 0%,#000 58%,transparent 100%); pointer-events:none; }
-    .brand { position:relative; width:116px; height:42px; margin-right:12px; display:flex; align-items:center; } .brand img { display:block; width:100%; max-height:38px; object-fit:contain; object-position:left center; mix-blend-mode:screen; } .beta { position:absolute; left:2px; top:calc(100% - 1px); padding:2px 6px; border:1px solid rgba(202,187,255,.42); border-radius:999px; background:rgba(85,0,255,.24); color:#e7ddff; font-size:8px; font-weight:850; letter-spacing:.12em; line-height:1; text-transform:uppercase; }
-    .switcher { position:relative; display:flex; flex:0 0 auto; gap:4px; padding:4px; border:1px solid rgba(157,120,255,.32); border-radius:999px; background:rgba(85,0,255,.12); box-shadow:inset 0 1px rgba(232,224,255,.16); } .switcher::before { content:""; position:absolute; z-index:0; top:4px; bottom:4px; left:4px; width:calc(50% - 4px); border-radius:999px; background:#fff; box-shadow:inset 0 1px rgba(255,255,255,.75),0 0 20px rgba(255,255,255,.18); transform:translateX(0); transition:transform .42s cubic-bezier(.2,.8,.2,1); } body.games .switcher::before { transform:translateX(100%); }
-    button { font:inherit; color:inherit; border:0; cursor:pointer; } .glass { position:relative; overflow:hidden; border:1px solid rgba(170,136,255,.34); background:linear-gradient(135deg,rgba(85,0,255,.29),rgba(42,17,118,.16)); box-shadow:inset 0 1px rgba(239,235,255,.34),inset 0 -1px rgba(49,15,132,.22),0 12px 30px rgba(0,0,0,.24); backdrop-filter:url(#frosted) blur(16px); -webkit-backdrop-filter:url(#frosted) blur(16px); transition:transform .22s ease, background .22s ease, box-shadow .22s ease; }
-    .glass::before { content:""; position:absolute; inset:0; background:linear-gradient(115deg,transparent 22%,rgba(238,229,255,.36),transparent 65%); transform:translateX(-120%); transition:transform .55s ease; } .glass:hover::before { transform:translateX(120%); } .glass:hover { transform:scale(1.035); background:linear-gradient(135deg,rgba(105,38,255,.38),rgba(56,18,150,.22)); box-shadow:inset 0 1px rgba(248,245,255,.48),0 16px 35px rgba(0,0,0,.34),0 0 28px rgba(85,0,255,.24); } .glass:active { transform:scale(.97); }
-    .tab { position:relative; z-index:1; flex:0 0 76px; width:76px; padding:8px 14px; text-align:center; border:0!important; border-radius:999px; background:transparent!important; box-shadow:none!important; backdrop-filter:none!important; -webkit-backdrop-filter:none!important; color:#d9d2f5; font-weight:800; transition:color .35s ease; } .tab::before,.tab::after { display:none!important; } .tab.active { color:#5500FF; } .tab:not(.active),.tab:not(.active):hover,.tab:not(.active):focus,.tab:not(.active):focus-visible,.tab:not(.active):active { transform:none!important; border:0!important; outline:0!important; color:#d9d2f5; background:transparent!important; box-shadow:none!important; } .tab.active:hover{color:#5500FF}
-    .nav-spacer { flex:1; } .icon-btn { width:40px; height:40px; display:grid; place-items:center; border-radius:50%; } .icon-btn:hover { transform:scale(1.1); } .search-wrap { position:relative; width:min(220px,24vw); } .search { display:flex; align-items:center; gap:8px; width:100%; padding:0 12px; height:40px; border-radius:22px; } .search input { width:100%; outline:0; border:0; background:transparent; color:white; font:inherit; } .search-results { position:absolute; top:calc(100% + 12px); right:0; display:none; width:100%; min-width:0; padding:8px; border:1px solid rgba(170,136,255,.34); border-radius:22px; overflow:hidden; background:linear-gradient(135deg,rgba(67,20,174,.86),rgba(15,10,46,.90)); box-shadow:inset 0 1px rgba(238,229,255,.25),0 18px 40px rgba(0,0,0,.34); backdrop-filter:url(#frosted) blur(20px); -webkit-backdrop-filter:url(#frosted) blur(20px); } .search-results:has(.search-empty),.search-results:has(.search-result:only-child) { min-height:40px; padding:0; border-radius:22px; } .search-results.open { display:grid; gap:4px; } .search-result { padding:9px 10px; border-radius:14px; color:#f5f1ff; text-align:left; background:transparent; transition:.2s; } .search-result:only-child,.search-empty { min-height:38px; padding:0 12px; display:flex; align-items:center; border-radius:22px; } .search-result:hover { background:rgba(125,71,255,.20); transform:scale(1.02); } .search-empty { color:#d4caf4; font-size:13px; } .avatar { width:40px; height:40px; padding:4px; border:1px solid rgba(170,136,255,.34); border-radius:50%; display:grid; place-items:center; background:rgba(24,23,35,.52); box-shadow:inset 0 1px rgba(239,235,255,.34),0 12px 30px rgba(0,0,0,.24); backdrop-filter:blur(22px) saturate(135%); -webkit-backdrop-filter:blur(22px) saturate(135%); font-weight:800; transition:transform .22s ease,box-shadow .22s ease; } .avatar span { width:100%; height:100%; display:grid; place-items:center; border-radius:50%; background:linear-gradient(135deg,#b79aff,#5500FF); color:#fff; } .avatar:hover { transform:scale(1.1); box-shadow:inset 0 1px rgba(248,245,255,.48),0 0 24px rgba(85,0,255,.42); }
-    main { padding-bottom:20px; } .hero { min-height:610px; display:flex; align-items:end; padding:70px clamp(12px,4vw,52px); position:relative; isolation:isolate; overflow:hidden; } .hero-image { position:absolute; inset:-3%; z-index:-1; background:center/cover no-repeat; transform:scale(1.03); animation:exclusiveArtworkMotion 22s ease-in-out infinite alternate; transition:background-image .5s ease,transform .7s ease,opacity .7s ease; } .hero::after { content:""; position:absolute; inset:0; z-index:-1; background:linear-gradient(90deg,rgba(6,7,15,.93) 3%,rgba(6,7,15,.55) 45%,rgba(6,7,15,.14)),linear-gradient(0deg,#080a12 0,transparent 40%); } .hero::before { content:""; position:absolute; z-index:0; inset:0; background:#000; opacity:0; transition:opacity .7s ease; pointer-events:none; } .hero.changing::before { opacity:1; } .hero.changing .hero-image { transform:scale(1.03); opacity:0; animation-play-state:paused; }
-    .hero-image,body.games .hero-image { background-image:var(--exclusive-image,none) !important; } .hero-copy { position:relative; z-index:1; width:min(780px,76vw); max-width:780px; } .hero-copy.slide-away { animation:slideAway .7s ease-in both; } .hero-copy.fade-in { animation:fadeIn .8s ease-out both; } .eyebrow { color:#b79aff; text-transform:uppercase; letter-spacing:2px; font-size:11px; font-weight:800; } h1 { font-size:clamp(44px,7vw,92px); line-height:.94; letter-spacing:-.07em; margin:12px 0 20px; } .description { max-width:760px; color:#e2e6f3; font-size:17px; } .metadata { display:flex; gap:14px; flex-wrap:wrap; color:#dae0f5; margin:20px 0; } .rating { color:#b9f8cb; font-weight:800; } .exclusive-dots { position:absolute; z-index:2; left:clamp(12px,4vw,52px); bottom:30px; display:flex; gap:12px; flex-wrap:wrap; max-width:45vw; } .exclusive-dot { width:13px; height:13px; padding:0; border:1px solid rgba(234,225,255,.52); border-radius:50%; background:rgba(250,247,255,.42); box-shadow:0 2px 9px rgba(0,0,0,.35); transition:transform .2s ease,background .2s ease,box-shadow .2s ease; } .exclusive-dot:hover:not(:disabled) { transform:scale(1.28); background:#fff; box-shadow:0 0 16px rgba(255,255,255,.56); } .exclusive-dot.active { background:#fff; box-shadow:0 0 16px rgba(255,255,255,.6); } .exclusive-dot:disabled { cursor:default; opacity:.24; }
-    .actions { display:flex; gap:8px; flex-wrap:wrap; } .exclusive-release { margin:0 0 18px; color:#d8ceff; font-size:14px; font-weight:700; } .action { min-height:38px; padding:8px 14px; border-radius:999px; font-weight:800; } .primary,.primary:hover { color:#5500FF; background:#fff; border-color:#fff; box-shadow:inset 0 1px rgba(255,255,255,.8),0 10px 25px rgba(255,255,255,.18); } .secondary { background:linear-gradient(135deg,rgba(100,53,226,.24),rgba(47,22,128,.18)); } .more-wrap { position:relative; } .exclusive-menu { position:absolute; z-index:5; left:0; bottom:calc(100% + 12px); display:grid; gap:4px; width:min(220px,calc(100vw - 24px)); min-width:0; padding:8px; border:1px solid rgba(170,136,255,.34); border-radius:22px; overflow:hidden; background:linear-gradient(135deg,rgba(67,20,174,.86),rgba(15,10,46,.90)); box-shadow:inset 0 1px rgba(238,229,255,.25),0 18px 40px rgba(0,0,0,.34); backdrop-filter:url(#frosted) blur(20px); -webkit-backdrop-filter:url(#frosted) blur(20px); opacity:0; visibility:hidden; transform:translateY(8px) scale(.97); transform-origin:bottom left; transition:.22s ease; } .exclusive-menu.open { opacity:1; visibility:visible; transform:none; } .exclusive-menu button { display:flex; align-items:center; justify-content:space-between; gap:14px; width:100%; min-width:0; padding:9px 10px; border-radius:14px; color:#f5f1ff; text-align:left; font:inherit; background:transparent; } .exclusive-menu button:hover { background:rgba(125,71,255,.20); transform:scale(1.02); } .favorite-star { color:#fff; font-size:18px; line-height:12px; }
-    .section { padding:18px 0; } .section-head { display:flex; justify-content:space-between; align-items:center; margin:0 0 14px; padding:0 clamp(12px,2vw,28px); } h2 { font-size:22px; letter-spacing:-.035em; margin:0; } .hint { color:var(--muted); font-size:13px; }
-    .row { display:grid; grid-auto-flow:column; grid-auto-columns:clamp(145px,15vw,208px); gap:14px; overflow-x:auto; overscroll-behavior-inline:contain; padding:36px 24px 34px; margin:-36px 0 -22px; scroll-padding-inline:24px; scrollbar-width:none; } .row::-webkit-scrollbar { display:none; }
-    .card { min-height:286px; position:relative; overflow:hidden; border-radius:24px; background:radial-gradient(circle at 20% 12%,rgba(119,82,255,.29),transparent 40%),radial-gradient(circle at 88% 100%,rgba(85,0,255,.28),transparent 48%),linear-gradient(145deg,rgba(64,39,146,.42),rgba(16,12,52,.76)); border:1px solid var(--line); box-shadow:inset 0 1px rgba(239,235,255,.34),0 12px 30px rgba(0,0,0,.24); transition:transform .25s ease,box-shadow .25s ease,opacity .55s ease; } .card.opening-player { opacity:1; transform:none; background-image:none!important; } .card.opening-player .card-info { opacity:0; } .hero-copy.opening-player { opacity:0; transform:scale(.94); } .card[style*="background-image"] { background-size:cover; background-position:center; background-repeat:no-repeat; } .card::before { content:""; position:absolute; z-index:0; inset:-22%; background:radial-gradient(circle at 23% 28%,rgba(181,152,255,.28),transparent 25%),radial-gradient(circle at 74% 75%,rgba(85,0,255,.33),transparent 31%); animation:ambientDrift 12s ease-in-out infinite alternate; } .card:hover { transform:scale(1.045); box-shadow:inset 0 1px rgba(255,255,255,.36),0 24px 38px rgba(0,0,0,.45),0 0 34px rgba(85,0,255,.29); z-index:2; } .card::after { content:""; position:absolute; z-index:0; inset:30% 0 0; background:linear-gradient(transparent,rgba(8,5,22,.93)); }
-    .games-row { grid-auto-columns:clamp(235px,25vw,350px); } .games-row .card { min-height:0; aspect-ratio:16/9; border-radius:24px; } .games-row .card::after { inset:38% 0 0; } .games-row .card-info { padding:13px 15px; background:transparent; backdrop-filter:none; }
-    .card-info { position:absolute; z-index:1; right:0; bottom:0; left:0; padding:15px; width:auto; min-width:0; display:flex; flex-direction:column; align-items:center; text-align:center; } .card-title { display:block; width:100%; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; font-weight:800; font-size:16px; } .card-detail,.tag { display:none; } .thumbnail-transition { position:fixed; z-index:100; pointer-events:none; overflow:hidden; border:1px solid var(--line); background:#000 center/cover no-repeat; box-shadow:0 12px 30px rgba(0,0,0,.34); transition:left 1.25s cubic-bezier(.18,.86,.2,1),top 1.25s cubic-bezier(.18,.86,.2,1),width 1.25s cubic-bezier(.18,.86,.2,1),height 1.25s cubic-bezier(.18,.86,.2,1),border-radius 1.16s ease; } .thumbnail-transition::after { content:""; position:absolute; inset:0; background:#000; opacity:0; transition:opacity .45s ease; } .thumbnail-transition.to-black::after { opacity:1; } .lobby-fade{position:fixed;z-index:200;inset:0;pointer-events:none;background:#000;opacity:0;transition:opacity .58s ease}.lobby-fade.show{opacity:1}
-    .footer { margin-top:46px; padding:130px clamp(12px,2vw,28px) 30px; background:linear-gradient(to bottom,transparent 0%,#05070e 52%,#000 100%); border-top:1px solid rgba(172,228,255,.09); } .footer-inner { display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; color:#8e9aad; font-size:13px; } .footer-links { display:flex; gap:18px; } .footer a { color:#d8effa; text-decoration:none; } .footer a:hover { color:#76dcff; }
-    .toast { position:fixed; left:50%; bottom:28px; z-index:30; transform:translate(-50%,120px); padding:12px 18px; border-radius:13px; background:#eefaff; color:#071018; font-weight:750; box-shadow:0 14px 35px #0006; transition:transform .3s ease; } .toast.show { transform:translate(-50%,0); }
-    .modal { position:fixed; z-index:20; inset:0; display:grid; place-items:center; padding:20px; background:rgba(2,4,10,.62); opacity:0; visibility:hidden; transition:.25s; } .modal.open { opacity:1; visibility:visible; } .modal-box { max-width:550px; padding:28px; border-radius:22px; background:rgba(20,25,44,.88); border:1px solid var(--line); backdrop-filter:blur(28px); transform:translateY(15px); transition:.25s; } .modal.open .modal-box { transform:none; } .close { float:right; border-radius:50%; width:30px; height:30px; background:#ffffff17; }
-    .games-only { display:none; } body.games .films-only { display:none; } body.games .games-only { display:block; } @keyframes slideAway { to { opacity:0; transform:translateX(-75px); } } @keyframes fadeIn { from { opacity:0; } to { opacity:1; } } @keyframes ambientDrift { from { transform:translate3d(-4%,-3%,0) scale(1.03); } to { transform:translate3d(5%,4%,0) scale(1.12); } } @keyframes exclusiveArtworkMotion { 0% { transform:translate3d(-1.2%,.5%,0) scale(1.04); } 50% { transform:translate3d(1%, -1%,0) scale(1.09); } 100% { transform:translate3d(-.6%,1%,0) scale(1.06); } }
-    @media(max-width:700px){ .nav { gap:10px; height:68px; padding:0 12px; } .brand { width:80px; height:35px; margin:0; } .search-wrap { display:none; } .nav-spacer { flex:1; } .hero { min-height:570px; padding:70px 12px; } .description { font-size:15px; } .row { grid-auto-columns:145px; padding:36px 20px 34px; scroll-padding-inline:20px; } .card { min-height:220px; border-radius:20px; } .games-row { grid-auto-columns:270px; } .games-row .card { min-height:0; border-radius:20px; } .section { padding:18px 0; } .section-head { padding-inline:12px; } .footer { padding-inline:12px; } }
+    :root {
+      --ink: #f8f9ff;
+      --muted: #b8bdcf;
+      --panel: rgba(18, 22, 39, .55);
+      --line: rgba(170, 136, 255, .34);
+      --violet: #5500FF;
+      --cyan: #5500FF;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: #080a12;
+      font: 500 15px/1.45 Inter, ui-sans-serif, system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+
+    body.player-open {
+      overflow: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -160px -100px;
+      pointer-events: none;
+      z-index: -2;
+      background: radial-gradient(circle at 20% -10%, #382c6c 0, transparent 29%),
+                  radial-gradient(circle at 100% 15%, #35007f 0, transparent 26%),
+                  linear-gradient(150deg, #080a12 15%, #101326 100%);
+      transform: translateY(var(--ambient-shift, 0px));
+      transition: transform .7s ease-out;
+      will-change: transform;
+    }
+
+    .nav {
+      position: fixed;
+      top: 0;
+      right: 0;
+      left: 0;
+      z-index: 10;
+      height: 76px;
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 0 clamp(12px, 2vw, 28px);
+      border: 0;
+      background: transparent;
+      isolation: isolate;
+    }
+
+    .nav::before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      inset: 0 0 -34px;
+      background: linear-gradient(180deg, rgba(7, 10, 20, .55) 0%, rgba(8, 13, 27, .30) 50%, rgba(8, 13, 27, 0) 100%);
+      box-shadow: 0 18px 36px rgba(0, 0, 0, .34);
+      backdrop-filter: blur(21px);
+      -webkit-backdrop-filter: blur(21px);
+      -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 0%, #000 58%, transparent 100%);
+      pointer-events: none;
+    }
+
+    .brand {
+      position: relative;
+      width: 116px;
+      height: 42px;
+      margin-right: 12px;
+      display: flex;
+      align-items: center;
+    }
+
+    .brand img {
+      display: block;
+      width: 100%;
+      max-height: 38px;
+      object-fit: contain;
+      object-position: left center;
+      mix-blend-mode: screen;
+    }
+
+    .beta {
+      position: absolute;
+      left: 2px;
+      top: calc(100% - 1px);
+      padding: 2px 6px;
+      border: 1px solid rgba(202, 187, 255, .42);
+      border-radius: 999px;
+      background: rgba(85, 0, 255, .24);
+      color: #e7ddff;
+      font-size: 8px;
+      font-weight: 850;
+      letter-spacing: .12em;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .switcher {
+      position: relative;
+      display: flex;
+      flex: 0 0 auto;
+      gap: 4px;
+      padding: 4px;
+      border: 1px solid rgba(157, 120, 255, .32);
+      border-radius: 999px;
+      background: rgba(85, 0, 255, .12);
+      box-shadow: inset 0 1px rgba(232, 224, 255, .16);
+    }
+
+    .switcher::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      top: 4px;
+      bottom: 4px;
+      left: 4px;
+      width: calc(50% - 4px);
+      border-radius: 999px;
+      background: #fff;
+      box-shadow: inset 0 1px rgba(255, 255, 255, .75), 0 0 20px rgba(255, 255, 255, .18);
+      transform: translateX(0);
+      transition: transform .42s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    body.games .switcher::before {
+      transform: translateX(100%);
+    }
+
+    button {
+      font: inherit;
+      color: inherit;
+      border: 0;
+      cursor: pointer;
+    }
+
+    .glass {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(170, 136, 255, .34);
+      background: linear-gradient(135deg, rgba(85, 0, 255, .29), rgba(42, 17, 118, .16));
+      box-shadow: inset 0 1px rgba(239, 235, 255, .34), inset 0 -1px rgba(49, 15, 132, .22), 0 12px 30px rgba(0, 0, 0, .24);
+      backdrop-filter: url(#frosted) blur(16px);
+      -webkit-backdrop-filter: url(#frosted) blur(16px);
+      transition: transform .22s ease, background .22s ease, box-shadow .22s ease;
+    }
+
+    .glass::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(115deg, transparent 22%, rgba(238, 229, 255, .36), transparent 65%);
+      transform: translateX(-120%);
+      transition: transform .55s ease;
+    }
+
+    .glass:hover::before {
+      transform: translateX(120%);
+    }
+
+    .glass:hover {
+      transform: scale(1.035);
+      background: linear-gradient(135deg, rgba(105, 38, 255, .38), rgba(56, 18, 150, .22));
+      box-shadow: inset 0 1px rgba(248, 245, 255, .48), 0 16px 35px rgba(0, 0, 0, .34), 0 0 28px rgba(85, 0, 255, .24);
+    }
+
+    .glass:active {
+      transform: scale(.97);
+    }
+
+    .tab {
+      position: relative;
+      z-index: 1;
+      flex: 0 0 76px;
+      width: 76px;
+      padding: 8px 14px;
+      text-align: center;
+      border: 0 !important;
+      border-radius: 999px;
+      background: transparent !important;
+      box-shadow: none !important;
+      backdrop-filter: none !important;
+      -webkit-backdrop-filter: none !important;
+      color: #d9d2f5;
+      font-weight: 800;
+      transition: color .35s ease;
+    }
+
+    .tab::before,
+    .tab::after {
+      display: none !important;
+    }
+
+    .tab.active {
+      color: #5500FF;
+    }
+
+    .tab:not(.active),
+    .tab:not(.active):hover,
+    .tab:not(.active):focus,
+    .tab:not(.active):focus-visible,
+    .tab:not(.active):active {
+      transform: none !important;
+      border: 0 !important;
+      outline: 0 !important;
+      color: #d9d2f5;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    .tab.active:hover {
+      color: #5500FF;
+    }
+
+    .nav-spacer {
+      flex: 1;
+    }
+
+    .icon-btn {
+      width: 40px;
+      height: 40px;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+    }
+
+    .icon-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .search-wrap {
+      position: relative;
+      width: min(220px, 24vw);
+    }
+
+    .search {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      width: 100%;
+      padding: 0 12px;
+      height: 40px;
+      border-radius: 22px;
+    }
+
+    .search input {
+      width: 100%;
+      outline: 0;
+      border: 0;
+      background: transparent;
+      color: white;
+      font: inherit;
+    }
+
+    .search-results {
+      position: absolute;
+      top: calc(100% + 12px);
+      right: 0;
+      display: none;
+      width: 100%;
+      min-width: 0;
+      padding: 8px;
+      border: 1px solid rgba(170, 136, 255, .34);
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(67, 20, 174, .86), rgba(15, 10, 46, .90));
+      box-shadow: inset 0 1px rgba(238, 229, 255, .25), 0 18px 40px rgba(0, 0, 0, .34);
+      backdrop-filter: url(#frosted) blur(20px);
+      -webkit-backdrop-filter: url(#frosted) blur(20px);
+    }
+
+    .search-results:has(.search-empty),
+    .search-results:has(.search-result:only-child) {
+      min-height: 40px;
+      padding: 0;
+      border-radius: 22px;
+    }
+
+    .search-results.open {
+      display: grid;
+      gap: 4px;
+    }
+
+    .search-result {
+      padding: 9px 10px;
+      border-radius: 14px;
+      color: #f5f1ff;
+      text-align: left;
+      background: transparent;
+      transition: .2s;
+    }
+
+    .search-result:only-child,
+    .search-empty {
+      min-height: 38px;
+      padding: 0 12px;
+      display: flex;
+      align-items: center;
+      border-radius: 22px;
+    }
+
+    .search-result:hover {
+      background: rgba(125, 71, 255, .20);
+      transform: scale(1.02);
+    }
+
+    .search-empty {
+      color: #d4caf4;
+      font-size: 13px;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      padding: 4px;
+      border: 1px solid rgba(170, 136, 255, .34);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: rgba(24, 23, 35, .52);
+      box-shadow: inset 0 1px rgba(239, 235, 255, .34), 0 12px 30px rgba(0, 0, 0, .24);
+      backdrop-filter: blur(22px) saturate(135%);
+      -webkit-backdrop-filter: blur(22px) saturate(135%);
+      font-weight: 800;
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+
+    .avatar span {
+      width: 100%;
+      height: 100%;
+      display: grid;
+      place-items: center;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #b79aff, #5500FF);
+      color: #fff;
+    }
+
+    .avatar:hover {
+      transform: scale(1.1);
+      box-shadow: inset 0 1px rgba(248, 245, 255, .48), 0 0 24px rgba(85, 0, 255, .42);
+    }
+
+    main {
+      padding-bottom: 20px;
+    }
+
+    .hero {
+      min-height: 610px;
+      display: flex;
+      align-items: end;
+      padding: 70px clamp(12px, 4vw, 52px);
+      position: relative;
+      isolation: isolate;
+      overflow: hidden;
+    }
+
+    .hero-image {
+      position: absolute;
+      inset: -3%;
+      z-index: -1;
+      background: center/cover no-repeat;
+      transform: scale(1.03);
+      animation: exclusiveArtworkMotion 22s ease-in-out infinite alternate;
+      transition: background-image .5s ease, transform .7s ease, opacity .7s ease;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background: linear-gradient(90deg, rgba(6, 7, 15, .93) 3%, rgba(6, 7, 15, .55) 45%, rgba(6, 7, 15, .14)),
+                  linear-gradient(0deg, #080a12 0, transparent 40%);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      transition: opacity .7s ease;
+      pointer-events: none;
+    }
+
+    .hero.changing::before {
+      opacity: 1;
+    }
+
+    .hero.changing .hero-image {
+      transform: scale(1.03);
+      opacity: 0;
+      animation-play-state: paused;
+    }
+
+    .hero-image,
+    body.games .hero-image {
+      background-image: var(--exclusive-image, none) !important;
+    }
+
+    .hero-copy {
+      position: relative;
+      z-index: 1;
+      width: min(780px, 76vw);
+      max-width: 780px;
+    }
+
+    .hero-copy.slide-away {
+      animation: slideAway .7s ease-in both;
+    }
+
+    .hero-copy.fade-in {
+      animation: fadeIn .8s ease-out both;
+    }
+
+    .eyebrow {
+      color: #b79aff;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 11px;
+      font-weight: 800;
+    }
+
+    h1 {
+      font-size: clamp(44px, 7vw, 92px);
+      line-height: .94;
+      letter-spacing: -.07em;
+      margin: 12px 0 20px;
+    }
+
+    .description {
+      max-width: 760px;
+      color: #e2e6f3;
+      font-size: 17px;
+    }
+
+    .metadata {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      color: #dae0f5;
+      margin: 20px 0;
+    }
+
+    .rating {
+      color: #b9f8cb;
+      font-weight: 800;
+    }
+
+    .exclusive-dots {
+      position: absolute;
+      z-index: 2;
+      left: clamp(12px, 4vw, 52px);
+      bottom: 30px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      max-width: 45vw;
+    }
+
+    .exclusive-dot {
+      width: 13px;
+      height: 13px;
+      padding: 0;
+      border: 1px solid rgba(234, 225, 255, .52);
+      border-radius: 50%;
+      background: rgba(250, 247, 255, .42);
+      box-shadow: 0 2px 9px rgba(0, 0, 0, .35);
+      transition: transform .2s ease, background .2s ease, box-shadow .2s ease;
+    }
+
+    .exclusive-dot:hover:not(:disabled) {
+      transform: scale(1.28);
+      background: #fff;
+      box-shadow: 0 0 16px rgba(255, 255, 255, .56);
+    }
+
+    .exclusive-dot.active {
+      background: #fff;
+      box-shadow: 0 0 16px rgba(255, 255, 255, .6);
+    }
+
+    .exclusive-dot:disabled {
+      cursor: default;
+      opacity: .24;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .exclusive-release {
+      margin: 0 0 18px;
+      color: #d8ceff;
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    .action {
+      min-height: 38px;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+    }
+
+    .primary,
+    .primary:hover {
+      color: #5500FF;
+      background: #fff;
+      border-color: #fff;
+      box-shadow: inset 0 1px rgba(255, 255, 255, .8), 0 10px 25px rgba(255, 255, 255, .18);
+    }
+
+    .secondary {
+      background: linear-gradient(135deg, rgba(100, 53, 226, .24), rgba(47, 22, 128, .18));
+    }
+
+    .more-wrap {
+      position: relative;
+    }
+
+    .exclusive-menu {
+      position: absolute;
+      z-index: 5;
+      left: 0;
+      bottom: calc(100% + 12px);
+      display: grid;
+      gap: 4px;
+      width: min(220px, calc(100vw - 24px));
+      min-width: 0;
+      padding: 8px;
+      border: 1px solid rgba(170, 136, 255, .34);
+      border-radius: 22px;
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(67, 20, 174, .86), rgba(15, 10, 46, .90));
+      box-shadow: inset 0 1px rgba(238, 229, 255, .25), 0 18px 40px rgba(0, 0, 0, .34);
+      backdrop-filter: url(#frosted) blur(20px);
+      -webkit-backdrop-filter: url(#frosted) blur(20px);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(8px) scale(.97);
+      transform-origin: bottom left;
+      transition: .22s ease;
+    }
+
+    .exclusive-menu.open {
+      opacity: 1;
+      visibility: visible;
+      transform: none;
+    }
+
+    .exclusive-menu button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      width: 100%;
+      min-width: 0;
+      padding: 9px 10px;
+      border-radius: 14px;
+      color: #f5f1ff;
+      text-align: left;
+      font: inherit;
+      background: transparent;
+    }
+
+    .exclusive-menu button:hover {
+      background: rgba(125, 71, 255, .20);
+      transform: scale(1.02);
+    }
+
+    .favorite-star {
+      color: #fff;
+      font-size: 18px;
+      line-height: 12px;
+    }
+
+    .section {
+      padding: 18px 0;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 0 0 14px;
+      padding: 0 clamp(12px, 2vw, 28px);
+    }
+
+    h2 {
+      font-size: 22px;
+      letter-spacing: -.035em;
+      margin: 0;
+    }
+
+    .hint {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .row {
+      display: grid;
+      grid-auto-flow: column;
+      grid-auto-columns: clamp(145px, 15vw, 208px);
+      gap: 14px;
+      overflow-x: auto;
+      overscroll-behavior-inline: contain;
+      padding: 36px 24px 34px;
+      margin: -36px 0 -22px;
+      scroll-padding-inline: 24px;
+      scrollbar-width: none;
+    }
+
+    .row::-webkit-scrollbar {
+      display: none;
+    }
+
+    .card {
+      min-height: 286px;
+      position: relative;
+      overflow: hidden;
+      border-radius: 24px;
+      background: radial-gradient(circle at 20% 12%, rgba(119, 82, 255, .29), transparent 40%),
+                  radial-gradient(circle at 88% 100%, rgba(85, 0, 255, .28), transparent 48%),
+                  linear-gradient(145deg, rgba(64, 39, 146, .42), rgba(16, 12, 52, .76));
+      border: 1px solid var(--line);
+      box-shadow: inset 0 1px rgba(239, 235, 255, .34), 0 12px 30px rgba(0, 0, 0, .24);
+      transition: transform .25s ease, box-shadow .25s ease, opacity .55s ease;
+    }
+
+    .card.opening-player {
+      opacity: 1;
+      transform: none;
+      background-image: none !important;
+    }
+
+    .card.opening-player .card-info {
+      opacity: 0;
+    }
+
+    .hero-copy.opening-player {
+      opacity: 0;
+      transform: scale(.94);
+    }
+
+    .card[style*="background-image"] {
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: -22%;
+      background: radial-gradient(circle at 23% 28%, rgba(181, 152, 255, .28), transparent 25%),
+                  radial-gradient(circle at 74% 75%, rgba(85, 0, 255, .33), transparent 31%);
+      animation: ambientDrift 12s ease-in-out infinite alternate;
+    }
+
+    .card:hover {
+      transform: scale(1.045);
+      box-shadow: inset 0 1px rgba(255, 255, 255, .36), 0 24px 38px rgba(0, 0, 0, .45), 0 0 34px rgba(85, 0, 255, .29);
+      z-index: 2;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      inset: 30% 0 0;
+      background: linear-gradient(transparent, rgba(8, 5, 22, .93));
+    }
+
+    .games-row {
+      grid-auto-columns: clamp(235px, 25vw, 350px);
+    }
+
+    .games-row .card {
+      min-height: 0;
+      aspect-ratio: 16/9;
+      border-radius: 24px;
+    }
+
+    .games-row .card::after {
+      inset: 38% 0 0;
+    }
+
+    .games-row .card-info {
+      padding: 13px 15px;
+      background: transparent;
+      backdrop-filter: none;
+    }
+
+    .card-info {
+      position: absolute;
+      z-index: 1;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      padding: 15px;
+      width: auto;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .card-title {
+      display: block;
+      width: 100%;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .card-detail,
+    .tag {
+      display: none;
+    }
+
+    .thumbnail-transition {
+      position: fixed;
+      z-index: 100;
+      pointer-events: none;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: #000 center/cover no-repeat;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .34);
+      transition: left 1.25s cubic-bezier(.18, .86, .2, 1),
+                  top 1.25s cubic-bezier(.18, .86, .2, 1),
+                  width 1.25s cubic-bezier(.18, .86, .2, 1),
+                  height 1.25s cubic-bezier(.18, .86, .2, 1),
+                  border-radius 1.16s ease;
+    }
+
+    .thumbnail-transition::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      transition: opacity .45s ease;
+    }
+
+    .thumbnail-transition.to-black::after {
+      opacity: 1;
+    }
+
+    .lobby-fade {
+      position: fixed;
+      z-index: 200;
+      inset: 0;
+      pointer-events: none;
+      background: #000;
+      opacity: 0;
+      transition: opacity .58s ease;
+    }
+
+    .lobby-fade.show {
+      opacity: 1;
+    }
+
+    .footer {
+      margin-top: 46px;
+      padding: 130px clamp(12px, 2vw, 28px) 30px;
+      background: linear-gradient(to bottom, transparent 0%, #05070e 52%, #000 100%);
+      border-top: 1px solid rgba(172, 228, 255, .09);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+      color: #8e9aad;
+      font-size: 13px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 18px;
+    }
+
+    .footer a {
+      color: #d8effa;
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      color: #76dcff;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 30;
+      transform: translate(-50%, 120px);
+      padding: 12px 18px;
+      border-radius: 13px;
+      background: #eefaff;
+      color: #071018;
+      font-weight: 750;
+      box-shadow: 0 14px 35px #0006;
+      transition: transform .3s ease;
+    }
+
+    .toast.show {
+      transform: translate(-50%, 0);
+    }
+
+    .modal {
+      position: fixed;
+      z-index: 20;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 20px;
+      background: rgba(2, 4, 10, .62);
+      opacity: 0;
+      visibility: hidden;
+      transition: .25s;
+    }
+
+    .modal.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-box {
+      max-width: 550px;
+      padding: 28px;
+      border-radius: 22px;
+      background: rgba(20, 25, 44, .88);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(28px);
+      transform: translateY(15px);
+      transition: .25s;
+    }
+
+    .modal.open .modal-box {
+      transform: none;
+    }
+
+    .close {
+      float: right;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      background: #ffffff17;
+    }
+
+    .games-only {
+      display: none;
+    }
+
+    body.games .films-only {
+      display: none;
+    }
+
+    body.games .games-only {
+      display: block;
+    }
+
+    @keyframes slideAway {
+      to {
+        opacity: 0;
+        transform: translateX(-75px);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes ambientDrift {
+      from {
+        transform: translate3d(-4%, -3%, 0) scale(1.03);
+      }
+      to {
+        transform: translate3d(5%, 4%, 0) scale(1.12);
+      }
+    }
+
+    @keyframes exclusiveArtworkMotion {
+      0% {
+        transform: translate3d(-1.2%, .5%, 0) scale(1.04);
+      }
+      50% {
+        transform: translate3d(1%, -1%, 0) scale(1.09);
+      }
+      100% {
+        transform: translate3d(-.6%, 1%, 0) scale(1.06);
+      }
+    }
+
+    @media (max-width: 700px) {
+      .nav {
+        gap: 10px;
+        height: 68px;
+        padding: 0 12px;
+      }
+      .brand {
+        width: 80px;
+        height: 35px;
+        margin: 0;
+      }
+      .search-wrap {
+        display: none;
+      }
+      .nav-spacer {
+        flex: 1;
+      }
+      .hero {
+        min-height: 570px;
+        padding: 70px 12px;
+      }
+      .description {
+        font-size: 15px;
+      }
+      .row {
+        grid-auto-columns: 145px;
+        padding: 36px 20px 34px;
+        scroll-padding-inline: 20px;
+      }
+      .card {
+        min-height: 220px;
+        border-radius: 20px;
+      }
+      .games-row {
+        grid-auto-columns: 270px;
+      }
+      .games-row .card {
+        min-height: 0;
+        border-radius: 20px;
+      }
+      .section {
+        padding: 18px 0;
+      }
+      .section-head {
+        padding-inline: 12px;
+      }
+      .footer {
+        padding-inline: 12px;
+      }
+    }
   </style>
-  <style>html.returning-lobby .lobby-fade{opacity:1;transition:none}body,button,input,textarea,select{font-family:'Space Grotesk',system-ui,sans-serif!important}.video-status-stack{position:fixed;z-index:12;right:22px;bottom:18px;display:grid;gap:7px}.video-status{position:static;display:flex;align-items:center;gap:8px;padding:8px 11px;border:1px solid rgba(201,181,255,.22);border-radius:999px;background:rgba(9,6,22,.58);color:#c9c2da;font-size:11px;backdrop-filter:blur(16px)}.video-status::before{content:"";width:7px;height:7px;border-radius:50%;background:#f4b85c;box-shadow:0 0 10px rgba(244,184,92,.55)}.video-status.online::before{background:#64e7a1;box-shadow:0 0 10px rgba(100,231,161,.6)}.video-status.offline::before{background:#ff5d68;box-shadow:0 0 10px rgba(255,93,104,.65)}.menu-player-backdrop{position:fixed;z-index:170;inset:0;background:#000;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility 0s linear .35s}.menu-player-backdrop.open{opacity:.88;visibility:visible;pointer-events:auto;transition:opacity .35s ease}.menu-player{position:fixed;z-index:180;left:50%;top:50%;width:min(1400px,94vw);height:min(860px,88vh);transform:translate(-50%,-50%);overflow:hidden;border:1px solid rgba(201,181,255,.42);border-radius:28px;background:#080510;box-shadow:0 34px 90px rgba(0,0,0,.62);visibility:hidden;opacity:0;pointer-events:none;transition:left .85s cubic-bezier(.18,.82,.2,1),top .85s cubic-bezier(.18,.82,.2,1),width .85s cubic-bezier(.18,.82,.2,1),height .85s cubic-bezier(.18,.82,.2,1),transform .85s cubic-bezier(.18,.82,.2,1),border-radius .85s cubic-bezier(.18,.82,.2,1),opacity .28s ease}.menu-player.open{visibility:visible;opacity:1;pointer-events:auto}.menu-player.fullscreen{left:0;top:0;width:100vw;height:100vh;transform:none;border-radius:0;border-color:transparent;box-shadow:none}.menu-player iframe{display:block;width:100%;height:100%;border:0;background:#080510}  .menu-player-transition{position:fixed;z-index:181;pointer-events:none;overflow:hidden;background-color:#080510;background-position:center;background-repeat:no-repeat;background-size:cover;box-shadow:0 30px 76px rgba(0,0,0,.56);transition:left .9s cubic-bezier(.18,.82,.2,1),top .9s cubic-bezier(.18,.82,.2,1),width .9s cubic-bezier(.18,.82,.2,1),height .9s cubic-bezier(.18,.82,.2,1),border .9s cubic-bezier(.18,.82,.2,1),border-radius .9s cubic-bezier(.18,.82,.2,1),opacity .45s ease}.menu-player-transition.reveal{opacity:0}.transition-loader{position:absolute;inset:0;display:grid;place-items:center;background:rgba(0,0,0,.18)}.transition-loader::before{content:"";width:38px;height:38px;border:3px solid rgba(255,255,255,.28);border-top-color:#fff;border-radius:50%;animation:transitionSpin .85s linear infinite}.transition-loader.hidden{opacity:0;transition:opacity .25s ease}@keyframes transitionSpin{to{transform:rotate(360deg)}}.source-player-label{position:fixed;z-index:182;display:grid;place-content:center;color:#fff;text-shadow:0 2px 18px #000;pointer-events:none;opacity:0;transform:translateY(12px);transition:opacity .45s ease,transform .7s cubic-bezier(.2,.8,.2,1)}.transition-player-label{position:absolute;inset:0;transform:none}.card-player-label{position:absolute;inset:0;z-index:3;transform:none}.source-player-label strong{font-size:clamp(16px,2.5vw,30px);letter-spacing:-.04em}.source-player-label span{margin-top:6px;color:#e3dcff;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase}.source-player-label.show{opacity:1;transform:none}@media(max-width:700px){.menu-player{width:96vw;height:86vh;border-radius:22px}.video-status{right:12px;bottom:12px}}</style>
-<style>.menu-player-transition{box-sizing:border-box;background-position:center center;background-size:cover}</style>
-<style>.search-wrap{width:40px;transition:width .35s cubic-bezier(.2,.8,.2,1)}.search-wrap.open{width:min(220px,24vw)}.search-toggle{position:absolute;inset:0 auto auto 0;z-index:2;transition:transform .22s ease,opacity .25s ease}.search-wrap.open .search-toggle{opacity:0;transform:scale(.78);pointer-events:none}.search{position:relative;opacity:0;transform:scale(.82);transform-origin:right center;transition:opacity .25s ease,transform .35s ease}.search-wrap.open .search{opacity:1;transform:scale(1)}.search-toggle:hover{transform:scale(1.1)}
- .update-status{position:relative;color:#d8ffe9}.update-status::before{background:#43e58c;box-shadow:0 0 10px rgba(67,229,140,.8)}.update-status #updateButton{display:none;position:absolute;right:8px;top:50%;transform:translateY(-50%);width:19px;height:19px;padding:0;border:0;border-radius:50%;background:#fff;color:#5500ff;font:800 13px/19px system-ui;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.24)}.update-status.available{color:#fff1b0}.update-status.available::before{background:#ffd45c;box-shadow:0 0 10px rgba(255,212,92,.75)}.update-status.available #updateButton{display:block}
-</style>
-<style>
-.video-status { min-width: 340px; padding-right: 42px; color: #fff; }
-.update-status, .update-status.available { color: #fff; }
-</style>
+
+  <style>
+    html.returning-lobby .lobby-fade {
+      opacity: 1;
+      transition: none;
+    }
+
+    body, button, input, textarea, select {
+      font-family: 'Space Grotesk', system-ui, sans-serif !important;
+    }
+
+    .video-status-stack {
+      position: fixed;
+      z-index: 12;
+      right: 22px;
+      bottom: 18px;
+      display: grid;
+      gap: 7px;
+    }
+
+    .video-status {
+      position: static;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border: 1px solid rgba(201, 181, 255, .22);
+      border-radius: 999px;
+      background: rgba(9, 6, 22, .58);
+      color: #c9c2da;
+      font-size: 11px;
+      backdrop-filter: blur(16px);
+    }
+
+    .video-status::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #f4b85c;
+      box-shadow: 0 0 10px rgba(244, 184, 92, .55);
+    }
+
+    .video-status.online::before {
+      background: #64e7a1;
+      box-shadow: 0 0 10px rgba(100, 231, 161, .6);
+    }
+
+    .video-status.offline::before {
+      background: #ff5d68;
+      box-shadow: 0 0 10px rgba(255, 93, 104, .65);
+    }
+
+    .menu-player-backdrop {
+      position: fixed;
+      z-index: 170;
+      inset: 0;
+      background: #000;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .35s ease, visibility 0s linear .35s;
+    }
+
+    .menu-player-backdrop.open {
+      opacity: .88;
+      visibility: visible;
+      pointer-events: auto;
+      transition: opacity .35s ease;
+    }
+
+    .menu-player {
+      position: fixed;
+      z-index: 180;
+      left: 50%;
+      top: 50%;
+      width: min(1400px, 94vw);
+      height: min(860px, 88vh);
+      transform: translate(-50%, -50%);
+      overflow: hidden;
+      border: 1px solid rgba(201, 181, 255, .42);
+      border-radius: 28px;
+      background: #080510;
+      box-shadow: 0 34px 90px rgba(0, 0, 0, .62);
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transition: left .85s cubic-bezier(.18, .82, .2, 1),
+                  top .85s cubic-bezier(.18, .82, .2, 1),
+                  width .85s cubic-bezier(.18, .82, .2, 1),
+                  height .85s cubic-bezier(.18, .82, .2, 1),
+                  transform .85s cubic-bezier(.18, .82, .2, 1),
+                  border-radius .85s cubic-bezier(.18, .82, .2, 1),
+                  opacity .28s ease;
+    }
+
+    .menu-player.open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .menu-player.fullscreen {
+      left: 0;
+      top: 0;
+      width: 100vw;
+      height: 100vh;
+      transform: none;
+      border-radius: 0;
+      border-color: transparent;
+      box-shadow: none;
+    }
+
+    .menu-player iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: #080510;
+    }
+
+    .menu-player-transition {
+      position: fixed;
+      z-index: 181;
+      pointer-events: none;
+      overflow: hidden;
+      background-color: #080510;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: cover;
+      box-shadow: 0 30px 76px rgba(0, 0, 0, .56);
+      transition: left .9s cubic-bezier(.18, .82, .2, 1),
+                  top .9s cubic-bezier(.18, .82, .2, 1),
+                  width .9s cubic-bezier(.18, .82, .2, 1),
+                  height .9s cubic-bezier(.18, .82, .2, 1),
+                  border .9s cubic-bezier(.18, .82, .2, 1),
+                  border-radius .9s cubic-bezier(.18, .82, .2, 1),
+                  opacity .45s ease;
+    }
+
+    .menu-player-transition.reveal {
+      opacity: 0;
+    }
+
+    .transition-loader {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: rgba(0, 0, 0, .18);
+    }
+
+    .transition-loader::before {
+      content: "";
+      width: 38px;
+      height: 38px;
+      border: 3px solid rgba(255, 255, 255, .28);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: transitionSpin .85s linear infinite;
+    }
+
+    .transition-loader.hidden {
+      opacity: 0;
+      transition: opacity .25s ease;
+    }
+
+    @keyframes transitionSpin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .source-player-label {
+      position: fixed;
+      z-index: 182;
+      display: grid;
+      place-content: center;
+      color: #fff;
+      text-shadow: 0 2px 18px #000;
+      pointer-events: none;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity .45s ease, transform .7s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .transition-player-label {
+      position: absolute;
+      inset: 0;
+      transform: none;
+    }
+
+    .card-player-label {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      transform: none;
+    }
+
+    .source-player-label strong {
+      font-size: clamp(16px, 2.5vw, 30px);
+      letter-spacing: -.04em;
+    }
+
+    .source-player-label span {
+      margin-top: 6px;
+      color: #e3dcff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .source-player-label.show {
+      opacity: 1;
+      transform: none;
+    }
+
+    @media (max-width: 700px) {
+      .menu-player {
+        width: 96vw;
+        height: 86vh;
+        border-radius: 22px;
+      }
+      .video-status {
+        right: 12px;
+        bottom: 12px;
+      }
+    }
+  </style>
+
+  <style>
+    .menu-player-transition {
+      box-sizing: border-box;
+      background-position: center center;
+      background-size: cover;
+    }
+  </style>
+
+  <style>
+    .search-wrap {
+      width: 40px;
+      transition: width .35s cubic-bezier(.2, .8, .2, 1);
+    }
+
+    .search-wrap.open {
+      width: min(220px, 24vw);
+    }
+
+    .search-toggle {
+      position: absolute;
+      inset: 0 auto auto 0;
+      z-index: 2;
+      transition: transform .22s ease, opacity .25s ease;
+    }
+
+    .search-wrap.open .search-toggle {
+      opacity: 0;
+      transform: scale(.78);
+      pointer-events: none;
+    }
+
+    .search {
+      position: relative;
+      opacity: 0;
+      transform: scale(.82);
+      transform-origin: right center;
+      transition: opacity .25s ease, transform .35s ease;
+    }
+
+    .search-wrap.open .search {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .search-toggle:hover {
+      transform: scale(1.1);
+    }
+
+    .update-status {
+      position: relative;
+      color: #d8ffe9;
+    }
+
+    .update-status::before {
+      background: #43e58c;
+      box-shadow: 0 0 10px rgba(67, 229, 140, .8);
+    }
+
+    .update-status #updateButton {
+      display: none;
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 19px;
+      height: 19px;
+      padding: 0;
+      border: 0;
+      border-radius: 50%;
+      background: #fff;
+      color: #5500ff;
+      font: 800 13px/19px system-ui;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, .24);
+    }
+
+    .update-status.available {
+      color: #fff1b0;
+    }
+
+    .update-status.available::before {
+      background: #ffd45c;
+      box-shadow: 0 0 10px rgba(255, 212, 92, .75);
+    }
+
+    .update-status.available #updateButton {
+      display: block;
+    }
+  </style>
+
+  <style>
+    .video-status {
+      min-width: 340px;
+      padding-right: 42px;
+      color: #fff;
+    }
+
+    .update-status,
+    .update-status.available {
+      color: #fff;
+    }
+  </style>
 </head>
 <body>
-  <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="frosted" primitiveUnits="objectBoundingBox"><feTurbulence type="fractalNoise" baseFrequency=".01 .08" numOctaves="2" seed="6" result="map"/><feGaussianBlur in="SourceGraphic" stdDeviation=".012" result="blur"/><feDisplacementMap in="blur" in2="map" scale="1.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
-  <nav class="nav"><div class="brand"><img src="assets/ryhze-wordmark.png" alt="Ryhze" /><span class="beta">Beta</span></div><div class="switcher"><button class="glass tab active" data-mode="films">Films</button><button class="glass tab" data-mode="games">Games</button></div><div class="nav-spacer"></div><div class="search-wrap"><button class="glass icon-btn search-toggle" id="searchToggle" aria-label="Open search">⌕</button><label class="glass search">⌕ <input id="search" placeholder="Search Films" aria-label="Search Films" autocomplete="off" /></label><div class="search-results" id="searchResults"></div></div><button class="glass icon-btn" id="profile" aria-label="Profile">☰</button><div class="avatar"><span>R</span></div></nav>
-  <audio id="menuMusic" src="assets/audio/menu-loop.mp3" loop preload="auto"></audio><div class="lobby-fade" id="lobbyFade"></div>
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute">
+    <filter id="frosted" primitiveUnits="objectBoundingBox">
+      <feTurbulence type="fractalNoise" baseFrequency=".01 .08" numOctaves="2" seed="6" result="map" />
+      <feGaussianBlur in="SourceGraphic" stdDeviation=".012" result="blur" />
+      <feDisplacementMap in="blur" in2="map" scale="1.2" xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
+  <nav class="nav">
+    <div class="brand">
+      <img src="assets/ryhze-wordmark.png" alt="Ryhze" />
+      <span class="beta">Beta</span>
+    </div>
+    <div class="switcher">
+      <button class="glass tab active" data-mode="films">Films</button>
+      <button class="glass tab" data-mode="games">Games</button>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="search-wrap">
+      <button class="glass icon-btn search-toggle" id="searchToggle" aria-label="Open search">⌕</button>
+      <label class="glass search">
+        ⌕ <input id="search" placeholder="Search Films" aria-label="Search Films" autocomplete="off" />
+      </label>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <button class="glass icon-btn" id="profile" aria-label="Profile">☰</button>
+    <div class="avatar"><span>R</span></div>
+  </nav>
+
+  <audio id="menuMusic" src="assets/audio/menu-loop.mp3" loop preload="auto"></audio>
+  <div class="lobby-fade" id="lobbyFade"></div>
+
   <main>
-    <section class="hero"><div class="hero-image"></div><div class="hero-copy" id="heroCopy"></div><div class="exclusive-dots" id="exclusiveDots" aria-label="Exclusive slides"></div></section>
+    <section class="hero">
+      <div class="hero-image"></div>
+      <div class="hero-copy" id="heroCopy"></div>
+      <div class="exclusive-dots" id="exclusiveDots" aria-label="Exclusive slides"></div>
+    </section>
     <div id="content"></div>
   </main>
-  <footer class="footer"><div class="footer-inner"><span>© 2026 Ryhze. All rights reserved.</span><nav class="footer-links" aria-label="Legal and contact links"><a href="privacy.html">Privacy</a><a href="contact.html">Contact</a></nav></div></footer><div class="video-status-stack"><div class="video-status" id="videoStatus">Streaming services: trying to connect</div><div class="video-status update-status" id="updateStatus">Webpage updates: latest · <span id="updateBuild">local</span> <button id="updateButton" type="button" aria-label="Apply webpage update">↓</button></div></div>
-  <div class="modal" id="modal"><div class="modal-box"><button class="close" id="close">×</button><div class="eyebrow">Ryhze selection</div><h2 id="modalTitle" style="font-size:32px;margin:10px 0"></h2><p id="modalText" style="color:var(--muted)"></p><button class="glass action primary" id="modalAction">Add to queue</button></div></div><div class="toast" id="toast"></div>
-  <script>document.write('<script src="library-data.js?v='+Date.now()+'"><\/script>');</script>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>© 2026 Ryhze. All rights reserved.</span>
+      <nav class="footer-links" aria-label="Legal and contact links">
+        <a href="privacy.html">Privacy</a>
+        <a href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </footer>
+
+  <div class="video-status-stack">
+    <div class="video-status" id="videoStatus">Streaming services: trying to connect</div>
+    <div class="video-status update-status" id="updateStatus">
+      Webpage updates: latest · <span id="updateBuild">local</span>
+      <button id="updateButton" type="button" aria-label="Apply webpage update">↓</button>
+    </div>
+  </div>
+
+  <div class="modal" id="modal">
+    <div class="modal-box">
+      <button class="close" id="close">×</button>
+      <div class="eyebrow">Ryhze selection</div>
+      <h2 id="modalTitle" style="font-size:32px;margin:10px 0"></h2>
+      <p id="modalText" style="color:var(--muted)"></p>
+      <button class="glass action primary" id="modalAction">Add to queue</button>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
   <script>
-    const library=window.RyhzeLibrary || {films:[],games:[]};
-    let librarySignature=JSON.stringify(library);document.querySelector('#updateBuild').textContent=window.RyhzeBuild||'local';
-    const filmCategories=library.films || [];
-    const gameCategories=library.games || [];
-    const uniqueTitles=categories=>Array.from(new Map(categories.flatMap(category=>category.items||[]).map(item=>[item.title,item])).values());
-    const films=uniqueTitles(filmCategories);
-    const games=uniqueTitles(gameCategories);
-    const state={mode:'films'}; const content=document.querySelector('#content'), hero=document.querySelector('#heroCopy'), heroImage=document.querySelector('.hero-image'), exclusiveDots=document.querySelector('#exclusiveDots'), modal=document.querySelector('#modal'), toast=document.querySelector('#toast'), searchResults=document.querySelector('#searchResults'), menuMusic=document.querySelector('#menuMusic'),lobbyFade=document.querySelector('#lobbyFade'); menuMusic.volume=.38;let musicStarted=false;const startMenuMusic=()=>{if(musicStarted)return;menuMusic.play().then(()=>musicStarted=true).catch(()=>{})};addEventListener('pointerdown',startMenuMusic,{once:true});addEventListener('keydown',startMenuMusic,{once:true});document.addEventListener('visibilitychange',()=>{if(document.hidden)menuMusic.pause();else if(musicStarted)menuMusic.play().catch(()=>{})});const fadeToPlayer=url=>{if(lobbyFade.classList.contains('show'))return;lobbyFade.classList.add('show');setTimeout(()=>location.href=url,590)};const revealLobby=()=>{const returning=sessionStorage.getItem('ryhzeReturnFade')==='1',updating=sessionStorage.getItem('ryhzeApplyUpdateFade')==='1';if(!returning&&!updating)return;sessionStorage.removeItem('ryhzeReturnFade');sessionStorage.removeItem('ryhzeApplyUpdateFade');lobbyFade.classList.add('show');requestAnimationFrame(()=>setTimeout(()=>lobbyFade.classList.remove('show'),updating?180:70))};addEventListener('pageshow',revealLobby);revealLobby(); let featuredIndex=0, currentExclusive=null, isFavorite=false;
-    const card=(item, gamesMode)=>`<button class="card item${gamesMode?' game-card':''}" data-title="${item.title}" data-meta="${(item.categories||[]).join(', ')}" data-release="${encodeURIComponent(item.release||'Coming soon')}" data-installer="${encodeURIComponent(JSON.stringify(item.installer||null))}" data-type="${item.mediaType||'Movie'}" data-licensor="${encodeURIComponent(item.licensor||'Not specified')}" data-synopsis="${encodeURIComponent(item.synopsis||'')}" data-image="${item.image||''}" data-streams="${encodeURIComponent(JSON.stringify(item.streams||[]))}" data-seasons="${encodeURIComponent(JSON.stringify(item.seasons||[]))}" data-search="${[item.title,...(item.searchTags||[]),...(item.categories||[])].join(' ').toLowerCase()}"${item.image?` style="background-image:url('${item.image}')"`:''}><span class="card-info"><span class="card-title" title="${item.title}">${item.title}</span><span class="card-detail"><span></span><span class="tag" title="${(item.categories||[]).join(', ')}">${gamesMode?'Game':'Film'}</span></span></span></button>`;
-    const getExclusives=()=>{const categories=state.mode==='games'?gameCategories:filmCategories;return (categories.find(category=>category.title.trim().toLowerCase()==='exclusives')||{items:[]}).items||[]};
-    function setExclusiveImage(item,imageIndex=0){const images=item?.exclusiveImages||[];document.documentElement.style.setProperty('--exclusive-image',images.length?`url("${images[imageIndex%images.length]}")`:'none');}
-    function render(){const gamesMode=state.mode==='games', categories=gamesMode?gameCategories:filmCategories, exclusives=getExclusives(), featuredSlide=exclusives.length?exclusives[featuredIndex%exclusives.length]:null;currentExclusive=featuredSlide; document.body.classList.toggle('games',gamesMode); document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('active',x.dataset.mode===state.mode)); setExclusiveImage(featuredSlide); hero.innerHTML=featuredSlide?`<div class="eyebrow">Ryhze Exclusives</div><h1>${featuredSlide.title}</h1><p class="description">${featuredSlide.synopsis||`A Ryhze ${gamesMode?'game':'film'} exclusive, available only here.`}</p>${featuredSlide.release?`<p class="exclusive-release">Release: ${featuredSlide.release}</p>`:''}<div class="actions"><button class="glass action primary play">${gamesMode?'Buy now':'Watch now'}</button><div class="more-wrap"><button class="glass action secondary info">More info</button><div class="exclusive-menu"><button data-exclusive-action="list">Add to list <span>＋</span></button><button data-exclusive-action="rate">Rate show <span>★</span></button><button data-exclusive-action="favorite">Favorite <span class="favorite-star">${isFavorite?'★':'☆'}</span></button></div></div></div>`:''; exclusiveDots.innerHTML=exclusives.map((item,index)=>`<button class="exclusive-dot${featuredSlide&&index===featuredIndex%exclusives.length?' active':''}" data-exclusive="${index}" aria-label="${item.title}"></button>`).join('');content.innerHTML=categories.filter(category=>category.title.trim().toLowerCase()!=='exclusives').map(category=>`<section class="section"><div class="section-head"><h2>${category.title}</h2></div><div class="row${gamesMode?' games-row':''}">${(category.items||[]).map(item=>card(item,gamesMode)).join('')}</div></section>`).join(''); }
-    function notify(msg){toast.textContent=msg;toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),2200)}
-    function openFilm(item){if(document.querySelector('.thumbnail-transition'))return;const source=item.getBoundingClientRect(),transition=document.createElement('div');    transition.className='thumbnail-transition';transition.innerHTML='<span>Showing in player</span>';transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;item.classList.add('opening-player');document.body.append(transition);void transition.offsetWidth;requestAnimationFrame(()=>requestAnimationFrame(()=>{transition.classList.add('moving');transition.style.transition='';transition.style.left='0';transition.style.top='0';transition.style.width='100vw';transition.style.height='100vh';transition.style.borderRadius='0'}));setTimeout(()=>transition.classList.add('to-black'),1300);setTimeout(()=>{item.classList.remove('opening-player');location.href=`player.html?intro=1&title=${encodeURIComponent(item.dataset.title)}&synopsis=${encodeURIComponent(decodeURIComponent(item.dataset.synopsis||''))}&image=${encodeURIComponent(item.dataset.image||'')}&streams=${encodeURIComponent(item.dataset.streams||'')}&seasons=${encodeURIComponent(item.dataset.seasons||'')}&type=${encodeURIComponent(item.dataset.type||'Movie')}&licensor=${item.dataset.licensor||''}`},1800)}addEventListener('pagehide',()=>document.querySelectorAll('.thumbnail-transition').forEach(transition=>transition.remove()));
-    document.addEventListener('click',e=>{const tab=e.target.closest('.tab'); if(tab){if(tab.dataset.mode===state.mode)return;hero.classList.add('changing');setTimeout(()=>{state.mode=tab.dataset.mode;featuredIndex=0;render();hero.classList.remove('changing');hero.classList.add('fade-in');setTimeout(()=>hero.classList.remove('fade-in'),850)},260);resetSlideshowTimer();return} const dot=e.target.closest('.exclusive-dot'); if(dot&&!dot.disabled){featuredIndex=Number(dot.dataset.exclusive);render();resetSlideshowTimer();hero.classList.add('fade-in');setTimeout(()=>hero.classList.remove('fade-in'),850);return} const play=e.target.closest('.play');if(play){if(state.mode==='games')notify('Exclusive game added to your cart');else if(currentExclusive)openExclusive(currentExclusive);return} const result=e.target.closest('.search-result'); if(result){document.querySelector('#modalTitle').textContent=result.dataset.title;document.querySelector('#modalText').textContent=decodeURIComponent(result.dataset.synopsis||'')||`A Ryhze ${result.dataset.meta} pick, ready for your next great escape.`;modal.classList.add('open');searchResults.classList.remove('open');return} const item=e.target.closest('.item'); if(item){if(state.mode==='films'){openFilm(item);return}openGame(item);return} const info=e.target.closest('.info'),menuAction=e.target.closest('[data-exclusive-action]');if(info){info.parentElement.querySelector('.exclusive-menu').classList.toggle('open');return}if(menuAction){const action=menuAction.dataset.exclusiveAction;if(action==='favorite'){isFavorite=!isFavorite;menuAction.querySelector('.favorite-star').textContent=isFavorite?'★':'☆';notify(isFavorite?'Added to favorites':'Removed from favorites')}else notify(action==='list'?'Added to your list':'Rating is ready for your score');menuAction.closest('.exclusive-menu').classList.remove('open');return}if(e.target.id==='close'||e.target===modal)modal.classList.remove('open');if(e.target.id==='profile')notify('Profile menu is ready for your account settings.');if(e.target.id==='modalAction'){modal.classList.remove('open');notify('Added to your Ryhze queue.');} if(!e.target.closest('.search-wrap'))searchResults.classList.remove('open');if(!e.target.closest('.more-wrap'))document.querySelectorAll('.exclusive-menu.open').forEach(menu=>menu.classList.remove('open'));});
-    document.querySelector('#search').addEventListener('input',e=>{const q=e.target.value.trim().toLowerCase(), active=state.mode==='games'?games:films, matches=active.filter(item=>[item.title,...(item.searchTags||[]),...(item.categories||[])].join(' ').toLowerCase().includes(q));if(!q){searchResults.classList.remove('open');searchResults.innerHTML='';return}searchResults.innerHTML=matches.length?matches.map(item=>`<button class="search-result" data-title="${item.title}" data-meta="${(item.categories||[]).join(', ')}" data-synopsis="${encodeURIComponent(item.synopsis||'')}">${item.title}</button>`).join(''):'<div class="search-empty">No matching titles</div>';searchResults.classList.add('open');});
-    document.querySelector('#search').addEventListener('focus',e=>{if(e.target.value.trim())e.target.dispatchEvent(new Event('input'));});document.addEventListener('click',e=>{const gameCard=e.target.closest('.item');if(gameCard&&state.mode==='games')document.querySelector('#modalAction').textContent='Pre Order';else if(e.target.closest('.item'))document.querySelector('#modalAction').textContent='Add to queue';});document.querySelector('#modalAction').addEventListener('click',e=>{if(e.currentTarget.textContent!=='Pre Order')return;e.stopImmediatePropagation();modal.classList.remove('open');notify('Pre-order added to your Ryhze list.');},{capture:true});
-    const heroSection=document.querySelector('.hero');
-    let ambientFrame;
-    addEventListener('scroll',()=>{if(ambientFrame)return;ambientFrame=requestAnimationFrame(()=>{document.body.style.setProperty('--ambient-shift',`${Math.min(scrollY*.08,120)}px`);ambientFrame=undefined;});},{passive:true});
-    let slideshowTimer,artworkTimer,slideshowPaused=false,slideDue=0,artworkDue=0,remainingSlide=10000,remainingArtwork=5000;const swapArtwork=()=>{const images=currentExclusive?.exclusiveImages||[];if(images.length<2)return;heroSection.classList.add('changing');setTimeout(()=>{setExclusiveImage(currentExclusive,1);heroSection.classList.remove('changing');},700)};const advanceSlide=()=>{const exclusives=getExclusives();if(!exclusives.length)return;heroSection.classList.add('changing');hero.classList.add('slide-away');setTimeout(()=>{featuredIndex=(featuredIndex+1)%exclusives.length;render();hero.classList.remove('slide-away');heroSection.classList.remove('changing');hero.classList.add('fade-in');setTimeout(()=>hero.classList.remove('fade-in'),850);resetSlideshowTimer()},700)};const scheduleTimers=(slideDelay=10000,artDelay=5000)=>{clearTimeout(slideshowTimer);clearTimeout(artworkTimer);slideDue=performance.now()+slideDelay;artworkDue=performance.now()+artDelay;slideshowTimer=setTimeout(advanceSlide,slideDelay);artworkTimer=setTimeout(swapArtwork,artDelay)};function resetSlideshowTimer(){slideshowPaused=false;remainingSlide=10000;remainingArtwork=5000;scheduleTimers()}function pauseSlideshow(){if(slideshowPaused)return;slideshowPaused=true;remainingSlide=Math.max(0,slideDue-performance.now());remainingArtwork=Math.max(0,artworkDue-performance.now());clearTimeout(slideshowTimer);clearTimeout(artworkTimer)}function resumeSlideshow(){if(!slideshowPaused)return;slideshowPaused=false;scheduleTimers(remainingSlide,remainingArtwork)}document.addEventListener('pointerover',e=>{const button=e.target.closest('.hero .play,.hero .info');if(button&&!button.contains(e.relatedTarget))pauseSlideshow()});document.addEventListener('pointerout',e=>{const button=e.target.closest('.hero .play,.hero .info');if(button&&!button.contains(e.relatedTarget))resumeSlideshow()});
-    setInterval(()=>{const updatedScript=document.createElement('script');updatedScript.src=`library-data.js?v=${Date.now()}`;updatedScript.onload=()=>{if(JSON.stringify(window.RyhzeLibrary)!==librarySignature){document.querySelector('#updateStatus')?.classList.add('available');document.querySelector('#updateStatus').firstChild.textContent='Webpage updates: available · ';document.querySelector('#updateBuild').textContent=window.RyhzeBuild||'new';}updatedScript.remove();};updatedScript.onerror=()=>updatedScript.remove();document.head.append(updatedScript);},10000);
-    resetSlideshowTimer();
-    render();
+    document.write('<script src="library-data.js?v=' + Date.now() + '"><\/script>');
   </script>
+
   <script>
-    (()=>{
-      const input=document.querySelector('#search'), results=document.querySelector('#searchResults'), fade=document.querySelector('#lobbyFade'), key='ryhze-search-history';
-      const updateSearchTitle=()=>{const label=`Search ${document.body.classList.contains('games')?'Games':'Films'}`;input.placeholder=label;input.setAttribute('aria-label',label)};
-      const getRecent=()=>{try{return JSON.parse(localStorage.getItem(key)||'[]').slice(0,3)}catch{return[]}};
-      const saveRecent=result=>{const current=getRecent(),entry={title:result.dataset.title,meta:result.dataset.meta||'',synopsis:decodeURIComponent(result.dataset.synopsis||'')};localStorage.setItem(key,JSON.stringify([entry,...current.filter(item=>item.title!==entry.title)].slice(0,3)))};
-      const recentButton=item=>`<button class="search-result" data-title="${item.title}" data-meta="${item.meta||''}" data-synopsis="${encodeURIComponent(item.synopsis||'')}">${item.title}</button>`;
-      const showRecent=()=>{const recent=getRecent();results.innerHTML=recent.length?recent.map(recentButton).join(''):'<div class="search-empty">No recent searches</div>';results.classList.add('open')};
-      updateSearchTitle();
-      document.addEventListener('click',event=>{if(event.target.closest('.tab'))setTimeout(updateSearchTitle);const result=event.target.closest('.search-result');if(result)saveRecent(result)});
-      input.addEventListener('focus',()=>{if(!input.value.trim())showRecent()});
-      input.addEventListener('input',()=>{if(!input.value.trim())showRecent()});
-      if(document.documentElement.classList.contains('returning-lobby'))setTimeout(()=>{fade.classList.add('show');document.documentElement.classList.remove('returning-lobby');requestAnimationFrame(()=>requestAnimationFrame(()=>fade.classList.remove('show')))},100);
-    })();
-  </script>
-  <script>
-    if (new URLSearchParams(location.search).get('mode') === 'games') {
-      state.mode = 'games';
-      render();
-      resetSlideshowTimer();
-      const search = document.querySelector('#search');
-      search.placeholder = 'Search Games';
-      search.setAttribute('aria-label', 'Search Games');
+    const library = window.RyhzeLibrary || { films: [], games: [] };
+    let librarySignature = JSON.stringify(library);
+    document.querySelector('#updateBuild').textContent = window.RyhzeBuild || 'local';
+
+    const filmCategories = library.films || [];
+    const gameCategories = library.games || [];
+
+    const uniqueTitles = categories => Array.from(
+      new Map(categories.flatMap(category => category.items || []).map(item => [item.title, item])).values()
+    );
+
+    const films = uniqueTitles(filmCategories);
+    const games = uniqueTitles(gameCategories);
+
+    const state = { mode: 'films' };
+    const content = document.querySelector('#content'),
+          hero = document.querySelector('#heroCopy'),
+          heroImage = document.querySelector('.hero-image'),
+          exclusiveDots = document.querySelector('#exclusiveDots'),
+          modal = document.querySelector('#modal'),
+          toast = document.querySelector('#toast'),
+          searchResults = document.querySelector('#searchResults'),
+          menuMusic = document.querySelector('#menuMusic'),
+          lobbyFade = document.querySelector('#lobbyFade');
+
+    menuMusic.volume = .38;
+    let musicStarted = false;
+
+    const startMenuMusic = () => {
+      if (musicStarted) return;
+      menuMusic.play().then(() => musicStarted = true).catch(() => {});
+    };
+
+    addEventListener('pointerdown', startMenuMusic, { once: true });
+    addEventListener('keydown', startMenuMusic, { once: true });
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) menuMusic.pause();
+      else if (musicStarted) menuMusic.play().catch(() => {});
+    });
+
+    const fadeToPlayer = url => {
+      if (lobbyFade.classList.contains('show')) return;
+      lobbyFade.classList.add('show');
+      setTimeout(() => location.href = url, 590);
+    };
+
+    const revealLobby = () => {
+      const returning = sessionStorage.getItem('ryhzeReturnFade') === '1',
+            updating = sessionStorage.getItem('ryhzeApplyUpdateFade') === '1';
+      if (!returning && !updating) return;
+      sessionStorage.removeItem('ryhzeReturnFade');
+      sessionStorage.removeItem('ryhzeApplyUpdateFade');
+      lobbyFade.classList.add('show');
+      requestAnimationFrame(() => setTimeout(() => lobbyFade.classList.remove('show'), updating ? 180 : 70));
+    };
+
+    addEventListener('pageshow', revealLobby);
+    revealLobby();
+
+    let featuredIndex = 0,
+        currentExclusive = null,
+        isFavorite = false;
+
+    const card = (item, gamesMode) => `<button class="card item${gamesMode ? ' game-card' : ''}" data-title="${item.title}" data-meta="${(item.categories || []).join(', ')}" data-release="${encodeURIComponent(item.release || 'Coming soon')}" data-installer="${encodeURIComponent(JSON.stringify(item.installer || null))}" data-type="${item.mediaType || 'Movie'}" data-licensor="${encodeURIComponent(item.licensor || 'Not specified')}" data-synopsis="${encodeURIComponent(item.synopsis || '')}" data-image="${item.image || ''}" data-streams="${encodeURIComponent(JSON.stringify(item.streams || []))}" data-seasons="${encodeURIComponent(JSON.stringify(item.seasons || []))}" data-search="${[item.title, ...(item.searchTags || []), ...(item.categories || [])].join(' ').toLowerCase()}"${item.image ? ` style="background-image:url('${item.image}')"` : ''}><span class="card-info"><span class="card-title" title="${item.title}">${item.title}</span><span class="card-detail"><span></span><span class="tag" title="${(item.categories || []).join(', ')}">${gamesMode ? 'Game' : 'Film'}</span></span></span></button>`;
+
+    const getExclusives = () => {
+      const categories = state.mode === 'games' ? gameCategories : filmCategories;
+      return (categories.find(category => category.title.trim().toLowerCase() === 'exclusives') || { items: [] }).items || [];
+    };
+
+    function setExclusiveImage(item, imageIndex = 0) {
+      const images = item?.exclusiveImages || [];
+      document.documentElement.style.setProperty('--exclusive-image', images.length ? `url("${images[imageIndex % images.length]}")` : 'none');
     }
-  </script>
-  <script>
-    if (document.documentElement.classList.contains('returning-lobby')) {
-      const fade = document.querySelector('#lobbyFade');
+
+    function render() {
+      const gamesMode = state.mode === 'games',
+            categories = gamesMode ? gameCategories : filmCategories,
+            exclusives = getExclusives(),
+            featuredSlide = exclusives.length ? exclusives[featuredIndex % exclusives.length] : null;
+      
+      currentExclusive = featuredSlide;
+      document.body.classList.toggle('games', gamesMode);
+      document.querySelectorAll('.tab').forEach(x => x.classList.toggle('active', x.dataset.mode === state.mode));
+      setExclusiveImage(featuredSlide);
+
+      hero.innerHTML = featuredSlide ? `<div class="eyebrow">Ryhze Exclusives</div><h1>${featuredSlide.title}</h1><p class="description">${featuredSlide.synopsis || `A Ryhze ${gamesMode ? 'game' : 'film'} exclusive, available only here.`}</p>${featuredSlide.release ? `<p class="exclusive-release">Release: ${featuredSlide.release}</p>` : ''}<div class="actions"><button class="glass action primary play">${gamesMode ? 'Buy now' : 'Watch now'}</button><div class="more-wrap"><button class="glass action secondary info">More info</button><div class="exclusive-menu"><button data-exclusive-action="list">Add to list <span>＋</span></button><button data-exclusive-action="rate">Rate show <span>★</span></button><button data-exclusive-action="favorite">Favorite <span class="favorite-star">${isFavorite ? '★' : '☆'}</span></button></div></div></div>` : '';
+      exclusiveDots.innerHTML = exclusives.map((item, index) => `<button class="exclusive-dot${featuredSlide && index === featuredIndex % exclusives.length ? ' active' : ''}" data-exclusive="${index}" aria-label="${item.title}"></button>`).join('');
+      content.innerHTML = categories.filter(category => category.title.trim().toLowerCase() !== 'exclusives').map(category => `<section class="section"><div class="section-head"><h2>${category.title}</h2></div><div class="row${gamesMode ? ' games-row' : ''}">${(category.items || []).map(item => card(item, gamesMode)).join('')}</div></section>`).join('');
+    }
+
+    function notify(msg) {
+      toast.textContent = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function openFilm(item) {
+      if (document.querySelector('.thumbnail-transition')) return;
+      const source = item.getBoundingClientRect(),
+            transition = document.createElement('div');
+      
+      transition.className = 'thumbnail-transition';
+      transition.innerHTML = '<span>Showing in player</span>';
+      transition.style.cssText = `left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;
+      
+      item.classList.add('opening-player');
+      document.body.append(transition);
+      void transition.offsetWidth;
+
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        transition.classList.add('moving');
+        transition.style.transition = '';
+        transition.style.left = '0';
+        transition.style.top = '0';
+        transition.style.width = '100vw';
+        transition.style.height = '100vh';
+        transition.style.borderRadius = '0';
+      }));
+
+      setTimeout(() => transition.classList.add('to-black'), 1300);
       setTimeout(() => {
-        fade.classList.add('show');
-        document.documentElement.classList.remove('returning-lobby');
-        requestAnimationFrame(() => requestAnimationFrame(() => fade.classList.remove('show')));
-      }, 90);
+        item.classList.remove('opening-player');
+        location.href = `player.html?intro=1&title=${encodeURIComponent(item.dataset.title)}&synopsis=${encodeURIComponent(decodeURIComponent(item.dataset.synopsis || ''))}&image=${encodeURIComponent(item.dataset.image || '')}&streams=${encodeURIComponent(item.dataset.streams || '')}&seasons=${encodeURIComponent(item.dataset.seasons || '')}&type=${encodeURIComponent(item.dataset.type || 'Movie')}&licensor=${item.dataset.licensor || ''}`;
+      }, 1800);
     }
+
+    addEventListener('pagehide', () => document.querySelectorAll('.thumbnail-transition').forEach(transition => transition.remove()));
+
+    document.addEventListener('click', e => {
+      const tab = e.target.closest('.tab');
+      if (tab) {
+        if (tab.dataset.mode === state.mode) return;
+        hero.classList.add('changing');
+        setTimeout(() => {
+          state.mode = tab.dataset.mode;
+          featuredIndex = 0;
+          render();
+          hero.classList.remove('changing');
+          hero.classList.add('fade-in');
+          setTimeout(() => hero.classList.remove('fade-in'), 850);
+        }, 260);
+        resetSlideshowTimer();
+        return;
+      }
+
+      const dot = e.target.closest('.exclusive-dot');
+      if (dot && !dot.disabled) {
+        featuredIndex = Number(dot.dataset.ex);
+        // Additional handler logic...
+      }
+    });
   </script>
-  <script>
-    (() => {
-      document.body.insertAdjacentHTML('beforeend','<div class="menu-player-backdrop" id="menuPlayerBackdrop"></div><section class="menu-player" id="menuPlayer" aria-label="Ryhze player"><iframe id="menuPlayerFrame" title="Ryhze player" allow="fullscreen"></iframe></section>');
-      const panel=document.querySelector('#menuPlayer'),backdrop=document.querySelector('#menuPlayerBackdrop'),frame=document.querySelector('#menuPlayerFrame');
-      let opening=false,closing=false,fullscreen=false,activeSource=null,activeLabel=null,activeTransition=null,frameReady=false;
-      const revealPlayer=transition=>{if(!transition)return;transition.classList.add('reveal');setTimeout(()=>{if(transition.parentNode)transition.remove()},480)};
-      const getPlayerImageRect=()=>{const stage=frame.contentDocument?.querySelector('#stage'),frameRect=frame.getBoundingClientRect();if(!stage)return null;const rect=stage.getBoundingClientRect(),style=getComputedStyle(stage);return{left:frameRect.left+rect.left,top:frameRect.top+rect.top,width:rect.width,height:rect.height,radius:style.borderRadius,border:'2px solid rgba(201,181,255,.42)',shadow:'inset 0 0 0 1px rgba(255,255,255,.24),0 25px 55px rgba(0,0,0,.48)'}};
-      const revealWhenReady=()=>{if(!panel.classList.contains('open')||!frameReady||!activeTransition||!activeTransition.classList.contains('landed'))return;requestAnimationFrame(()=>requestAnimationFrame(()=>{setTimeout(()=>{if(!panel.classList.contains('open'))return;revealPlayer(activeTransition);activeTransition=null},260)}))};
-      const beginLanding=()=>{if(!activeTransition)return;const imageRect=getPlayerImageRect();if(imageRect){activeTransition.style.left=`${imageRect.left}px`;activeTransition.style.top=`${imageRect.top}px`;activeTransition.style.width=`${imageRect.width}px`;activeTransition.style.height=`${imageRect.height}px`;activeTransition.style.borderRadius=imageRect.radius;activeTransition.style.border=imageRect.border;activeTransition.style.boxShadow=imageRect.shadow}activeTransition.querySelector('.transition-loader')?.classList.add('hidden');activeTransition.style.transition='';requestAnimationFrame(()=>requestAnimationFrame(()=>{activeTransition.classList.add('landed');revealWhenReady()}))};
-      addEventListener('message',event=>{if(event.data?.type==='ryhze-player-ready'||event.data?.type==='ryhze-game-ready'){frameReady=true;revealWhenReady()}});
-      const closePlayer=async()=>{
-        if(closing||!panel.classList.contains('open'))return;
-        closing=true;
-        const source=activeSource,sourceRect=source?.getBoundingClientRect();
-        // Measure the visible artwork at the top of either embedded page, not a scrolled game-details section.
-        try{const doc=frame.contentDocument;frame.contentWindow?.scrollTo(0,0);if(doc){doc.documentElement.scrollTop=0;doc.body.scrollTop=0}}catch{}
-        await new Promise(resolve=>setTimeout(resolve,90));
-        const panelRect=panel.getBoundingClientRect();
-        const imageRect=getPlayerImageRect()||panelRect;
-        let returnTransition=null;
-        if(source&&sourceRect&&sourceRect.width&&sourceRect.height){
-          returnTransition=document.createElement('div');
-          returnTransition.className='menu-player-transition';
-          const artwork=source.dataset?.image||getComputedStyle(document.querySelector('.hero-image')).backgroundImage||'';
-          returnTransition.style.cssText=`z-index:250;left:${panelRect.left}px;top:${panelRect.top}px;width:${panelRect.width}px;height:${panelRect.height}px;border:1px solid rgba(170,136,255,.34);border-radius:${getComputedStyle(panel).borderRadius};box-shadow:0 30px 76px rgba(0,0,0,.56);transition:none`;
-          returnTransition.style.backgroundImage=artwork.startsWith('url(')?artwork:`url("${artwork}")`;
-          document.body.append(returnTransition);
-          void returnTransition.offsetWidth;
-        }
-        fullscreen=false;panel.classList.remove('fullscreen','open');document.body.classList.remove('player-open');
-        let finished=false;
-        const finish=()=>{if(finished)return;finished=true;backdrop.classList.remove('open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}returnTransition?.remove();if(!panel.classList.contains('open'))frame.src='about:blank';closing=false};
-        if(returnTransition){
-          const targetStyle=getComputedStyle(source);
-          const settle=returnTransition.animate([
-            {left:`${panelRect.left}px`,top:`${panelRect.top}px`,width:`${panelRect.width}px`,height:`${panelRect.height}px`,borderRadius:getComputedStyle(panel).borderRadius,border:'1px solid rgba(170,136,255,.34)',boxShadow:'0 30px 76px rgba(0,0,0,.56)',opacity:1},
-            {left:`${imageRect.left}px`,top:`${imageRect.top}px`,width:`${imageRect.width}px`,height:`${imageRect.height}px`,borderRadius:imageRect.radius||'28px',border:imageRect.border||'1px solid rgba(170,136,255,.34)',boxShadow:imageRect.shadow||'0 25px 55px rgba(0,0,0,.48)',opacity:1}
-          ],{duration:560,easing:'cubic-bezier(.18,.82,.2,1)',fill:'forwards'});
-          settle.finished.then(()=>{
-            const shrink=returnTransition.animate([
-              {left:`${imageRect.left}px`,top:`${imageRect.top}px`,width:`${imageRect.width}px`,height:`${imageRect.height}px`,borderRadius:imageRect.radius||'28px',opacity:1},
-              {left:`${sourceRect.left}px`,top:`${sourceRect.top}px`,width:`${sourceRect.width}px`,height:`${sourceRect.height}px`,borderRadius:targetStyle.borderRadius,opacity:1}
-            ],{duration:760,easing:'cubic-bezier(.18,.82,.2,1)',fill:'forwards'});
-            shrink.finished.then(finish).catch(finish);
-          }).catch(finish);
-          setTimeout(finish,1650);
-        }else setTimeout(finish,280);
-      };
-      const setFullscreen=next=>{fullscreen=next;panel.classList.toggle('fullscreen',fullscreen);setTimeout(()=>frame.contentWindow?.postMessage({type:'ryhze-embed-fullscreen',fullscreen},'*'),60)};
-      addEventListener('message',event=>{if(event.data?.type==='ryhze-close-player')closePlayer();if(event.data?.type==='ryhze-toggle-player-fullscreen')setFullscreen(!fullscreen)});
-      openFilm=function(item){
-        if(opening||panel.classList.contains('open')||document.querySelector('.menu-player-transition'))return;
-        opening=true;
-        menuMusic.pause();
-        const source=item.getBoundingClientRect(),panelRect=panel.getBoundingClientRect(),target={left:panelRect.left+panel.clientLeft,top:panelRect.top+panel.clientTop,width:panel.clientWidth,height:panel.clientHeight},transition=document.createElement('div');
-        transition.className='menu-player-transition';
-        transition.innerHTML='<span class="transition-loader" aria-label="Loading"></span>';
-        const label=document.createElement('span');label.className='source-player-label card-player-label';label.innerHTML='<span>Showing in player</span>';
-        transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border:${getComputedStyle(item).border};border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;
-        activeSource=item;activeLabel=label;activeTransition=transition;frameReady=false;item.classList.add('opening-player');item.append(label);document.body.append(transition);
-        const query=new URLSearchParams({embedded:'1',title:item.dataset.title,synopsis:decodeURIComponent(item.dataset.synopsis||''),image:item.dataset.image||'',streams:item.dataset.streams||'',seasons:item.dataset.seasons||'[]',type:item.dataset.type||'Movie'});
-        frame.src=`player.html?${query}&v=${Date.now()}`;
-        void transition.offsetWidth;
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          label.classList.add('show');transition.style.transition='';
-          transition.style.left=`${target.left}px`;transition.style.top=`${target.top}px`;
-          transition.style.width=`${target.width}px`;transition.style.height=`${target.height}px`;transition.style.borderRadius=getComputedStyle(panel).borderRadius;
-        }));
-        setTimeout(()=>{backdrop.classList.add('open');panel.classList.add('open');document.body.classList.add('player-open');opening=false;setTimeout(beginLanding,5000)},920);
-      };
-      openGame=function(item){
-        if(opening||panel.classList.contains('open')||document.querySelector('.menu-player-transition'))return;
-        opening=true;
-        menuMusic.pause();
-        const source=item.getBoundingClientRect(),panelRect=panel.getBoundingClientRect(),target={left:panelRect.left+panel.clientLeft,top:panelRect.top+panel.clientTop,width:panel.clientWidth,height:panel.clientHeight},transition=document.createElement('div');
-        transition.className='menu-player-transition';
-        transition.innerHTML='<span class="transition-loader" aria-label="Loading"></span>';
-        const label=document.createElement('span');label.className='source-player-label card-player-label';label.innerHTML='<span>Opening game page</span>';
-        transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border:${getComputedStyle(item).border};border-radius:${getComputedStyle(item).borderRadius};background-image:url("${item.dataset.image}");transition:none`;
-        activeSource=item;activeLabel=label;activeTransition=transition;frameReady=false;item.classList.add('opening-player');item.append(label);document.body.append(transition);
-        const query=new URLSearchParams({embedded:'1',title:item.dataset.title,synopsis:decodeURIComponent(item.dataset.synopsis||''),image:item.dataset.image||'',categories:item.dataset.meta||'',release:decodeURIComponent(item.dataset.release||'Coming soon'),installer:decodeURIComponent(item.dataset.installer||'null'),licensor:decodeURIComponent(item.dataset.licensor||'Not specified')});
-        frame.src=`game.html?${query}&v=${Date.now()}`;
-        void transition.offsetWidth;
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          label.classList.add('show');transition.style.transition='';
-          transition.style.left=`${target.left}px`;transition.style.top=`${target.top}px`;
-          transition.style.width=`${target.width}px`;transition.style.height=`${target.height}px`;transition.style.borderRadius=getComputedStyle(panel).borderRadius;
-        }));
-        setTimeout(()=>{backdrop.classList.add('open');panel.classList.add('open');document.body.classList.add('player-open');opening=false;setTimeout(beginLanding,5000)},920);
-      };
-      openExclusive=function(item){
-        if(opening||panel.classList.contains('open')||document.querySelector('.menu-player-transition'))return;
-        opening=true;
-        menuMusic.pause();
-        const source=document.querySelector('.hero-image').getBoundingClientRect(),panelRect=panel.getBoundingClientRect(),target={left:panelRect.left+panel.clientLeft,top:panelRect.top+panel.clientTop,width:panel.clientWidth,height:panel.clientHeight},transition=document.createElement('div');
-        transition.className='menu-player-transition';
-        transition.innerHTML='<span class="transition-loader" aria-label="Loading"></span>';
-        transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border:1px solid rgba(170,136,255,.34);border-radius:0;background-image:${getComputedStyle(document.querySelector('.hero-image')).backgroundImage};transition:none`;
-        activeSource=document.querySelector('.hero-copy');activeLabel=null;activeTransition=transition;frameReady=false;activeSource.classList.add('opening-player');document.body.append(transition);
-        const query=new URLSearchParams({embedded:'1',title:item.title,synopsis:item.synopsis||'',image:item.image||'',streams:JSON.stringify(item.streams||[]),seasons:JSON.stringify(item.seasons||[]),type:item.mediaType||'Movie',licensor:item.licensor||'Not specified'});
-        frame.src=`player.html?${query}&v=${Date.now()}`;
-        void transition.offsetWidth;
-        requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          transition.style.transition='';
-          transition.style.left=`${target.left}px`;transition.style.top=`${target.top}px`;
-          transition.style.width=`${target.width}px`;transition.style.height=`${target.height}px`;transition.style.borderRadius=getComputedStyle(panel).borderRadius;
-        }));
-        setTimeout(()=>{backdrop.classList.add('open');panel.classList.add('open');document.body.classList.add('player-open');opening=false;setTimeout(beginLanding,5000)},920);
-      };
-    })();
-  </script>
-  <script>
-    (()=>{const status=document.querySelector('#videoStatus'),health='https://video.ryhze.com/health';const check=async()=>{const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),4500);try{const response=await fetch(health,{mode:'cors',cache:'no-store',signal:controller.signal});if(!response.ok)throw new Error();status.textContent='Streaming services: online';status.classList.add('online')}catch{status.textContent='Streaming services: not online · trying to connect';status.classList.remove('online')}finally{clearTimeout(timer)}};check();setInterval(check,30000)})();
-  </script>
-<script>(()=>{const wrap=document.querySelector('.search-wrap'),toggle=document.querySelector('#searchToggle'),input=document.querySelector('#search');if(!wrap||!toggle||!input)return;const open=()=>{wrap.classList.add('open');setTimeout(()=>input.focus(),180)};toggle.addEventListener('click',open);input.addEventListener('focus',()=>wrap.classList.add('open'));document.addEventListener('click',event=>{if(!wrap.contains(event.target)){wrap.classList.remove('open');document.querySelector('#searchResults')?.classList.remove('open')}})})();</script>
-<script>(()=>{const button=document.querySelector('#updateButton'),fade=document.querySelector('#lobbyFade');button?.addEventListener('click',()=>{if(button.disabled)return;button.disabled=true;fade.classList.add('show');sessionStorage.setItem('ryhzeApplyUpdateFade','1');setTimeout(()=>{const url=new URL(location.href);url.searchParams.set('update',Date.now());location.replace(url.href)},600)})})();</script>
-<script>(()=>{const key='ryhze-my-list',refresh=()=>{document.querySelector('.my-list-section')?.remove();let items=[];try{items=JSON.parse(localStorage.getItem(key)||'[]')}catch{}if(!items.length)return;const section=document.createElement('section');section.className='section my-list-section';section.innerHTML=`<div class="section-head"><h2>My List</h2></div><div class="row">${items.map(item=>card(item,false)).join('')}</div>`;document.querySelector('#content').prepend(section)};refresh();document.addEventListener('click',event=>{if(!event.target.closest('[data-exclusive-action="list"]'))return;if(!currentExclusive)return;let items=[];try{items=JSON.parse(localStorage.getItem(key)||'[]')}catch{}if(!items.some(item=>item.title===currentExclusive.title)){items.unshift(currentExclusive);localStorage.setItem(key,JSON.stringify(items));refresh();notify('Added to My List')}})})();</script>
-<script>new MutationObserver(()=>{const content=document.querySelector('#content');if(content&&!content.querySelector('.my-list-section')){let items=[];try{items=JSON.parse(localStorage.getItem('ryhze-my-list')||'[]')}catch{}if(items.length){const section=document.createElement('section');section.className='section my-list-section';section.innerHTML=`<div class="section-head"><h2>My List</h2></div><div class="row">${items.map(item=>card(item,false)).join('')}</div>`;content.prepend(section)}}}).observe(document.querySelector('#content'),{childList:true});</script>
-<script>/* list state is handled by the hero click listener below */</script>
-<script>setInterval(()=>{const status=document.querySelector('#videoStatus');if(status)status.textContent=`${document.body.classList.contains('games')?'Game services':'Streaming services'}: ${status.classList.contains('online')?'online':'not online · trying to connect'}`},500);</script>
-<script>(()=>{const sync=()=>{const action=document.querySelector('[data-exclusive-action="list"]');if(!action||!currentExclusive)return;let items=[];try{items=JSON.parse(localStorage.getItem('ryhze-my-list')||'[]')}catch{}action.firstChild.textContent=items.some(item=>item.title===currentExclusive.title)?'Remove from list ':'Add to list '};new MutationObserver(sync).observe(document.querySelector('#heroCopy'),{childList:true});sync()})();</script>
-<script>document.addEventListener('click',event=>{const action=event.target.closest('[data-exclusive-action="list"]');if(!action||!currentExclusive)return;setTimeout(()=>{let items=[];try{items=JSON.parse(localStorage.getItem('ryhze-my-list')||'[]')}catch{}action.firstChild.textContent=items.some(item=>item.title===currentExclusive.title)?'Remove from list ':'Add to list '},0)});</script>
-<script>setInterval(()=>{const action=document.querySelector('[data-exclusive-action="list"]');if(!action||!currentExclusive)return;let items=[];try{items=JSON.parse(localStorage.getItem('ryhze-my-list')||'[]')}catch{}action.firstChild.textContent=items.some(item=>item.title===currentExclusive.title)?'Remove from list ':'Add to list '},120);</script>
-<script>document.querySelector('#heroCopy')?.addEventListener('click',event=>{const action=event.target.closest('[data-exclusive-action="list"]');if(!action||!currentExclusive)return;event.stopPropagation();let items=[];try{items=JSON.parse(localStorage.getItem('ryhze-my-list')||'[]')}catch{}const index=items.findIndex(item=>item.title===currentExclusive.title);if(index>=0){items.splice(index,1);action.firstChild.textContent='Add to list '}else{items.unshift(currentExclusive);action.firstChild.textContent='Remove from list '}localStorage.setItem('ryhze-my-list',JSON.stringify(items));document.querySelector('.exclusive-menu')?.classList.remove('open');notify(index>=0?'Removed from My List':'Added to My List')});</script>
-<script>(()=>{document.addEventListener('click',event=>{const action=event.target.closest('[data-exclusive-action="list"]');if(!action||!currentExclusive)return;event.stopImmediatePropagation();let items=[];try{items=JSON.parse(localStorage.getItem('ryhze-my-list')||'[]')}catch{}const index=items.findIndex(item=>item.title===currentExclusive.title);if(index>=0)items.splice(index,1);else items.unshift(currentExclusive);localStorage.setItem('ryhze-my-list',JSON.stringify(items));action.firstChild.textContent=index>=0?'Add to list ':'Remove from list ';document.querySelector('.exclusive-menu')?.classList.remove('open');document.querySelector('.my-list-section')?.remove();if(items.length)document.querySelector('#content')?.insertAdjacentHTML('afterbegin',`<section class="section my-list-section"><div class="section-head"><h2>My List</h2></div><div class="row">${items.map(item=>card(item,false)).join('')}</div></section>`);notify(index>=0?'Removed from My List':'Added to My List')},{capture:true})})();</script>
-<script>
-(()=>{const key='ryhzeAnalytics';const record=e=>{try{const list=JSON.parse(localStorage.getItem(key)||'[]');list.push({...e,time:new Date().toISOString()});localStorage.setItem(key,JSON.stringify(list.slice(-500)))}catch{}};document.addEventListener('click',event=>{const card=event.target.closest('.card[data-title]');if(card)record({type:'open',title:card.dataset.title,media:card.dataset.type||'Movie'});const result=event.target.closest('.search-result[data-title]');if(result)record({type:'search',title:result.dataset.title})})})();
-</script>
 </body>
 </html>
