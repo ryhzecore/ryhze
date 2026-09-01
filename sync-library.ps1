@@ -52,7 +52,8 @@ function Get-InstallerItem([string]$TitleFolder) {
     Where-Object { $installerExtensions -contains $_.Extension.ToLowerInvariant() } |
     Select-Object -First 1
   if (-not $file) { return $null }
-  [PSCustomObject]@{ name = $file.Name; url = Get-RelativeUrl $file.FullName }
+  $localUrl = Get-RelativeUrl $file.FullName
+  [PSCustomObject]@{ name = $file.Name; url = $localUrl; publicUrl = "$VideoBaseUrl/$localUrl" }
 }
 
 function Get-RyhzeTitles([string]$LibraryType) {

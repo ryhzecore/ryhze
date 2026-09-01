@@ -661,7 +661,8 @@
                                                        ],
                                         "installer":  {
                                                           "name":  "Install.exe",
-                                                          "url":  "Games/Valorant/Download/Install.exe"
+                                                          "url":  "Games/Valorant/Download/Install.exe",
+                                                          "publicUrl":  "https://video.ryhze.com/Games/Valorant/Download/Install.exe"
                                                       }
                                     }
                                 ]
@@ -745,12 +746,13 @@
                                                        ],
                                         "installer":  {
                                                           "name":  "Install.exe",
-                                                          "url":  "Games/Valorant/Download/Install.exe"
+                                                          "url":  "Games/Valorant/Download/Install.exe",
+                                                          "publicUrl":  "https://video.ryhze.com/Games/Valorant/Download/Install.exe"
                                                       }
                                     }
                                 ]
                   }
               ]
 };
-window.RyhzeBuild = 'acbbe4a';
+window.RyhzeBuild = 'f864d91';
 
