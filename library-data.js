@@ -619,7 +619,7 @@
                                     },
                                     {
                                         "title":  "Valorant",
-                                        "image":  "Games/Valorant/Thumbnail/OfficialImage.png?v=639235732426863946",
+                                        "image":  "Games/Valorant/Thumbnail/OfficialImage.png?v=639238192598625810",
                                         "exclusiveImages":  [
                                                                 "Games/Valorant/Images/images.png?v=639235732846660659",
                                                                 "Games/Valorant/Images/images2.png?v=639235733626872181"
@@ -698,7 +698,7 @@
                                     },
                                     {
                                         "title":  "Valorant",
-                                        "image":  "Games/Valorant/Thumbnail/OfficialImage.png?v=639235732426863946",
+                                        "image":  "Games/Valorant/Thumbnail/OfficialImage.png?v=639238192598625810",
                                         "exclusiveImages":  [
                                                                 "Games/Valorant/Images/images.png?v=639235732846660659",
                                                                 "Games/Valorant/Images/images2.png?v=639235733626872181"
@@ -737,5 +737,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '1fdc165';
+window.RyhzeBuild = '861a949';
 
