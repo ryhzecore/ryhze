@@ -172,7 +172,13 @@ $library = [PSCustomObject]@{
 }
 
 $json = $library | ConvertTo-Json -Depth 10
-$build = (git rev-parse --short HEAD 2>$null)
-if (-not $build) { $build = 'local' }
-Set-Content -LiteralPath (Join-Path $Root 'library-data.js') -Value "window.RyhzeLibrary = $json;`nwindow.RyhzeBuild = '$build';`n" -Encoding utf8
+# The library revision must be deterministic. Using the current Git SHA here
+# rewrote this generated file after every auto-commit and caused a publish loop.
+$bytes = [System.Text.Encoding]::UTF8.GetBytes($json)
+$hash = [System.Security.Cryptography.SHA256]::Create().ComputeHash($bytes)
+$build = (-join ($hash | ForEach-Object { $_.ToString('x2') })).Substring(0,7)
+$output = "window.RyhzeLibrary = $json;`nwindow.RyhzeBuild = '$build';`n"
+$outputPath = Join-Path $Root 'library-data.js'
+$existing = if (Test-Path -LiteralPath $outputPath) { Get-Content -LiteralPath $outputPath -Raw } else { '' }
+if ($existing -ne $output) { Set-Content -LiteralPath $outputPath -Value $output -Encoding utf8 }
 Write-Host 'Ryhze library data updated successfully.'
