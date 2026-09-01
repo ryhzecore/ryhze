@@ -153,6 +153,7 @@
       openGame=function(item){
         if(opening||panel.classList.contains('open')||document.querySelector('.menu-player-transition'))return;
         opening=true;
+        menuMusic.pause();
         const source=item.getBoundingClientRect(),panelRect=panel.getBoundingClientRect(),target={left:panelRect.left+panel.clientLeft,top:panelRect.top+panel.clientTop,width:panel.clientWidth,height:panel.clientHeight},transition=document.createElement('div');
         transition.className='menu-player-transition';
         transition.innerHTML='<span class="transition-loader" aria-label="Loading"></span>';
