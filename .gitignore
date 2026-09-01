@@ -23,5 +23,6 @@ mobile-conversion*.log
 watch-sync.log
 watch-sync.heartbeat
 web-media-conversion.log
+web-media-conversion.lock
 bin/
 obj/

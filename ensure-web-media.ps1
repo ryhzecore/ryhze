@@ -4,7 +4,14 @@ $ErrorActionPreference = 'Continue'
 $ffmpeg = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffmpeg.exe'
 $ffprobe = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffprobe.exe'
 $logPath = Join-Path $Root 'web-media-conversion.log'
+$lockPath = Join-Path $Root 'web-media-conversion.lock'
+try {
+  $lock = [System.IO.File]::Open($lockPath, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
+} catch {
+  exit 0
+}
 
+try {
 if (-not (Test-Path -LiteralPath $ffmpeg) -or -not (Test-Path -LiteralPath $ffprobe)) {
   "[$(Get-Date)] FFmpeg is unavailable; conversion skipped." | Add-Content -LiteralPath $logPath
   exit 1
@@ -13,7 +20,7 @@ if (-not (Test-Path -LiteralPath $ffmpeg) -or -not (Test-Path -LiteralPath $ffpr
 $mediaExtensions = @('.mp4','.m4v','.mov','.mkv','.webm')
 $sources = Get-ChildItem -LiteralPath (Join-Path $Root 'Films'),(Join-Path $Root 'Games') -File -Recurse -ErrorAction SilentlyContinue |
   Where-Object { $mediaExtensions -contains $_.Extension.ToLowerInvariant() -and $_.BaseName -notmatch '-web$' } |
-  Sort-Object Length
+  Sort-Object @{Expression={if ($_.FullName -match 'Loki.*Season 2.*Episode 6') { 0 } elseif ($_.FullName -match 'Fanstastic Four First Steps') { 1 } else { 2 }}}, Length
 
 foreach ($source in $sources) {
   $output = Join-Path $source.DirectoryName ($source.BaseName + '-web.mp4')
@@ -36,4 +43,8 @@ foreach ($source in $sources) {
     Remove-Item -LiteralPath $partial -Force -ErrorAction SilentlyContinue
     "[$(Get-Date)] Browser copy failed: $($source.FullName)" | Add-Content -LiteralPath $logPath
   }
+}
+} finally {
+  if ($lock) { $lock.Dispose() }
+  Remove-Item -LiteralPath $lockPath -Force -ErrorAction SilentlyContinue
 }
