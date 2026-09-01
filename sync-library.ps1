@@ -22,6 +22,12 @@ function Get-RelativeUrl([string]$FilePath) {
   return (($relativePath -split '[\\/]') | ForEach-Object { [uri]::EscapeDataString($_) }) -join '/'
 }
 
+function Get-AssetUrl($File) {
+  if (-not $File) { return '' }
+  # New or replaced artwork receives a URL version so browsers fetch it after an approved update.
+  return "$(Get-RelativeUrl $File.FullName)?v=$($File.LastWriteTimeUtc.Ticks)"
+}
+
 function Get-StreamItems($Files) {
   $mediaFiles = @($Files | Where-Object { $_ -and $streamExtensions -contains $_.Extension.ToLowerInvariant() })
   $browserFiles = @($mediaFiles | Where-Object { $_.BaseName -match '-web$' })
@@ -57,7 +63,7 @@ function Get-RyhzeTitles([string]$LibraryType) {
         $exclusiveImages = if (Test-Path -LiteralPath $imagesPath) {
           Get-ChildItem -LiteralPath $imagesPath -File |
             Where-Object { $imageExtensions -contains $_.Extension.ToLowerInvariant() } |
-            ForEach-Object { Get-RelativeUrl $_.FullName }
+          ForEach-Object { Get-AssetUrl $_ }
         } else { @() }
         
         $streamPath = @(
@@ -118,7 +124,7 @@ function Get-RyhzeTitles([string]$LibraryType) {
         
         [PSCustomObject]@{
           title = $titleFolder.Name
-          image = Get-RelativeUrl $thumbnail.FullName
+          image = Get-AssetUrl $thumbnail
           exclusiveImages = @($exclusiveImages)
           streams = @($streamFiles)
           synopsis = Get-NoteValue $notes 'Synopsis'

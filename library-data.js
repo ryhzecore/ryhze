@@ -5,10 +5,10 @@
                       "items":  [
                                     {
                                         "title":  "Fanstastic Four First Steps",
-                                        "image":  "Films/Fanstastic%20Four%20First%20Steps/Thumbnail/OfficialImage.png",
+                                        "image":  "Films/Fanstastic%20Four%20First%20Steps/Thumbnail/OfficialImage.png?v=639237837814361275",
                                         "exclusiveImages":  [
-                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images.png",
-                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images2.png"
+                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images.png?v=639237839002291884",
+                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images2.png?v=639237839224245930"
                                                             ],
                                         "streams":  [
 
@@ -66,15 +66,15 @@
                                     },
                                     {
                                         "title":  "Loki",
-                                        "image":  "Films/Loki/Thumbnail/OfficialImage.png",
+                                        "image":  "Films/Loki/Thumbnail/OfficialImage.png?v=639237846072461403",
                                         "exclusiveImages":  [
-                                                                "Films/Loki/Images/images.png",
-                                                                "Films/Loki/Images/images2.png"
+                                                                "Films/Loki/Images/images.png?v=639237843878949638",
+                                                                "Films/Loki/Images/images2.png?v=639238156220103477"
                                                             ],
                                         "streams":  [
 
                                                     ],
-                                        "synopsis":  "Details coming soon.",
+                                        "synopsis":  "After escaping with the Tesseract in Avengers: Endgame, the God of Mischief is captured by the Time Variance Authority, forcing him to help repair broken timelines and save the multiverse.",
                                         "release":  "Coming soon",
                                         "licensor":  "Marvel",
                                         "mediaType":  "Series",
@@ -173,9 +173,41 @@
                                                            "Marvel"
                                                        ],
                                         "searchTags":  [
-                                                           "Avengers",
-                                                           "Doomsday",
-                                                           "Marvel"
+                                                           "Loki",
+                                                           "Marvel Loki",
+                                                           "Loki Disney Plus",
+                                                           "Tom Hiddleston",
+                                                           "God of Mischief",
+                                                           "Time Variance Authority",
+                                                           "TVA",
+                                                           "Mobius",
+                                                           "Sylvie",
+                                                           "Jonathan Majors",
+                                                           "He Who Remains",
+                                                           "Kang the Conqueror",
+                                                           "Marvel Cinematic Universe",
+                                                           "MCU Phase 4",
+                                                           "MCU Phase 5",
+                                                           "Multiverse Saga",
+                                                           "Sacred Timeline",
+                                                           "Time Slipping",
+                                                           "Temporal Loom",
+                                                           "Ouroboros",
+                                                           "OB",
+                                                           "Ke Huy Quan",
+                                                           "Gobi Desert",
+                                                           "Avengers Endgame Variant",
+                                                           "Marvel Series",
+                                                           "Multiverse",
+                                                           "Miss Minutes",
+                                                           "Ravonna Renslayer",
+                                                           "Glorious Purpose",
+                                                           "Loki Season 1",
+                                                           "Loki Season 2",
+                                                           "Marvel Breakdown",
+                                                           "MCU Theory",
+                                                           "MarvelTok",
+                                                           "ComicTok"
                                                        ]
                                     }
                                 ]
@@ -185,10 +217,10 @@
                       "items":  [
                                     {
                                         "title":  "Fanstastic Four First Steps",
-                                        "image":  "Films/Fanstastic%20Four%20First%20Steps/Thumbnail/OfficialImage.png",
+                                        "image":  "Films/Fanstastic%20Four%20First%20Steps/Thumbnail/OfficialImage.png?v=639237837814361275",
                                         "exclusiveImages":  [
-                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images.png",
-                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images2.png"
+                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images.png?v=639237839002291884",
+                                                                "Films/Fanstastic%20Four%20First%20Steps/Images/images2.png?v=639237839224245930"
                                                             ],
                                         "streams":  [
 
@@ -246,15 +278,15 @@
                                     },
                                     {
                                         "title":  "Loki",
-                                        "image":  "Films/Loki/Thumbnail/OfficialImage.png",
+                                        "image":  "Films/Loki/Thumbnail/OfficialImage.png?v=639237846072461403",
                                         "exclusiveImages":  [
-                                                                "Films/Loki/Images/images.png",
-                                                                "Films/Loki/Images/images2.png"
+                                                                "Films/Loki/Images/images.png?v=639237843878949638",
+                                                                "Films/Loki/Images/images2.png?v=639238156220103477"
                                                             ],
                                         "streams":  [
 
                                                     ],
-                                        "synopsis":  "Details coming soon.",
+                                        "synopsis":  "After escaping with the Tesseract in Avengers: Endgame, the God of Mischief is captured by the Time Variance Authority, forcing him to help repair broken timelines and save the multiverse.",
                                         "release":  "Coming soon",
                                         "licensor":  "Marvel",
                                         "mediaType":  "Series",
@@ -353,9 +385,41 @@
                                                            "Marvel"
                                                        ],
                                         "searchTags":  [
-                                                           "Avengers",
-                                                           "Doomsday",
-                                                           "Marvel"
+                                                           "Loki",
+                                                           "Marvel Loki",
+                                                           "Loki Disney Plus",
+                                                           "Tom Hiddleston",
+                                                           "God of Mischief",
+                                                           "Time Variance Authority",
+                                                           "TVA",
+                                                           "Mobius",
+                                                           "Sylvie",
+                                                           "Jonathan Majors",
+                                                           "He Who Remains",
+                                                           "Kang the Conqueror",
+                                                           "Marvel Cinematic Universe",
+                                                           "MCU Phase 4",
+                                                           "MCU Phase 5",
+                                                           "Multiverse Saga",
+                                                           "Sacred Timeline",
+                                                           "Time Slipping",
+                                                           "Temporal Loom",
+                                                           "Ouroboros",
+                                                           "OB",
+                                                           "Ke Huy Quan",
+                                                           "Gobi Desert",
+                                                           "Avengers Endgame Variant",
+                                                           "Marvel Series",
+                                                           "Multiverse",
+                                                           "Miss Minutes",
+                                                           "Ravonna Renslayer",
+                                                           "Glorious Purpose",
+                                                           "Loki Season 1",
+                                                           "Loki Season 2",
+                                                           "Marvel Breakdown",
+                                                           "MCU Theory",
+                                                           "MarvelTok",
+                                                           "ComicTok"
                                                        ]
                                     }
                                 ]
@@ -365,15 +429,15 @@
                       "items":  [
                                     {
                                         "title":  "Loki",
-                                        "image":  "Films/Loki/Thumbnail/OfficialImage.png",
+                                        "image":  "Films/Loki/Thumbnail/OfficialImage.png?v=639237846072461403",
                                         "exclusiveImages":  [
-                                                                "Films/Loki/Images/images.png",
-                                                                "Films/Loki/Images/images2.png"
+                                                                "Films/Loki/Images/images.png?v=639237843878949638",
+                                                                "Films/Loki/Images/images2.png?v=639238156220103477"
                                                             ],
                                         "streams":  [
 
                                                     ],
-                                        "synopsis":  "Details coming soon.",
+                                        "synopsis":  "After escaping with the Tesseract in Avengers: Endgame, the God of Mischief is captured by the Time Variance Authority, forcing him to help repair broken timelines and save the multiverse.",
                                         "release":  "Coming soon",
                                         "licensor":  "Marvel",
                                         "mediaType":  "Series",
@@ -472,9 +536,41 @@
                                                            "Marvel"
                                                        ],
                                         "searchTags":  [
-                                                           "Avengers",
-                                                           "Doomsday",
-                                                           "Marvel"
+                                                           "Loki",
+                                                           "Marvel Loki",
+                                                           "Loki Disney Plus",
+                                                           "Tom Hiddleston",
+                                                           "God of Mischief",
+                                                           "Time Variance Authority",
+                                                           "TVA",
+                                                           "Mobius",
+                                                           "Sylvie",
+                                                           "Jonathan Majors",
+                                                           "He Who Remains",
+                                                           "Kang the Conqueror",
+                                                           "Marvel Cinematic Universe",
+                                                           "MCU Phase 4",
+                                                           "MCU Phase 5",
+                                                           "Multiverse Saga",
+                                                           "Sacred Timeline",
+                                                           "Time Slipping",
+                                                           "Temporal Loom",
+                                                           "Ouroboros",
+                                                           "OB",
+                                                           "Ke Huy Quan",
+                                                           "Gobi Desert",
+                                                           "Avengers Endgame Variant",
+                                                           "Marvel Series",
+                                                           "Multiverse",
+                                                           "Miss Minutes",
+                                                           "Ravonna Renslayer",
+                                                           "Glorious Purpose",
+                                                           "Loki Season 1",
+                                                           "Loki Season 2",
+                                                           "Marvel Breakdown",
+                                                           "MCU Theory",
+                                                           "MarvelTok",
+                                                           "ComicTok"
                                                        ]
                                     }
                                 ]
@@ -486,10 +582,10 @@
                       "items":  [
                                     {
                                         "title":  "Grand Theft Auto VI",
-                                        "image":  "Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png",
+                                        "image":  "Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png?v=639235732426863946",
                                         "exclusiveImages":  [
-                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images.png",
-                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images2.png"
+                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images.png?v=639235732846660659",
+                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images2.png?v=639235733626872181"
                                                             ],
                                         "streams":  [
 
@@ -528,10 +624,10 @@
                       "items":  [
                                     {
                                         "title":  "Grand Theft Auto VI",
-                                        "image":  "Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png",
+                                        "image":  "Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png?v=639235732426863946",
                                         "exclusiveImages":  [
-                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images.png",
-                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images2.png"
+                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images.png?v=639235732846660659",
+                                                                "Games/Grand%20Theft%20Auto%20VI/Images/images2.png?v=639235733626872181"
                                                             ],
                                         "streams":  [
 
@@ -567,5 +663,5 @@
                   }
               ]
 };
-window.RyhzeBuild = 'b41bced';
+window.RyhzeBuild = 'cf3fa0f';
 
