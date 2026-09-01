@@ -140,8 +140,9 @@
         if(source&&sourceRect&&sourceRect.width&&sourceRect.height){
           returnTransition=document.createElement('div');
           returnTransition.className='menu-player-transition';
-          const artwork=source.dataset?.image||'';
-          returnTransition.style.cssText=`z-index:250;left:${panelRect.left}px;top:${panelRect.top}px;width:${panelRect.width}px;height:${panelRect.height}px;border:1px solid rgba(170,136,255,.34);border-radius:${getComputedStyle(panel).borderRadius};box-shadow:0 30px 76px rgba(0,0,0,.56);background-image:url("${artwork}");transition:none`;
+          const artwork=source.dataset?.image||getComputedStyle(document.querySelector('.hero-image')).backgroundImage||'';
+          returnTransition.style.cssText=`z-index:250;left:${panelRect.left}px;top:${panelRect.top}px;width:${panelRect.width}px;height:${panelRect.height}px;border:1px solid rgba(170,136,255,.34);border-radius:${getComputedStyle(panel).borderRadius};box-shadow:0 30px 76px rgba(0,0,0,.56);transition:none`;
+          returnTransition.style.backgroundImage=artwork.startsWith('url(')?artwork:`url("${artwork}")`;
           document.body.append(returnTransition);
           void returnTransition.offsetWidth;
         }
