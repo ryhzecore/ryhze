@@ -5,7 +5,8 @@ $ffmpeg = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffmpeg.exe'
 $ffprobe = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffprobe.exe'
 $logPath = Join-Path $Root 'web-media-conversion.log'
 $lockPath = Join-Path $Root 'web-media-conversion.lock'
-$quarantinePath = Join-Path $Root 'video-server\web-media-quarantine'
+# Keep interrupted or invalid transcodes outside the published site and video folders.
+$quarantinePath = Join-Path $env:LOCALAPPDATA 'Ryhze\media-recovery'
 try {
   $lock = [System.IO.File]::Open($lockPath, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
 } catch {
