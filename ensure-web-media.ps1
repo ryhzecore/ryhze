@@ -4,10 +4,6 @@ $ErrorActionPreference = 'Continue'
 $ffmpeg = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffmpeg.exe'
 $ffprobe = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffprobe.exe'
 $logPath = Join-Path $Root 'web-media-conversion.log'
-$mutex = [System.Threading.Mutex]::new($false, 'Global\\RyhzeWebMediaConversion')
-if (-not $mutex.WaitOne(0)) { exit 0 }
-
-try {
 
 if (-not (Test-Path -LiteralPath $ffmpeg) -or -not (Test-Path -LiteralPath $ffprobe)) {
   "[$(Get-Date)] FFmpeg is unavailable; conversion skipped." | Add-Content -LiteralPath $logPath
@@ -40,8 +36,4 @@ foreach ($source in $sources) {
     Remove-Item -LiteralPath $partial -Force -ErrorAction SilentlyContinue
     "[$(Get-Date)] Browser copy failed: $($source.FullName)" | Add-Content -LiteralPath $logPath
   }
-}
-} finally {
-  $mutex.ReleaseMutex()
-  $mutex.Dispose()
 }
