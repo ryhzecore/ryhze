@@ -621,7 +621,7 @@
                                         "title":  "Valorant",
                                         "image":  "Games/Valorant/Thumbnail/OfficialImage.png?v=639238192598625810",
                                         "exclusiveImages":  [
-                                                                "Games/Valorant/Images/images.png?v=639235732846660659",
+                                                                "Games/Valorant/Images/images.png?v=639238201090983582",
                                                                 "Games/Valorant/Images/images2.png?v=639235733626872181"
                                                             ],
                                         "streams":  [
@@ -700,7 +700,7 @@
                                         "title":  "Valorant",
                                         "image":  "Games/Valorant/Thumbnail/OfficialImage.png?v=639238192598625810",
                                         "exclusiveImages":  [
-                                                                "Games/Valorant/Images/images.png?v=639235732846660659",
+                                                                "Games/Valorant/Images/images.png?v=639238201090983582",
                                                                 "Games/Valorant/Images/images2.png?v=639235733626872181"
                                                             ],
                                         "streams":  [
@@ -737,5 +737,5 @@
                   }
               ]
 };
-window.RyhzeBuild = '6d3d257';
+window.RyhzeBuild = 'a5a8c21';
 
