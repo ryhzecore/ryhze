@@ -213,14 +213,12 @@
         const source=document.querySelector('.hero-image').getBoundingClientRect(),panelRect=panel.getBoundingClientRect(),target={left:panelRect.left+panel.clientLeft,top:panelRect.top+panel.clientTop,width:panel.clientWidth,height:panel.clientHeight},transition=document.createElement('div');
         transition.className='menu-player-transition';
         transition.innerHTML='<span class="transition-loader" aria-label="Loading"></span>';
-        const label=document.createElement('span');label.className='source-player-label transition-player-label';label.innerHTML='<span>Showing in player</span>';
         transition.style.cssText=`left:${source.left}px;top:${source.top}px;width:${source.width}px;height:${source.height}px;border:1px solid rgba(170,136,255,.34);border-radius:0;background-image:${getComputedStyle(document.querySelector('.hero-image')).backgroundImage};transition:none`;
-        activeSource=document.querySelector('.hero-copy');activeLabel=label;activeTransition=transition;frameReady=false;activeSource.classList.add('opening-player');transition.append(label);document.body.append(transition);
+        activeSource=document.querySelector('.hero-copy');activeLabel=null;activeTransition=transition;frameReady=false;activeSource.classList.add('opening-player');document.body.append(transition);
         const query=new URLSearchParams({embedded:'1',title:item.title,synopsis:item.synopsis||'',image:item.image||'',streams:JSON.stringify(item.streams||[]),seasons:JSON.stringify(item.seasons||[]),type:item.mediaType||'Movie',licensor:item.licensor||'Not specified'});
         frame.src=`player.html?${query}&v=${Date.now()}`;
         void transition.offsetWidth;
         requestAnimationFrame(()=>requestAnimationFrame(()=>{
-          label.classList.add('show');
           transition.style.transition='';
           transition.style.left=`${target.left}px`;transition.style.top=`${target.top}px`;
           transition.style.width=`${target.width}px`;transition.style.height=`${target.height}px`;transition.style.borderRadius=getComputedStyle(panel).borderRadius;
