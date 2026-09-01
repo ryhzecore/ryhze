@@ -14,6 +14,7 @@ function Start-Watcher {
 }
 
 while ($true) {
+  # A separate process prevents a stalled publish from disabling future automatic updates.
   $watcher = @(Get-Watcher)
   $heartbeatAge = if (Test-Path -LiteralPath $heartbeat) { ((Get-Date) - (Get-Item -LiteralPath $heartbeat).LastWriteTime).TotalSeconds } else { [double]::PositiveInfinity }
   if ($watcher.Count -eq 0) {

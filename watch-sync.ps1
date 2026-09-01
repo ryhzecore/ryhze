@@ -35,7 +35,14 @@ function Invoke-Publish {
     }
   }
   if ($env:R2_ACCESS_KEY_ID -and $env:R2_SECRET_ACCESS_KEY) {
-    node (Join-Path $Root 'sync-r2-s3.mjs') | Out-Null
+    # Media uploads may take a long time. Keep them out of this watcher so GitHub
+    # updates continue to publish while R2 is still transferring a large video.
+    $r2Script = Join-Path $Root 'sync-r2-s3.mjs'
+    $r2Running = Get-CimInstance Win32_Process -Filter "Name='node.exe'" -ErrorAction SilentlyContinue |
+      Where-Object { $_.CommandLine -like "*$r2Script*" }
+    if (-not $r2Running) {
+      Start-Process -FilePath 'node.exe' -ArgumentList @($r2Script, $Root) -WorkingDirectory $Root -WindowStyle Hidden
+    }
   }
 }
 
