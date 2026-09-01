@@ -1,6 +1,6 @@
 $site = Join-Path $PSScriptRoot 'index.html'
 $app = Join-Path $PSScriptRoot 'Ryhze.exe'
-$watcher = Join-Path $PSScriptRoot 'watch-github.ps1'
+$watcher = Join-Path $PSScriptRoot 'watch-sync.ps1'
 
 if (Test-Path -LiteralPath $watcher) {
   $runningWatcher = Get-CimInstance Win32_Process | Where-Object {
