@@ -21,9 +21,10 @@ if (-not (Get-Process cloudflared -ErrorAction SilentlyContinue)) {
 }
 
 # Keep GitHub, the local library index, and R2 synchronized in the background.
-$syncScript = 'C:\Test123\watch-sync.ps1'
-$syncRunning = Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
-  Where-Object { $_.CommandLine -like "*$syncScript*" }
-if (-not $syncRunning) {
-  Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $syncScript) -WindowStyle Hidden
+# The supervisor restarts the watcher if it ever becomes unresponsive.
+$supervisorScript = 'C:\Test123\watch-sync-supervisor.ps1'
+$supervisorRunning = Get-CimInstance Win32_Process -Filter "Name='powershell.exe'" -ErrorAction SilentlyContinue |
+  Where-Object { $_.CommandLine -like "*$supervisorScript*" }
+if (-not $supervisorRunning) {
+  Start-Process -FilePath 'powershell.exe' -ArgumentList @('-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', $supervisorScript) -WindowStyle Hidden
 }
