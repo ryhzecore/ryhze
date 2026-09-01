@@ -22,5 +22,6 @@ h264-check.mp4
 mobile-conversion*.log
 watch-sync.log
 watch-sync.heartbeat
+web-media-conversion.log
 bin/
 obj/
