@@ -616,6 +616,43 @@
                                                            "GTA6",
                                                            "6"
                                                        ]
+                                    },
+                                    {
+                                        "title":  "Valorant",
+                                        "image":  "Games/Valorant/Thumbnail/OfficialImage.png?v=639235732426863946",
+                                        "exclusiveImages":  [
+                                                                "Games/Valorant/Images/images.png?v=639235732846660659",
+                                                                "Games/Valorant/Images/images2.png?v=639235733626872181"
+                                                            ],
+                                        "streams":  [
+
+                                                    ],
+                                        "synopsis":  "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clydeâ€“style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media cultureâ€”relying entirely on mutual trust to survive.",
+                                        "release":  "Coming soon",
+                                        "licensor":  "",
+                                        "mediaType":  "Movie",
+                                        "seasons":  [
+
+                                                    ],
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Grand Theft Auto",
+                                                           "GrandTheftAuto",
+                                                           "Grand Theft Auto VI",
+                                                           "GrandTheftAutoVI",
+                                                           "GrandTheftAuto VI",
+                                                           "GTA",
+                                                           "GTAVI VI",
+                                                           "Grand Theft Auto 6",
+                                                           "GrandTheftAuto6",
+                                                           "GrandTheftAuto 6",
+                                                           "GTA",
+                                                           "GTA6",
+                                                           "6"
+                                                       ]
                                     }
                                 ]
                   },
@@ -658,10 +695,47 @@
                                                            "GTA6",
                                                            "6"
                                                        ]
+                                    },
+                                    {
+                                        "title":  "Valorant",
+                                        "image":  "Games/Valorant/Thumbnail/OfficialImage.png?v=639235732426863946",
+                                        "exclusiveImages":  [
+                                                                "Games/Valorant/Images/images.png?v=639235732846660659",
+                                                                "Games/Valorant/Images/images2.png?v=639235733626872181"
+                                                            ],
+                                        "streams":  [
+
+                                                    ],
+                                        "synopsis":  "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clydeâ€“style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media cultureâ€”relying entirely on mutual trust to survive.",
+                                        "release":  "Coming soon",
+                                        "licensor":  "",
+                                        "mediaType":  "Movie",
+                                        "seasons":  [
+
+                                                    ],
+                                        "categories":  [
+                                                           "Exclusives",
+                                                           "Up \u0026 Coming"
+                                                       ],
+                                        "searchTags":  [
+                                                           "Grand Theft Auto",
+                                                           "GrandTheftAuto",
+                                                           "Grand Theft Auto VI",
+                                                           "GrandTheftAutoVI",
+                                                           "GrandTheftAuto VI",
+                                                           "GTA",
+                                                           "GTAVI VI",
+                                                           "Grand Theft Auto 6",
+                                                           "GrandTheftAuto6",
+                                                           "GrandTheftAuto 6",
+                                                           "GTA",
+                                                           "GTA6",
+                                                           "6"
+                                                       ]
                                     }
                                 ]
                   }
               ]
 };
-window.RyhzeBuild = 'e54ebc6';
+window.RyhzeBuild = 'd2dfb7e';
 
