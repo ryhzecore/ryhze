@@ -137,15 +137,16 @@
         if(source&&sourceRect&&sourceRect.width&&sourceRect.height){
           returnTransition=document.createElement('div');
           returnTransition.className='menu-player-transition';
-          const frozenFrame=frame.cloneNode(true);frozenFrame.removeAttribute('id');frozenFrame.style.cssText='display:block;width:100%;height:100%;border:0;pointer-events:none;background:#080510';
-          returnTransition.append(frozenFrame);
+          // Move the live iframe instead of cloning it, so its current visible frame stays intact during the return.
+          frame.style.cssText='display:block;width:100%;height:100%;border:0;pointer-events:none;background:#080510';
+          returnTransition.append(frame);
           returnTransition.style.cssText=`left:${panelRect.left}px;top:${panelRect.top}px;width:${panelRect.width}px;height:${panelRect.height}px;border:1px solid rgba(170,136,255,.34);border-radius:${getComputedStyle(panel).borderRadius};box-shadow:0 30px 76px rgba(0,0,0,.56);transition:none`;
           document.body.append(returnTransition);
           void returnTransition.offsetWidth;
         }
         fullscreen=false;panel.classList.remove('fullscreen','open');document.body.classList.remove('player-open');
         let finished=false;
-        const finish=()=>{if(finished)return;finished=true;backdrop.classList.remove('open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}returnTransition?.remove();if(!panel.classList.contains('open'))frame.src='about:blank';closing=false};
+        const finish=()=>{if(finished)return;finished=true;backdrop.classList.remove('open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}if(returnTransition?.contains(frame))panel.append(frame);returnTransition?.remove();if(!panel.classList.contains('open'))frame.src='about:blank';closing=false};
         if(returnTransition){
           const targetStyle=getComputedStyle(source);
           const animation=returnTransition.animate([
