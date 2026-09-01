@@ -18,7 +18,12 @@ $sources = Get-ChildItem -LiteralPath (Join-Path $Root 'Films'),(Join-Path $Root
 foreach ($source in $sources) {
   $output = Join-Path $source.DirectoryName ($source.BaseName + '-web.mp4')
   $partial = Join-Path $source.DirectoryName ($source.BaseName + '-web.partial.mp4')
-  if (Test-Path -LiteralPath $output) { continue }
+  if (Test-Path -LiteralPath $output) {
+    $existingCodec = (& $ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $output 2>$null | Select-Object -First 1).Trim()
+    if ($existingCodec -eq 'h264') { continue }
+    # A cancelled conversion has no usable MP4 index. Remove only that generated copy.
+    Remove-Item -LiteralPath $output -Force -ErrorAction SilentlyContinue
+  }
   Remove-Item -LiteralPath $partial -Force -ErrorAction SilentlyContinue
   $codec = (& $ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $source.FullName 2>$null | Select-Object -First 1).Trim()
   if (-not $codec) { continue }
