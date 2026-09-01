@@ -49,6 +49,8 @@ function Invoke-Publish {
 # Reconcile once on launch, so changes made while the PC or watcher was stopped are published too.
 $lastLocal = Get-Date
 $lastRemoteCheck = [datetime]::MinValue
+$lastFallbackCheck = [datetime]::MinValue
+$lastLibraryWrite = [datetime]::MinValue
 $busy = $false
 while ($true) {
   $event = Wait-Event -Timeout 2
@@ -60,6 +62,17 @@ while ($true) {
   }
 
   Set-Content -LiteralPath $heartbeatPath -Value (Get-Date).ToString('o') -Encoding ascii
+
+  # FileSystemWatcher can occasionally miss an editor's atomic save. Poll Git for
+  # ordinary site edits and the media folders for newly added artwork or streams.
+  if (-not $busy -and ((Get-Date) - $lastFallbackCheck).TotalSeconds -ge 8) {
+    $lastFallbackCheck = Get-Date
+    $libraryFiles = Get-ChildItem -LiteralPath (Join-Path $Root 'Films'),(Join-Path $Root 'Games') -File -Recurse -ErrorAction SilentlyContinue
+    $latestLibraryWrite = @($libraryFiles | ForEach-Object { $_.LastWriteTimeUtc } | Sort-Object -Descending | Select-Object -First 1)[0]
+    if ($latestLibraryWrite -and $latestLibraryWrite -gt $lastLibraryWrite) { $lastLibraryWrite = $latestLibraryWrite; $lastLocal = Get-Date }
+    $dirty = git status --porcelain --untracked-files=all 2>$null
+    if ($dirty) { $lastLocal = Get-Date }
+  }
 
   if (-not $busy -and $lastLocal -ne [datetime]::MinValue -and ((Get-Date) - $lastLocal).TotalSeconds -ge 2) {
     $busy = $true; $lastLocal = [datetime]::MinValue
