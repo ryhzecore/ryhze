@@ -30,7 +30,8 @@ function Get-AssetUrl($File) {
 }
 
 function Get-StreamItems($Files) {
-  $mediaFiles = @($Files | Where-Object { $_ -and $streamExtensions -contains $_.Extension.ToLowerInvariant() })
+  # Partial conversion files are not playable media and must never become a stream URL.
+  $mediaFiles = @($Files | Where-Object { $_ -and $streamExtensions -contains $_.Extension.ToLowerInvariant() -and $_.BaseName -notmatch '-web\.(?:partial|incomplete)$' })
   $browserFiles = @($mediaFiles | Where-Object { $_.BaseName -match '-web$' })
   if ($browserFiles.Count) { $mediaFiles = $browserFiles }
   @($mediaFiles |

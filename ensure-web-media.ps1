@@ -5,6 +5,7 @@ $ffmpeg = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffmpeg.exe'
 $ffprobe = Join-Path $Root 'tools\ffmpeg-9.0.1-essentials_build\bin\ffprobe.exe'
 $logPath = Join-Path $Root 'web-media-conversion.log'
 $lockPath = Join-Path $Root 'web-media-conversion.lock'
+$quarantinePath = Join-Path $Root 'video-server\web-media-quarantine'
 try {
   $lock = [System.IO.File]::Open($lockPath, [System.IO.FileMode]::CreateNew, [System.IO.FileAccess]::Write, [System.IO.FileShare]::None)
 } catch {
@@ -19,8 +20,8 @@ if (-not (Test-Path -LiteralPath $ffmpeg) -or -not (Test-Path -LiteralPath $ffpr
 
 $mediaExtensions = @('.mp4','.m4v','.mov','.mkv','.webm')
 $sources = Get-ChildItem -LiteralPath (Join-Path $Root 'Films'),(Join-Path $Root 'Games') -File -Recurse -ErrorAction SilentlyContinue |
-  Where-Object { $mediaExtensions -contains $_.Extension.ToLowerInvariant() -and $_.BaseName -notmatch '-web$' } |
-  Sort-Object @{Expression={if ($_.FullName -match 'Loki.*Season 2.*Episode 6') { 0 } elseif ($_.FullName -match 'Fanstastic Four First Steps') { 1 } else { 2 }}}, Length
+  Where-Object { $mediaExtensions -contains $_.Extension.ToLowerInvariant() -and $_.BaseName -notmatch '-web(?:\.(?:partial|incomplete))?$' } |
+  Sort-Object @{Expression={if ($_.FullName -match 'Loki.*Season 2.*Episode 5') { 0 } elseif ($_.FullName -match 'Loki.*Season 2.*Episode 6') { 1 } elseif ($_.FullName -match 'Fanstastic Four First Steps') { 2 } else { 3 }}}, Length
 
 foreach ($source in $sources) {
   $output = Join-Path $source.DirectoryName ($source.BaseName + '-web.mp4')
@@ -28,10 +29,17 @@ foreach ($source in $sources) {
   if (Test-Path -LiteralPath $output) {
     $existingCodec = (& $ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $output 2>$null | Select-Object -First 1).Trim()
     if ($existingCodec -eq 'h264') { continue }
-    # A cancelled conversion has no usable MP4 index. Remove only that generated copy.
-    Remove-Item -LiteralPath $output -Force -ErrorAction SilentlyContinue
+    # Preserve incomplete generated copies outside the library rather than serving them.
+    New-Item -ItemType Directory -Path $quarantinePath -Force | Out-Null
+    $quarantineFile = Join-Path $quarantinePath ("{0}.{1}.invalid{2}" -f $source.Directory.Name,$source.BaseName,(Split-Path $output -Leaf).Replace($source.BaseName,''))
+    Move-Item -LiteralPath $output -Destination $quarantineFile -Force
+    "[$(Get-Date)] Moved invalid browser copy to quarantine: $output" | Add-Content -LiteralPath $logPath
   }
-  Remove-Item -LiteralPath $partial -Force -ErrorAction SilentlyContinue
+  if (Test-Path -LiteralPath $partial) {
+    New-Item -ItemType Directory -Path $quarantinePath -Force | Out-Null
+    $partialQuarantine = Join-Path $quarantinePath ("{0}.{1}.partial.mp4" -f $source.Directory.Name,$source.BaseName)
+    Move-Item -LiteralPath $partial -Destination $partialQuarantine -Force
+  }
   $codec = (& $ffprobe -v error -select_streams v:0 -show_entries stream=codec_name -of default=noprint_wrappers=1:nokey=1 $source.FullName 2>$null | Select-Object -First 1).Trim()
   if (-not $codec) { continue }
   "[$(Get-Date)] Creating browser copy for $($source.FullName) ($codec)" | Add-Content -LiteralPath $logPath
