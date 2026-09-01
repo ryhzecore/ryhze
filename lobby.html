@@ -130,13 +130,14 @@
       const closePlayer=()=>{
         if(closing||!panel.classList.contains('open'))return;
         closing=true;
-        const source=activeSource,sourceRect=source?.getBoundingClientRect(),sourceImage=source?.dataset?.image||getComputedStyle(document.querySelector('.hero-image')).backgroundImage;
-        const stageRect=getPlayerImageRect()||{left:panel.getBoundingClientRect().left,top:panel.getBoundingClientRect().top,width:panel.getBoundingClientRect().width,height:panel.getBoundingClientRect().height,radius:getComputedStyle(panel).borderRadius,border:'1px solid rgba(170,136,255,.34)',shadow:'0 30px 76px rgba(0,0,0,.56)'};
+        const source=activeSource,sourceRect=source?.getBoundingClientRect(),sourceBackground=source?.style?.backgroundImage||(source?.dataset?.image?`url("${source.dataset.image}")`:getComputedStyle(document.querySelector('.hero-image')).backgroundImage);
+        // Always use the visible outer frame as the return origin. Internal iframe content may be scrolled.
+        const panelRect=panel.getBoundingClientRect(),stageRect={left:panelRect.left,top:panelRect.top,width:panelRect.width,height:panelRect.height,radius:getComputedStyle(panel).borderRadius,border:'1px solid rgba(170,136,255,.34)',shadow:'0 30px 76px rgba(0,0,0,.56)'};
         let returnTransition=null;
         if(source&&sourceRect&&sourceRect.width&&sourceRect.height){
           returnTransition=document.createElement('div');
           returnTransition.className='menu-player-transition';
-          returnTransition.style.cssText=`left:${stageRect.left}px;top:${stageRect.top}px;width:${stageRect.width}px;height:${stageRect.height}px;border:${stageRect.border};border-radius:${stageRect.radius};box-shadow:${stageRect.shadow};background-image:url("${sourceImage}");transition:none`;
+          returnTransition.style.cssText=`left:${stageRect.left}px;top:${stageRect.top}px;width:${stageRect.width}px;height:${stageRect.height}px;border:${stageRect.border};border-radius:${stageRect.radius};box-shadow:${stageRect.shadow};background-image:${sourceBackground};transition:none`;
           document.body.append(returnTransition);
           void returnTransition.offsetWidth;
         }
