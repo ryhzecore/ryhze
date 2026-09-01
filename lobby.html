@@ -141,21 +141,20 @@
           returnTransition=document.createElement('div');
           returnTransition.className='menu-player-transition';
           const artwork=source.dataset?.image||getComputedStyle(document.querySelector('.hero-image')).backgroundImage||'';
-          returnTransition.style.cssText=`z-index:250;display:block;opacity:1;left:${panelRect.left}px;top:${panelRect.top}px;width:${panelRect.width}px;height:${panelRect.height}px;border:1px solid rgba(170,136,255,.34);border-radius:${getComputedStyle(panel).borderRadius};box-shadow:0 30px 76px rgba(0,0,0,.56);transition:none`;
+          returnTransition.style.cssText=`z-index:250;display:block;opacity:1;left:${imageRect.left}px;top:${imageRect.top}px;width:${imageRect.width}px;height:${imageRect.height}px;border:${imageRect.border||'1px solid rgba(170,136,255,.34)'};border-radius:${imageRect.radius||'28px'};box-shadow:${imageRect.shadow||'0 25px 55px rgba(0,0,0,.48)'};transition:none`;
           returnTransition.style.backgroundImage=artwork.startsWith('url(')?artwork:`url("${artwork}")`;
           document.body.append(returnTransition);
           void returnTransition.offsetWidth;
         }
-        fullscreen=false;
+        fullscreen=false;panel.classList.remove('fullscreen','open');document.body.classList.remove('player-open');
         let finished=false;
         const finish=()=>{if(finished)return;finished=true;backdrop.classList.remove('open');if(musicStarted)menuMusic.play().catch(()=>{});if(activeSource){activeSource.classList.remove('opening-player');activeSource=null}if(activeLabel){activeLabel.remove();activeLabel=null}if(activeTransition){activeTransition.remove();activeTransition=null}returnTransition?.remove();if(!panel.classList.contains('open'))frame.src='about:blank';closing=false};
         if(returnTransition){
           const targetStyle=getComputedStyle(source);
           requestAnimationFrame(()=>requestAnimationFrame(()=>{
             returnTransition.style.transition='left .56s cubic-bezier(.18,.82,.2,1),top .56s cubic-bezier(.18,.82,.2,1),width .56s cubic-bezier(.18,.82,.2,1),height .56s cubic-bezier(.18,.82,.2,1),border-radius .56s ease,box-shadow .56s ease,border-color .56s ease';
-            returnTransition.style.left=`${imageRect.left}px`;returnTransition.style.top=`${imageRect.top}px`;returnTransition.style.width=`${imageRect.width}px`;returnTransition.style.height=`${imageRect.height}px`;returnTransition.style.borderRadius=imageRect.radius||'28px';returnTransition.style.border=imageRect.border||'1px solid rgba(170,136,255,.34)';returnTransition.style.boxShadow=imageRect.shadow||'0 25px 55px rgba(0,0,0,.48)';
+            returnTransition.style.left=`${panelRect.left}px`;returnTransition.style.top=`${panelRect.top}px`;returnTransition.style.width=`${panelRect.width}px`;returnTransition.style.height=`${panelRect.height}px`;returnTransition.style.borderRadius=getComputedStyle(panel).borderRadius;returnTransition.style.border='1px solid rgba(170,136,255,.34)';returnTransition.style.boxShadow='0 30px 76px rgba(0,0,0,.56)';
             setTimeout(()=>{
-              panel.classList.remove('fullscreen','open');document.body.classList.remove('player-open');
               returnTransition.style.transition='left .76s cubic-bezier(.18,.82,.2,1),top .76s cubic-bezier(.18,.82,.2,1),width .76s cubic-bezier(.18,.82,.2,1),height .76s cubic-bezier(.18,.82,.2,1),border-radius .76s ease';
               returnTransition.style.left=`${sourceRect.left}px`;returnTransition.style.top=`${sourceRect.top}px`;returnTransition.style.width=`${sourceRect.width}px`;returnTransition.style.height=`${sourceRect.height}px`;returnTransition.style.borderRadius=targetStyle.borderRadius;
             },600);
