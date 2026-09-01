@@ -22,6 +22,14 @@ function Invoke-Publish {
   git add -A
   git diff --cached --quiet
   if ($LASTEXITCODE -ne 0) {
+    # A small independent version marker lets already-open webpages notice any
+    # published change, including UI/code changes that do not alter the library.
+    $diffText = git diff --cached --binary | Out-String
+    $diffBytes = [System.Text.Encoding]::UTF8.GetBytes($diffText)
+    $diffHash = [System.Security.Cryptography.SHA256]::Create().ComputeHash($diffBytes)
+    $siteVersion = (-join ($diffHash | ForEach-Object { $_.ToString('x2') })).Substring(0,7)
+    Set-Content -LiteralPath (Join-Path $Root 'site-version.js') -Value "window.RyhzeSiteVersion = '$siteVersion';`n" -Encoding ascii
+    git add -- site-version.js
     git commit -m 'Auto-sync Ryhze updates' | Out-Null
     if ($LASTEXITCODE -eq 0) {
       git push origin main 2>&1 | Out-Null
