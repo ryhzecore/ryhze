@@ -52,9 +52,7 @@ while ($true) {
     if ($path -notmatch '[\\/]\.git([\\/]|$)' -and $path -notmatch 'mobile-conversion.*\.log$' -and $path -notmatch '[\\/]library-data\.js$' -and $path -notmatch '[\\/]watch-sync\.(log|heartbeat)$') { $lastLocal = Get-Date }
   }
 
-  if (((Get-Date) - (if (Test-Path -LiteralPath $heartbeatPath) { (Get-Item -LiteralPath $heartbeatPath).LastWriteTime } else { [datetime]::MinValue })).TotalSeconds -ge 20) {
-    Set-Content -LiteralPath $heartbeatPath -Value (Get-Date).ToString('o') -Encoding ascii
-  }
+  Set-Content -LiteralPath $heartbeatPath -Value (Get-Date).ToString('o') -Encoding ascii
 
   if (-not $busy -and $lastLocal -ne [datetime]::MinValue -and ((Get-Date) - $lastLocal).TotalSeconds -ge 2) {
     $busy = $true; $lastLocal = [datetime]::MinValue
