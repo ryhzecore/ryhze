@@ -64,18 +64,25 @@ function Get-RyhzeTitles([string]$LibraryType) {
   @(
     Get-ChildItem -LiteralPath $libraryPath -Directory | ForEach-Object {
       $titleFolder = $_
+      # New title layout: Images/Thumbnail.webp is the card artwork. Keep the
+      # legacy Thumbnail folder as a fallback so existing game folders remain usable.
+      $imagesPath = Join-Path $titleFolder.FullName 'Images'
       $thumbnailPath = Join-Path $titleFolder.FullName 'Thumbnail'
-      $thumbnail = if (Test-Path -LiteralPath $thumbnailPath) {
-        Get-ChildItem -LiteralPath $thumbnailPath -File |
+      $thumbnail = if (Test-Path -LiteralPath $imagesPath) {
+        Get-ChildItem -LiteralPath $imagesPath -File |
+          Where-Object { $_.BaseName -ieq 'Thumbnail' -and $imageExtensions -contains $_.Extension.ToLowerInvariant() } |
+          Select-Object -First 1
+      }
+      if (-not $thumbnail -and (Test-Path -LiteralPath $thumbnailPath)) {
+        $thumbnail = Get-ChildItem -LiteralPath $thumbnailPath -File |
           Where-Object { $imageExtensions -contains $_.Extension.ToLowerInvariant() } |
           Select-Object -First 1
       }
 
       if ($thumbnail) {
-        $imagesPath = Join-Path $titleFolder.FullName 'Images'
         $exclusiveImages = if (Test-Path -LiteralPath $imagesPath) {
           Get-ChildItem -LiteralPath $imagesPath -File |
-            Where-Object { $imageExtensions -contains $_.Extension.ToLowerInvariant() } |
+            Where-Object { $imageExtensions -contains $_.Extension.ToLowerInvariant() -and $_.BaseName -ine 'Thumbnail' } |
           ForEach-Object { Get-AssetUrl $_ }
         } else { @() }
         
@@ -84,7 +91,10 @@ function Get-RyhzeTitles([string]$LibraryType) {
           Join-Path $titleFolder.FullName 'Streams'
         ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
         
-        $notesPath = Join-Path $titleFolder.FullName 'notes.txt'
+        $notesPath = @(
+          Join-Path $titleFolder.FullName 'Information.txt'
+          Join-Path $titleFolder.FullName 'notes.txt'
+        ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
         $notes = if (Test-Path -LiteralPath $notesPath) { Get-Content -LiteralPath $notesPath } else { @() }
         
         # Check if sub-directories exist inside Streams folder
