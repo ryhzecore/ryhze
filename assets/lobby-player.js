@@ -1,12 +1,14 @@
 // One surface travels between the source thumbnail and player in both directions.
 (() => {
-  document.body.insertAdjacentHTML('beforeend', '<div class="menu-player-backdrop" id="menuPlayerBackdrop"></div><section class="menu-player" id="menuPlayer" role="dialog" aria-modal="true" aria-label="Ryhze player"><iframe id="menuPlayerFrame" title="Ryhze player" allow="autoplay; fullscreen"></iframe></section>');
+  document.body.insertAdjacentHTML('beforeend', '<div class="menu-player-backdrop" id="menuPlayerBackdrop"></div><section class="menu-player" id="menuPlayer" tabindex="-1" role="dialog" aria-modal="true" aria-label="Ryhze player"><iframe id="menuPlayerFrame" title="Ryhze player" allow="autoplay; fullscreen"></iframe></section>');
   const panel = document.querySelector('#menuPlayer'), frame = document.querySelector('#menuPlayerFrame'), backdrop = document.querySelector('#menuPlayerBackdrop');
   const regions = [...document.querySelectorAll('body > nav, body > main, body > footer, .video-status-stack')];
   const duration = 850, easing = 'cubic-bezier(.22,.68,.18,1)';
-  let source, artwork, sourceRadius, busy = false, opened = false, resolveReady;
+  let source, artwork, sourceRadius, busy = false, opened = false, resolveReady, keyboardInput = false, closeQueued = false;
+  addEventListener('keydown', () => { keyboardInput = true; }, true);
+  addEventListener('pointerdown', () => { keyboardInput = false; }, true);
   const animate = async (node, keyframes, options = {}) => {
-    const animation = node.animate(keyframes, { duration, easing, fill: 'forwards', ...options, ...(matchMedia('(prefers-reduced-motion: reduce)').matches ? { duration: 0 } : {}) });
+    const animation = node.animate(keyframes, { duration, easing, fill: 'forwards', ...options, ...(window.RyhzeMotion.reduced ? { duration: 0 } : {}) });
     await animation.finished.catch(() => {});
     return animation;
   };
@@ -50,10 +52,12 @@
     panel.classList.add('open');
     await animate(node, [{ opacity: 1 }, { opacity: 0 }], { duration: 240, easing: 'ease-out' });
     motion.cancel(); node.remove(); busy = false;
-    try { frame.contentDocument?.querySelector('#back, button')?.focus({ preventScroll: true }); } catch {}
+    try { if (keyboardInput) frame.contentDocument?.querySelector('#back, button')?.focus({ preventScroll: true }); else panel.focus({ preventScroll: true }); } catch {}
+    if (closeQueued) { closeQueued = false; close(); }
   }
   async function close() {
-    if (busy || !opened) return;
+    if (!opened) return;
+    if (busy) { closeQueued = true; return; }
     busy = true;
     try { frame.contentDocument?.querySelector('video')?.pause(); } catch {}
     const base = panel.getBoundingClientRect(), node = surface(base), full = playerFrame();
@@ -69,7 +73,7 @@
     regions.forEach(region => { region.inert = false; });
     const focus = source?.matches('button') ? source : source?.querySelector('button');
     focus?.focus({ preventScroll: true });
-    busy = false; opened = false; resumeSlideshow();
+    busy = false; opened = false; closeQueued = false; resumeSlideshow();
     dispatchEvent(new Event('ryhze-player-closed'));
     if (musicStarted) menuMusic.play().catch(() => {});
   }

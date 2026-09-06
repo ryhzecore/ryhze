@@ -27,3 +27,7 @@ Bucket: `ryhze-streams`. Media is served through `/media/Films/...` or `/media/G
 ## Privacy and cookies
 
 Only essential sign-in cookies are used. Saved titles are browser preferences, scoped to the signed-in user. There are no advertising trackers or live viewer telemetry. Expired sessions, invitations, and rate-limit records are cleaned up daily.
+
+## Motion
+
+Smooth animations are the requested site default. The account menu offers a reduced-animation setting saved in the browser and shared with embedded players. Button and search hover effects scale from their centres; the Films/Games selector slides while library content fades between modes. Keyboard focus remains visible without automatically outlining the Back button on pointer entry.

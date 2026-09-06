@@ -135,7 +135,7 @@ async function handle(request, env) {
     return fail('Not found', 404);
   }
   if (path.startsWith('/api/')) return fail('Not found', 404);
-  const publicAsset = /^\/assets\/(theme\.css|auth-ui\.js|site-ui\.js|ryhze-wordmark\.png)$/.test(path);
+  const publicAsset = /^\/assets\/(motion\.js|theme\.css|auth-ui\.js|site-ui\.js|ryhze-wordmark\.png)$/.test(path);
   if (!publicPaths.has(path) && !publicAsset && !user) return path.startsWith('/media/') ? fail('Sign in required.', 401) : redirect('/login?next=' + encodeURIComponent(safeNext(path + url.search)));
   if (path.startsWith('/media/')) return ['GET','HEAD'].includes(request.method) ? media(request, env, path) : fail('Method not allowed', 405);
   if (path.startsWith('/admin') && user?.role !== 'admin') return fail('Administrator access required.', 403);
