@@ -26,3 +26,9 @@ web-media-conversion.log
 web-media-conversion.lock
 bin/
 obj/
+dist/
+.wrangler/
+.private/
+.dev.vars*
+.env*
+cleanup-report.json

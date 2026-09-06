@@ -140,8 +140,7 @@
                                                        ],
                                         "installer":  {
                                                           "name":  "Install.exe",
-                                                          "url":  "Games/Valorant/Download/Install.exe",
-                                                          "publicUrl":  "https://video.ryhze.com/Games/Valorant/Download/Install.exe"
+                                                          "url":  "/media/Games/Valorant/Download/Install.exe"
                                                       }
                                     }
                                 ]
@@ -255,8 +254,7 @@
                                                        ],
                                         "installer":  {
                                                           "name":  "Install.exe",
-                                                          "url":  "Games/Valorant/Download/Install.exe",
-                                                          "publicUrl":  "https://video.ryhze.com/Games/Valorant/Download/Install.exe"
+                                                          "url":  "/media/Games/Valorant/Download/Install.exe"
                                                       }
                                     }
                                 ]
@@ -332,13 +330,12 @@
                                                        ],
                                         "installer":  {
                                                           "name":  "Install.exe",
-                                                          "url":  "Games/Valorant/Download/Install.exe",
-                                                          "publicUrl":  "https://video.ryhze.com/Games/Valorant/Download/Install.exe"
+                                                          "url":  "/media/Games/Valorant/Download/Install.exe"
                                                       }
                                     }
                                 ]
                   }
               ]
 };
-window.RyhzeBuild = 'bbbbcf4';
+window.RyhzeBuild = '9ee5715';
 

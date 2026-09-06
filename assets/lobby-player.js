@@ -6,7 +6,7 @@
   const duration = 850, easing = 'cubic-bezier(.22,.68,.18,1)';
   let source, artwork, sourceRadius, busy = false, opened = false, resolveReady;
   const animate = async (node, keyframes, options = {}) => {
-    const animation = node.animate(keyframes, { duration, easing, fill: 'forwards', ...options });
+    const animation = node.animate(keyframes, { duration, easing, fill: 'forwards', ...options, ...(matchMedia('(prefers-reduced-motion: reduce)').matches ? { duration: 0 } : {}) });
     await animation.finished.catch(() => {});
     return animation;
   };
@@ -41,7 +41,7 @@
     const ready = new Promise(resolve => { resolveReady = resolve; });
     const query = new URLSearchParams({ embedded: '1', title: data.title || '', image: data.image || '', synopsis: exclusive ? data.synopsis || '' : decodeURIComponent(data.synopsis || ''), type: data.mediaType || data.type || 'Movie', streams: exclusive ? JSON.stringify(data.streams || []) : data.streams || '[]', seasons: exclusive ? JSON.stringify(data.seasons || []) : data.seasons || '[]', categories: data.meta || '', release: decodeURIComponent(data.release || 'Coming soon'), installer: decodeURIComponent(data.installer || 'null'), licensor: decodeURIComponent(data.licensor || 'Not specified') });
     query.set('v', window.RyhzeSiteVersion || 'smooth-player');
-    frame.src = `${game ? 'game' : 'player'}.html?${query}`;
+    frame.src = `/${game ? 'game' : 'player'}.html?${query}`;
     const motion = await animate(node, [first, playerFrame()]);
     let timeout;
     await Promise.race([ready, new Promise(resolve => { timeout = setTimeout(resolve, 3000); })]);
@@ -50,7 +50,7 @@
     panel.classList.add('open');
     await animate(node, [{ opacity: 1 }, { opacity: 0 }], { duration: 240, easing: 'ease-out' });
     motion.cancel(); node.remove(); busy = false;
-    try { frame.contentDocument?.querySelector('#backToRyhze, .back, button')?.focus({ preventScroll: true }); } catch {}
+    try { frame.contentDocument?.querySelector('#back, button')?.focus({ preventScroll: true }); } catch {}
   }
   async function close() {
     if (busy || !opened) return;
@@ -70,16 +70,17 @@
     const focus = source?.matches('button') ? source : source?.querySelector('button');
     focus?.focus({ preventScroll: true });
     busy = false; opened = false; resumeSlideshow();
+    dispatchEvent(new Event('ryhze-player-closed'));
     if (musicStarted) menuMusic.play().catch(() => {});
   }
   frame.addEventListener('load', () => { if (opened) resolveReady?.(); });
   addEventListener('message', event => {
-    if (event.source !== frame.contentWindow) return;
+    if (event.source !== frame.contentWindow || event.origin !== location.origin) return;
     if (['ryhze-player-ready', 'ryhze-game-ready'].includes(event.data?.type)) resolveReady?.();
     if (event.data?.type === 'ryhze-close-player') close();
     if (event.data?.type === 'ryhze-toggle-player-fullscreen' && !busy) {
       panel.classList.toggle('fullscreen');
-      frame.contentWindow.postMessage({ type: 'ryhze-embed-fullscreen', fullscreen: panel.classList.contains('fullscreen') }, '*');
+      frame.contentWindow.postMessage({ type: 'ryhze-embed-fullscreen', fullscreen: panel.classList.contains('fullscreen') }, location.origin);
     }
   });
   backdrop.addEventListener('click', close);

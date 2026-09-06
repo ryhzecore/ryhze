@@ -1,1 +1,1 @@
-window.RyhzeSiteVersion = '20260906-smooth';
+window.RyhzeSiteVersion = '20260907-cloud-secure';

@@ -1,15 +1,28 @@
 param(
   [string]$Root = $PSScriptRoot,
-  [string]$VideoBaseUrl = $(if ($env:RYHZE_VIDEO_BASE_URL) { $env:RYHZE_VIDEO_BASE_URL } else { 'https://video.ryhze.com' }),
-  [string]$R2VideoBaseUrl = $(if ($env:RYHZE_R2_VIDEO_BASE_URL) { $env:RYHZE_R2_VIDEO_BASE_URL } else { 'https://pub-7e02d448a41c4dbabd5711a9c5f799f0.r2.dev' })
+  [string]$VideoBaseUrl = '/media'
 )
 
 $VideoBaseUrl = $VideoBaseUrl.TrimEnd('/')
-$R2VideoBaseUrl = $R2VideoBaseUrl.TrimEnd('/')
 
 $imageExtensions = @('.png', '.jpg', '.jpeg', '.webp', '.avif')
 $streamExtensions = @('.mp4', '.webm', '.ogv', '.ogg', '.m4v', '.mkv', '.mp3', '.m4a', '.wav', '.aac')
 $installerExtensions = @('.exe', '.msi', '.msix', '.appx')
+
+# Keep cloud references when media originals have been removed from this PC.
+$previousTitles = @{}
+$catalogPath = Join-Path $Root 'library-data.js'
+if (Test-Path -LiteralPath $catalogPath) {
+  $catalogText = Get-Content -LiteralPath $catalogPath -Raw -Encoding UTF8
+  if ($catalogText -match '(?s)window\.RyhzeLibrary\s*=\s*(\{.*\});\s*window\.RyhzeBuild') {
+    $previous = $Matches[1] | ConvertFrom-Json
+    foreach ($kind in @('films', 'games')) {
+      foreach ($group in $previous.$kind) {
+        foreach ($item in $group.items) { $previousTitles["$kind/$($item.title)"] = $item }
+      }
+    }
+  }
+}
 
 function Get-NoteValue([string[]]$Notes, [string]$Label) {
   $pattern = '^\s*' + [regex]::Escape($Label) + '\s*:\s*(.*)$'
@@ -38,9 +51,7 @@ function Get-StreamItems($Files) {
     Sort-Object Name | ForEach-Object {
       $localUrl = Get-RelativeUrl $_.FullName
       [PSCustomObject]@{
-        url = $localUrl
-        publicUrl = "$VideoBaseUrl/$localUrl"
-        backupPublicUrl = "$R2VideoBaseUrl/$localUrl"
+        url = "$VideoBaseUrl/$localUrl"
         type = $_.Extension.ToLowerInvariant()
       }
     })
@@ -54,7 +65,7 @@ function Get-InstallerItem([string]$TitleFolder) {
     Select-Object -First 1
   if (-not $file) { return $null }
   $localUrl = Get-RelativeUrl $file.FullName
-  [PSCustomObject]@{ name = $file.Name; url = $localUrl; publicUrl = "$VideoBaseUrl/$localUrl" }
+  [PSCustomObject]@{ name = $file.Name; url = "$VideoBaseUrl/$localUrl" }
 }
 
 function Get-RyhzeTitles([string]$LibraryType) {
@@ -146,6 +157,19 @@ function Get-RyhzeTitles([string]$LibraryType) {
         $categories = (Get-NoteValue $notes 'Categories') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
         $searchTags = (Get-NoteValue $notes 'Search Tags') -split ',' | ForEach-Object { $_.Trim() } | Where-Object { $_ }
         $installer = if ($LibraryType -eq 'Games') { Get-InstallerItem $titleFolder.FullName } else { $null }
+
+        $prior = $previousTitles["$($LibraryType.ToLowerInvariant())/$($titleFolder.Name)"]
+        if ($prior) {
+          if (-not @($streamFiles).Count) { $streamFiles = @($prior.streams | Where-Object { $_.url -match '^/media/(Films|Games)/' }) }
+          if (-not @($seasons).Count -and @($prior.seasons).Count) {
+            $seasons = @($prior.seasons)
+            foreach ($season in $seasons) {
+              foreach ($episode in $season.episodes) { $episode.streams = @($episode.streams | Where-Object { $_.url -match '^/media/(Films|Games)/' }) }
+            }
+            $mediaType = 'Series'
+          }
+          if (-not $installer -and $prior.installer.url -match '^/media/Games/') { $installer = $prior.installer }
+        }
         
         [PSCustomObject]@{
           title = $titleFolder.Name
