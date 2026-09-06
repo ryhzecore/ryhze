@@ -1,2 +1,1 @@
-window.RyhzeSiteVersion = '0966c4b';
-
+window.RyhzeSiteVersion = '20260906-player-fix';

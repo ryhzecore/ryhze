@@ -79,7 +79,8 @@ function Get-RyhzeTitles([string]$LibraryType) {
           Select-Object -First 1
       }
 
-      if ($thumbnail) {
+      # Keep titles visible while their artwork and streams are being prepared.
+      if ($titleFolder) {
         $exclusiveImages = if (Test-Path -LiteralPath $imagesPath) {
           Get-ChildItem -LiteralPath $imagesPath -File |
             Where-Object { $imageExtensions -contains $_.Extension.ToLowerInvariant() -and $_.BaseName -ine 'Thumbnail' } |
@@ -95,7 +96,7 @@ function Get-RyhzeTitles([string]$LibraryType) {
           Join-Path $titleFolder.FullName 'Information.txt'
           Join-Path $titleFolder.FullName 'notes.txt'
         ) | Where-Object { Test-Path -LiteralPath $_ } | Select-Object -First 1
-        $notes = if (Test-Path -LiteralPath $notesPath) { Get-Content -LiteralPath $notesPath } else { @() }
+        $notes = if ($notesPath -and (Test-Path -LiteralPath $notesPath)) { Get-Content -LiteralPath $notesPath -Encoding UTF8 } else { @() }
         
         # Check if sub-directories exist inside Streams folder
         $hasSubdirectories = if ($streamPath) { (Get-ChildItem -LiteralPath $streamPath -Directory).Count -gt 0 } else { $false }
