@@ -44,7 +44,7 @@
 .video-status { min-width: 340px; padding-right: 42px; color: #fff; }
 .update-status, .update-status.available { color: #fff; }
 </style>
-<style>.player-source-active{visibility:hidden}.menu-player-backdrop.open{opacity:.7}.menu-player{transition:width .4s ease,height .4s ease,left .4s ease,top .4s ease,transform .4s ease,border-radius .4s ease}.menu-player-transition{z-index:190}.search-toggle{display:none}.video-status-stack{max-width:calc(100vw - 24px)}.video-status{min-width:0}.hero:has(.hero-copy:empty){min-height:180px}.hero-copy:empty::after{content:"New titles are on their way."}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}</style></head>
+<style>.player-source-active{visibility:hidden}.menu-player-backdrop.open{opacity:.7}.menu-player{transition:width .4s ease,height .4s ease,left .4s ease,top .4s ease,transform .4s ease,border-radius .4s ease}.menu-player-transition{z-index:190}.search-toggle{display:none}.video-status-stack{max-width:calc(100vw - 24px)}.video-status{min-width:0}.hero:has(.hero-copy:empty){min-height:180px}.hero-copy:empty::after{content:"New titles are on their way."}@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}</style><link rel="stylesheet" href="assets/lobby-layout.css?v=20260906-smooth"></head>
 <body>
   <svg width="0" height="0" aria-hidden="true" style="position:absolute"><filter id="frosted" primitiveUnits="objectBoundingBox"><feTurbulence type="fractalNoise" baseFrequency=".01 .08" numOctaves="2" seed="6" result="map"/><feGaussianBlur in="SourceGraphic" stdDeviation=".012" result="blur"/><feDisplacementMap in="blur" in2="map" scale="1.2" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
   <nav class="nav"><div class="brand"><img src="assets/ryhze-wordmark.png" alt="Ryhze" /><span class="beta">Beta</span></div><div class="switcher"><button class="glass tab active" data-mode="films">Films</button><button class="glass tab" data-mode="games">Games</button></div><div class="nav-spacer"></div><div class="search-wrap"><button class="glass icon-btn search-toggle" id="searchToggle" aria-label="Open search">⌕</button><label class="glass search">⌕ <input id="search" placeholder="Search Films" aria-label="Search Films" autocomplete="off" /></label><div class="search-results" id="searchResults"></div></div><button class="glass icon-btn" id="profile" aria-label="Profile">☰</button><div class="avatar"><span>R</span></div></nav>
@@ -117,7 +117,7 @@
       }, 90);
     }
   </script>
-  <script src="assets/lobby-player.js"></script>
+  <script src="assets/lobby-player.js?v=20260906-smooth"></script>
   <script>
     (()=>{const status=document.querySelector('#videoStatus'),health='https://video.ryhze.com/health';const check=async()=>{const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),4500);try{const response=await fetch(health,{mode:'cors',cache:'no-store',signal:controller.signal});if(!response.ok)throw new Error();status.textContent='Streaming services: online';status.classList.add('online')}catch{status.textContent='Streaming services: not online · trying to connect';status.classList.remove('online')}finally{clearTimeout(timer)}};check();setInterval(check,30000)})();
   </script>

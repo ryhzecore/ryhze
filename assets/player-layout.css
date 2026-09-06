@@ -1,5 +1,6 @@
 /* Reserve independent rows for navigation, picture, and playback controls. */
-html body { display:flex; flex-direction:column; height:100dvh; overflow:hidden; }
+:root { font-size:clamp(14px,calc(10px + .4vw),20px); }
+html body { display:flex; flex-direction:column; height:100dvh; overflow:hidden; font-size:1rem; }
 body .top, .embedded-player body .top { position:relative; inset:auto; flex:0 0 auto; min-height:64px; height:auto; padding:10px 16px; gap:10px; flex-wrap:wrap; opacity:1; transform:none; animation:none; }
 body .back { margin:0; }
 body .brand { margin:0; flex:1; min-width:0; max-width:none; }
@@ -17,6 +18,9 @@ body .stage-content { transition:opacity .25s ease; }
 body.playing .stage-content { pointer-events:none; }
 body.playing .stage-content { visibility:hidden; }
 body .watch:disabled { cursor:default; }
+body .top { min-height:4rem; }
+body .player-ui { flex-basis:3.75rem; }
+body .stage { border-radius:1.35rem; }
 body .series-options { z-index:20; max-height:50vh; overflow-y:auto; }
 @media(max-width:600px) { body .top { padding:8px 12px; gap:8px; } body .brand { font-size:13px; } body .series-controls { width:100%; margin:0; } body .back, body .list-toggle { font-size:12px; padding:8px 10px; } body .scrubber-island { padding:10px; gap:8px; } }
 @media(prefers-reduced-motion:reduce) { *,*::before,*::after { animation:none!important; transition:none!important; scroll-behavior:auto!important; } }

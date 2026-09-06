@@ -1,105 +1,81 @@
-// Keep the source card mounted while the player is open so returning never jumps.
+// One surface travels between the source thumbnail and player in both directions.
 (() => {
   document.body.insertAdjacentHTML('beforeend', '<div class="menu-player-backdrop" id="menuPlayerBackdrop"></div><section class="menu-player" id="menuPlayer" role="dialog" aria-modal="true" aria-label="Ryhze player"><iframe id="menuPlayerFrame" title="Ryhze player" allow="autoplay; fullscreen"></iframe></section>');
-  const panel = document.querySelector('#menuPlayer');
-  const frame = document.querySelector('#menuPlayerFrame');
-  const backdrop = document.querySelector('#menuPlayerBackdrop');
-  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
-  const lobbyRegions = [...document.querySelectorAll('body > nav, body > main, body > footer, .video-status-stack')];
-  let source, artwork, transition, busy = false, ready = false, openingDone = false, fallback;
-  const delay = ms => new Promise(resolve => setTimeout(resolve, reduced.matches ? 0 : ms));
-  const rectStyle = rect => ({ left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px` });
-  function stageRect() {
-    try {
-      const stage = frame.contentDocument?.querySelector('#stage');
-      if (stage) {
-        const rect = stage.getBoundingClientRect(), outer = frame.getBoundingClientRect();
-        return { left: outer.left + rect.left, top: outer.top + rect.top, width: rect.width, height: rect.height };
-      }
-    } catch {}
-    return panel.getBoundingClientRect();
-  }
-  function makeTransition(rect, radius) {
+  const panel = document.querySelector('#menuPlayer'), frame = document.querySelector('#menuPlayerFrame'), backdrop = document.querySelector('#menuPlayerBackdrop');
+  const regions = [...document.querySelectorAll('body > nav, body > main, body > footer, .video-status-stack')];
+  const duration = 850, easing = 'cubic-bezier(.22,.68,.18,1)';
+  let source, artwork, sourceRadius, busy = false, opened = false, resolveReady;
+  const animate = async (node, keyframes, options = {}) => {
+    const animation = node.animate(keyframes, { duration, easing, fill: 'forwards', ...options });
+    await animation.finished.catch(() => {});
+    return animation;
+  };
+  function surface(rect) {
     const node = document.createElement('div');
     node.className = 'menu-player-transition';
-    Object.assign(node.style, rectStyle(rect), { backgroundImage: artwork, borderRadius: radius, transition: 'none' });
+    Object.assign(node.style, { left: `${rect.left}px`, top: `${rect.top}px`, width: `${rect.width}px`, height: `${rect.height}px`, backgroundImage: artwork, borderRadius: getComputedStyle(panel).borderRadius });
     document.body.append(node);
     return node;
   }
-  async function reveal() {
-    if (!ready || !openingDone || !transition || !busy) return;
-    const node = transition;
-    transition = null;
-    clearTimeout(fallback);
-    node.style.transition = reduced.matches ? 'none' : 'opacity .25s ease';
-    node.style.opacity = '0';
-    await delay(260);
-    node.remove();
-    busy = false;
-    try { frame.contentDocument?.querySelector('#backToRyhze, .back, button')?.focus(); } catch {}
+  function thumbnailFrame(rect, base) {
+    const sx = rect.width / base.width, sy = rect.height / base.height;
+    return { transform: `translate(${rect.left - base.left}px, ${rect.top - base.top}px) scale(${sx}, ${sy})`, borderRadius: `${sourceRadius / sx}px / ${sourceRadius / sy}px` };
   }
+  const playerFrame = () => ({ transform: 'translate(0px, 0px) scale(1, 1)', borderRadius: getComputedStyle(panel).borderRadius });
   async function open(item, exclusive = false, game = false) {
-    if (busy || panel.classList.contains('open')) return;
-    busy = true; ready = false; openingDone = false;
+    if (busy || opened) return;
+    busy = true; opened = true;
     source = exclusive ? document.querySelector('.hero') : item;
     const data = exclusive ? item : item.dataset;
-    artwork = exclusive ? getComputedStyle(document.querySelector('.hero-image')).backgroundImage : getComputedStyle(item).backgroundImage;
-    pauseSlideshow();
-    menuMusic.pause();
+    artwork = getComputedStyle(exclusive ? document.querySelector('.hero-image') : source).backgroundImage;
+    if (!artwork || artwork === 'none') artwork = 'radial-gradient(circle at 20% 10%,#513487,transparent 65%),linear-gradient(145deg,#26164b,#0b0719)';
+    sourceRadius = parseFloat(getComputedStyle(source).borderTopLeftRadius) || 0;
+    pauseSlideshow(); menuMusic.pause();
     document.body.classList.add('player-open');
-    const start = source.getBoundingClientRect();
-    transition = makeTransition(start, getComputedStyle(source).borderRadius);
-    const query = new URLSearchParams({ embedded: '1', title: data.title || '', image: data.image || '', synopsis: exclusive ? data.synopsis || '' : decodeURIComponent(data.synopsis || ''), type: data.mediaType || data.type || 'Movie', streams: exclusive ? JSON.stringify(data.streams || []) : data.streams || '[]', seasons: exclusive ? JSON.stringify(data.seasons || []) : data.seasons || '[]', categories: data.meta || '', release: decodeURIComponent(data.release || 'Coming soon'), installer: decodeURIComponent(data.installer || 'null'), licensor: decodeURIComponent(data.licensor || 'Not specified') });
-    frame.src = `${game ? 'game' : 'player'}.html?${query}`;
-    panel.classList.add('open');
-    lobbyRegions.forEach(region => { region.inert = true; });
-    backdrop.classList.add('open');
+    const start = source.getBoundingClientRect(), destination = panel.getBoundingClientRect();
+    const node = surface(destination), first = thumbnailFrame(start, destination);
+    Object.assign(node.style, first);
     source.classList.add('player-source-active');
-    const node = transition;
-    void node.offsetWidth;
-    node.style.transition = reduced.matches ? 'none' : 'left .5s ease,top .5s ease,width .5s ease,height .5s ease,border-radius .5s ease';
-    Object.assign(node.style, rectStyle(panel.getBoundingClientRect()), { borderRadius: getComputedStyle(panel).borderRadius });
-    fallback = setTimeout(() => { ready = true; reveal(); }, 4000);
-    await delay(520);
-    openingDone = true;
-    reveal();
+    regions.forEach(region => { region.inert = true; });
+    backdrop.classList.add('open');
+    const ready = new Promise(resolve => { resolveReady = resolve; });
+    const query = new URLSearchParams({ embedded: '1', title: data.title || '', image: data.image || '', synopsis: exclusive ? data.synopsis || '' : decodeURIComponent(data.synopsis || ''), type: data.mediaType || data.type || 'Movie', streams: exclusive ? JSON.stringify(data.streams || []) : data.streams || '[]', seasons: exclusive ? JSON.stringify(data.seasons || []) : data.seasons || '[]', categories: data.meta || '', release: decodeURIComponent(data.release || 'Coming soon'), installer: decodeURIComponent(data.installer || 'null'), licensor: decodeURIComponent(data.licensor || 'Not specified') });
+    query.set('v', window.RyhzeSiteVersion || 'smooth-player');
+    frame.src = `${game ? 'game' : 'player'}.html?${query}`;
+    const motion = await animate(node, [first, playerFrame()]);
+    let timeout;
+    await Promise.race([ready, new Promise(resolve => { timeout = setTimeout(resolve, 3000); })]);
+    clearTimeout(timeout);
+    // Do not expose a full-size player behind the travelling thumbnail.
+    panel.classList.add('open');
+    await animate(node, [{ opacity: 1 }, { opacity: 0 }], { duration: 240, easing: 'ease-out' });
+    motion.cancel(); node.remove(); busy = false;
+    try { frame.contentDocument?.querySelector('#backToRyhze, .back, button')?.focus({ preventScroll: true }); } catch {}
   }
   async function close() {
-    if (busy || !panel.classList.contains('open')) return;
+    if (busy || !opened) return;
     busy = true;
-    clearTimeout(fallback);
     try { frame.contentDocument?.querySelector('video')?.pause(); } catch {}
-    const node = makeTransition(stageRect(), '24px');
-    node.style.opacity = '0';
-    void node.offsetWidth;
-    node.style.transition = reduced.matches ? 'none' : 'opacity .18s ease';
-    node.style.opacity = '1';
-    await delay(180);
-    panel.classList.remove('open');
-    backdrop.classList.remove('open');
+    const base = panel.getBoundingClientRect(), node = surface(base), full = playerFrame();
+    await animate(node, [{ opacity: 0 }, { opacity: 1 }], { duration: 180 });
+    panel.classList.remove('open'); backdrop.classList.remove('open');
     const target = source?.isConnected ? source.getBoundingClientRect() : null;
-    node.style.transition = reduced.matches ? 'none' : 'left .55s cubic-bezier(.2,.8,.2,1),top .55s cubic-bezier(.2,.8,.2,1),width .55s cubic-bezier(.2,.8,.2,1),height .55s cubic-bezier(.2,.8,.2,1),border-radius .55s ease,opacity .2s ease';
-    if (target && target.width && target.height) Object.assign(node.style, rectStyle(target), { borderRadius: getComputedStyle(source).borderRadius });
-    else node.style.opacity = '0';
-    await delay(570);
+    if (target?.width && target?.height) await animate(node, [full, thumbnailFrame(target, base)]);
+    else await animate(node, [{ opacity: 1 }, { opacity: 0 }], { duration: 250 });
     source?.classList.remove('player-source-active');
-    node.style.opacity = '0';
-    await delay(200);
-    node.remove();
-    panel.classList.remove('fullscreen');
-    frame.src = 'about:blank';
+    await animate(node, [{ opacity: 1 }, { opacity: 0 }], { duration: 160 });
+    node.remove(); panel.classList.remove('fullscreen'); frame.src = 'about:blank';
     document.body.classList.remove('player-open');
-    lobbyRegions.forEach(region => { region.inert = false; });
-    source?.querySelector('button')?.focus({ preventScroll: true });
-    if (source?.matches('button')) source.focus({ preventScroll: true });
-    busy = false;
-    resumeSlideshow();
+    regions.forEach(region => { region.inert = false; });
+    const focus = source?.matches('button') ? source : source?.querySelector('button');
+    focus?.focus({ preventScroll: true });
+    busy = false; opened = false; resumeSlideshow();
     if (musicStarted) menuMusic.play().catch(() => {});
   }
-  frame.addEventListener('load', () => { if (panel.classList.contains('open')) { ready = true; reveal(); } });
+  frame.addEventListener('load', () => { if (opened) resolveReady?.(); });
   addEventListener('message', event => {
     if (event.source !== frame.contentWindow) return;
-    if (['ryhze-player-ready', 'ryhze-game-ready'].includes(event.data?.type)) { ready = true; reveal(); }
+    if (['ryhze-player-ready', 'ryhze-game-ready'].includes(event.data?.type)) resolveReady?.();
     if (event.data?.type === 'ryhze-close-player') close();
     if (event.data?.type === 'ryhze-toggle-player-fullscreen' && !busy) {
       panel.classList.toggle('fullscreen');
