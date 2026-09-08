@@ -17,4 +17,8 @@ The user approved Andru as the production administrator. The account and a 24-ho
 
 Live checks confirm the public page and catalogue load, anonymous private catalogue/media requests fail, private artwork redirects to sign-in, and an invalid password receives the expected rejection. Browser verification confirms the deployed home renders. The old public R2 URL is disabled and its public custom domain removed.
 
-The custom domain switch is pending DNS access. `ryhze.com` still uses `dns1.registrar-servers.com` / `dns2.registrar-servers.com` and points to the earlier GitHub Pages site. Cloudflare routes are configured, but cannot intercept traffic until DNS is correctly connected. The browser sessions for Namecheap and Cloudflare require user sign-in. Preserve existing mail and verification records during that change. Do not run the GitHub Pages redirect workflow before the domain switch is verified.
+The nameservers were switched at Namecheap to `johnathan.ns.cloudflare.com` and `joselyn.ns.cloudflare.com` on 8 September 2026. Cloudflare and Google public resolvers confirm the new delegation. HTTPS requests to the Cloudflare destination for `ryhze.com` return the new website and catalogue; `www.ryhze.com` redirects to the primary domain. Some recursive DNS caches may temporarily retain the earlier GitHub address.
+
+The existing Zoho MX, SPF, DKIM and DMARC records are preserved. An obsolete duplicate forwarding SPF record in Cloudflare was replaced with the existing GitHub domain verification TXT record that had not been copied previously. Authoritative DNS checks confirm the expected mail routing and single SPF record.
+
+GitHub Pages publishes only a redirect to the deployed Cloudflare address, so cached DNS and the GitHub Pages URL cannot continue serving the old application or cause a redirect loop through a stale primary-domain DNS answer.
