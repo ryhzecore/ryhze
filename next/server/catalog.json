@@ -1,0 +1,19 @@
+[
+  {
+    "id": "larcenous-driftscape",
+    "title": "Larcenous Driftscape",
+    "kind": "game",
+    "label": "Ryhze Games",
+    "status": "In development",
+    "description": "An open-world crime and driving game set across San Coronado. From the working docks of Oakhaven to the mountain roads of Cascadia, every route is another way into the story.",
+    "image": "/art/san-coronado.png",
+    "imageNote": "World concept artwork · Not gameplay",
+    "categories": ["Open world", "Driving", "Crime"],
+    "streams": [],
+    "facts": [
+      { "label": "Perspective", "value": "Top-down 2D" },
+      { "label": "Setting", "value": "San Coronado" },
+      { "label": "Release", "value": "To be announced" }
+    ]
+  }
+]

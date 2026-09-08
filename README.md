@@ -1,14 +1,14 @@
 # Ryhze
 
-Ryhze runs on Cloudflare Workers with static assets, D1 authentication, and private R2 media. The website does not depend on a PC tunnel, Caddy, or a local streaming service.
+The rebuilt Ryhze website is in [`next/`](next/README.md): React, TypeScript, Vite and a Cloudflare Worker with D1 authentication and private R2 media. Earlier root-level website files remain as concept and migration references. Use the new application for further development.
 
 ## Develop and verify
 
-Use Node.js 22 or newer. Run `npm ci`, `npm test`, `npm run build`, and `npm run dev`. Local development uses Wrangler's isolated local D1/R2 storage; it is not a production streaming server.
+Use Node.js 24 or newer. From `next/`, run `npm ci`, `npm test`, `npm run build`, and `npm run preview`. Local development uses Wrangler's isolated local D1/R2 storage; it is not a production streaming server. See the [web brand rules](next/docs/BRAND.md) and [validation record](next/docs/VALIDATION.md).
 
 ## Deploy
 
-Run `npm run build` and `npm run deploy` while signed in to the correct Cloudflare account. Routes protect `ryhze.com` and `www.ryhze.com`. GitHub Pages only publishes a redirect so it cannot become an alternative public copy of protected pages. Never upload the repository root as website content.
+From `next/`, run `npm run deploy` while signed in to the correct Cloudflare account, after approving and verifying production account setup. Routes protect `ryhze.com` and `www.ryhze.com`. The GitHub Pages workflow publishes only a redirect so it cannot become an alternative public copy of protected pages. Never upload the repository root as website content.
 
 ## Accounts
 
@@ -22,7 +22,7 @@ Passwords use salted scrypt (N=32768, r=8, p=3). Sessions use random 256-bit opa
 
 Bucket: `ryhze-streams`. Media is served through `/media/Films/...` or `/media/Games/...` after authentication. Public bucket URLs and custom R2 domains must remain disabled. Do not publish public backup URLs.
 
-`sync-library.ps1` updates the catalog from local title metadata and artwork; `sync-r2-s3.mjs` is an optional one-off cloud uploader using environment credentials. These are authoring tools, not streaming services. Existing cloud catalog entries should be retained if the original media is no longer stored on this computer. The media object must exist in R2 before publishing its catalog entry. Large media files are excluded from GitHub and the static asset build.
+The new catalogue is maintained in `next/server/catalog.json` (public originals) and `next/server/internal-catalog.json` (authenticated references). Root sync tools belong to the earlier website. The media object must exist in R2 before publishing its catalogue entry. Large media files are excluded from GitHub and the static asset build.
 
 ## Privacy and cookies
 

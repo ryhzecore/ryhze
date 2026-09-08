@@ -1,7 +1,5 @@
 name: Publish redirect to Cloudflare
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -22,7 +20,11 @@ jobs:
         with:
           node-version: 24
       - run: npm ci
+        working-directory: next
       - run: npm test
+        working-directory: next
+      - run: npm run build
+        working-directory: next
       - uses: actions/configure-pages@v5
       - run: |
           mkdir redirect

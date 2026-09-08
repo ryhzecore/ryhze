@@ -1,0 +1,30 @@
+{
+  "name": "ryhze-web",
+  "main": "server/index.mjs",
+  "compatibility_date": "2026-09-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "account_id": "e120ad8b4234f7c9641ac44e0bee43c4",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "binding": "ASSETS",
+    "run_worker_first": true,
+    "html_handling": "none",
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "ryhze-auth",
+      "database_id": "7ee0eac7-1e2c-4e76-a076-c6927e8c33d6",
+      "migrations_dir": "../cloud/migrations",
+    },
+  ],
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "ryhze-streams" }],
+  "routes": [
+    { "pattern": "ryhze.com/*", "zone_name": "ryhze.com" },
+    { "pattern": "www.ryhze.com/*", "zone_name": "ryhze.com" },
+    { "pattern": "video.ryhze.com/*", "zone_name": "ryhze.com" },
+  ],
+  "triggers": { "crons": ["0 3 * * *"] },
+}
