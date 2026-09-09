@@ -201,7 +201,14 @@ select option {
   border-color: #f9f8fb;
 }
 .icon-button {
-  width: 48px;
+  --icon-size: 48px;
+  width: var(--icon-size);
+  height: var(--icon-size);
+  min-width: var(--icon-size);
+  min-height: var(--icon-size);
+  flex: 0 0 var(--icon-size);
+  aspect-ratio: 1;
+  border-radius: 50%;
   padding: 0;
 }
 .full {
@@ -673,9 +680,7 @@ select option {
   color: #8e8798;
 }
 .card-meta .icon-button {
-  width: 40px;
-  height: 44px;
-  min-height: 44px;
+  --icon-size: 44px;
   border-color: transparent;
   background: transparent;
 }
@@ -933,9 +938,7 @@ select option {
   padding: 12px 0;
 }
 .playback-bar .icon-button {
-  width: 44px;
-  height: 44px;
-  min-height: 44px;
+  --icon-size: 44px;
   background: none;
   border-color: transparent;
 }
@@ -1265,9 +1268,7 @@ select option {
     gap: 7px;
   }
   .header-right > .icon-button {
-    width: 40px;
-    min-height: 44px;
-    height: 44px;
+    --icon-size: 44px;
   }
   .signin-link {
     display: none;
@@ -1437,9 +1438,6 @@ select option {
   .time {
     font-size: 9px;
   }
-  .playback-bar .icon-button {
-    width: 38px;
-  }
   .text-page {
     padding-top: 60px;
     padding-bottom: 70px;
@@ -1596,9 +1594,6 @@ select option {
   }
   .header-right {
     gap: 4px;
-  }
-  .header-right > .icon-button {
-    width: 36px;
   }
   .hero h1 {
     font-size: 46px;
