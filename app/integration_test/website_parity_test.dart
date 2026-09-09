@@ -2,9 +2,11 @@ import 'package:integration_test/integration_test.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import '../test/website_parity_test.dart' as checks;
+import 'native_test_setup.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  configureNativeSemantics(binding);
   // XCTest enables native accessibility during application launch. Finish the
   // initial frame before testWidgets records its semantics-handle baseline.
   setUpAll(() async {

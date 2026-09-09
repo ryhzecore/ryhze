@@ -7,11 +7,13 @@ import 'package:integration_test/integration_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ryhze/core/api.dart';
 import 'package:ryhze/core/state.dart';
+import 'native_test_setup.dart';
 
 // Run seed and restore as separate native app processes. This key is isolated
 // from the member's real session; all account responses are local fixtures.
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  configureNativeSemantics(binding);
   setUpAll(() async {
     final previousPolicy = binding.framePolicy;
     binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
