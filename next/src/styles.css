@@ -292,7 +292,7 @@ select option {
   gap: 30px;
   padding: 0 var(--gutter);
   border-bottom: 1px solid #ffffff0c;
-  background: #09090ce8;
+  background: linear-gradient(to bottom, #09090cf5, #09090c99);
 }
 .brand {
   display: block;
@@ -781,7 +781,7 @@ select option {
 .modal-backdrop {
   position: absolute;
   inset: 0;
-  background: #050406cc;
+  background: #05040688;
   backdrop-filter: blur(14px);
   border: 0;
   border-radius: 0;
@@ -789,7 +789,9 @@ select option {
 }
 .title-panel {
   position: relative;
-  background: #111014;
+  background: #111014d9;
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   border: 1px solid #ffffff28;
   width: min(1080px, 100%);
   max-height: calc(100dvh - 48px);
@@ -806,6 +808,7 @@ select option {
   border-radius: 0 !important;
 }
 .detail-header {
+  background: linear-gradient(to bottom, #111014de, #11101433);
   display: flex;
   align-items: center;
   gap: 20px;

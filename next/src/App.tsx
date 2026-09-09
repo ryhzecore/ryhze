@@ -58,7 +58,7 @@ export function App() {
   const [reduced, setReduced] = useState(
       () => stored<string>("ryhze-motion-v2", "smooth") === "reduced",
     ),
-    [sound, setSound] = useState(() => stored("ryhze-sound-v2", false));
+    [sound, setSound] = useState(() => stored("ryhze-sound-v2", true));
   const openingArtwork = useRef<ArtworkRect | null>(null),
     flightSequence = useRef(0);
   const app = useRef<HTMLDivElement>(null),
@@ -251,13 +251,21 @@ export function App() {
     if (node.paused) node.volume = 0;
     const initial = node.volume,
       started = performance.now();
-    if (target > 0)
+    const retry = () => {
+      if (!cancelled && target > 0) node.play().then(clearRetry).catch(() => {});
+    };
+    function clearRetry() {
+      removeEventListener("pointerdown", retry);
+      removeEventListener("keydown", retry);
+    }
+    if (target > 0) {
       node.play().catch(() => {
         if (!cancelled) {
-          setSound(false);
-          notify("Select sound again when you are ready to listen.");
+          addEventListener("pointerdown", retry);
+          addEventListener("keydown", retry);
         }
       });
+    }
     function tick(now: number) {
       const progress = Math.min(1, (now - started) / 650);
       node!.volume = initial + (target - initial) * progress;
@@ -267,6 +275,7 @@ export function App() {
     frame = requestAnimationFrame(tick);
     return () => {
       cancelled = true;
+      clearRetry();
       cancelAnimationFrame(frame);
     };
   }, [sound, user, selected, leaving, previewPlaying, notify]);
