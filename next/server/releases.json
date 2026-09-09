@@ -1,0 +1,16 @@
+[
+  {
+    "platform": "windows",
+    "version": "1.0.0",
+    "filename": "Ryhze-1.0.0-Windows-Setup.exe",
+    "bytes": 29731389,
+    "sha256": "8162701d094e2ce7bc8e65bbf5c83482c9aad5f04f8d6e40469e61d15fcc4248"
+  },
+  {
+    "platform": "android",
+    "version": "1.0.0",
+    "filename": "Ryhze-1.0.0-Android.apk",
+    "bytes": 101314542,
+    "sha256": "d104c143cb281477db8a60b7129191d861f7cea8dd5b5a53a8343327f18c010e"
+  }
+]

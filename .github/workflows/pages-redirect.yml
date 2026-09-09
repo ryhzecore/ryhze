@@ -30,7 +30,7 @@ jobs:
       - uses: actions/configure-pages@v5
       - run: |
           mkdir redirect
-          printf '%s' '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=https://ryhze-web.live-insights.workers.dev/games"><link rel="canonical" href="https://ryhze.com/"><title>Ryhze</title><a href="https://ryhze-web.live-insights.workers.dev/games">Continue to Ryhze</a>' > redirect/index.html
+          printf '%s' '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta http-equiv="refresh" content="0;url=https://ryhze-web.live-insights.workers.dev/"><link rel="canonical" href="https://ryhze.com/"><title>Ryhze</title><a href="https://ryhze-web.live-insights.workers.dev/">Continue to Ryhze</a>' > redirect/index.html
           cp redirect/index.html redirect/404.html
       - uses: actions/upload-pages-artifact@v3
         with:

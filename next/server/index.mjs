@@ -1,3 +1,4 @@
+import { download } from "./downloads.mjs";
 import auth, { session } from "./auth.mjs";
 import originals from "./catalog.json" with { type: "json" };
 import internal from "./internal-catalog.json" with { type: "json" };
@@ -35,6 +36,8 @@ async function handle(request, env) {
     return redirect("https://ryhze.com" + path + url.search);
   if (url.hostname === "video.ryhze.com")
     return json({ error: "Use the Ryhze player." }, 410);
+  if (path === "/home") return redirect("/");
+  if (path.startsWith("/downloads/")) return download(request, env);
   if (path === "/api/discover")
     return request.method === "GET"
       ? json(originals)

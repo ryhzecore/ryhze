@@ -7,6 +7,7 @@ import {
 } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { Icon } from "./Icon";
+import { Home } from "./Home";
 import { AuthPage, AdminPage, EditorialPage } from "./Pages";
 import { Player } from "./Player";
 import { Preview } from "./Preview";
@@ -14,6 +15,7 @@ import { api, ease, mediaUrl, save, stored } from "./lib";
 import type { Page, Title, User } from "./types";
 
 const pages: Page[] = [
+  "home",
   "games",
   "films",
   "saved",
@@ -26,8 +28,9 @@ const pages: Page[] = [
 ];
 const currentPage = (): Page => {
   const path = location.pathname.replace(/^\/|\/$/g, "");
-  return !path || path === "menu"
-    ? "games"
+  return !path
+    ? "home"
+    : path === "menu" ? "games"
     : pages.includes(path as Page)
       ? (path as Page)
       : "not-found";
@@ -68,7 +71,7 @@ export function App() {
     }
   }, [notice]);
   const navigate = useCallback((target: Page) => {
-    history.pushState(null, "", "/" + target);
+    history.pushState(null, "", target === "home" ? "/" : "/" + target);
     setPage(target);
     setMenu(false);
     setSearch(false);
@@ -129,7 +132,7 @@ export function App() {
   useEffect(() => {
     document.title = selected
       ? selected.title.title + " — Ryhze"
-      : page === "games" || page === "films"
+      : page === "home" || page === "games" || page === "films"
         ? "Ryhze — Entertainment has no limits."
         : page.charAt(0).toUpperCase() + page.slice(1) + " — Ryhze";
   }, [page, selected]);
@@ -323,7 +326,7 @@ export function App() {
     >
       <div onClick={intercept}>
         <AnimatePresence>
-          {!ready && (
+          {!ready && page !== "home" && (
             <motion.div
               className="boot"
               initial={{ opacity: 1 }}
@@ -339,10 +342,10 @@ export function App() {
           <a className="skip-link" href="#main">
             Skip to content
           </a>
-          <header className="site-header">
+          {page !== "home" && <header className="site-header">
             <a
-              href="/games"
-              data-nav="games"
+              href="/"
+              data-nav="home"
               className="brand"
               aria-label="Ryhze home"
             >
@@ -536,7 +539,7 @@ export function App() {
                 </motion.section>
               )}
             </AnimatePresence>
-          </header>
+          </header>}
           <AnimatePresence mode="wait" initial={false}>
             <motion.div
               key={page}
@@ -545,7 +548,7 @@ export function App() {
               exit={{ opacity: 0, y: -4 }}
               transition={{ duration: reduced ? 0 : 0.32, ease }}
             >
-              {libraryPage ? (
+              {page === "home" ? <Home reduced={reduced} /> : libraryPage ? (
                 <main id="main">
                   {page !== "saved" && (
                     <section className={"hero " + (!hero ? "studio-hero" : "")}>
@@ -826,7 +829,7 @@ export function App() {
             </motion.div>
           </AnimatePresence>
           <footer className="site-footer">
-            <a href="/games" data-nav="games">
+            <a href="/" data-nav="home">
               <img src="/brand/wordmark.png" alt="Ryhze" />
             </a>
             <p>Entertainment has no limits.</p>

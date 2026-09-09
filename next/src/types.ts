@@ -19,6 +19,7 @@ export type Title = {
   facts?: { label: string; value: string }[];
 };
 export type Page =
+  | "home"
   | "games"
   | "films"
   | "saved"
