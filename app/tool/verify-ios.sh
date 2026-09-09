@@ -17,10 +17,24 @@ if ! xcrun simctl list devices booted | grep -Fq "$RYHZE_SIMULATOR_ID"; then
 fi
 python3 tool/run-bounded.py 300 xcrun simctl bootstatus "$RYHZE_SIMULATOR_ID" -b
 run_test() {
+  local phase="$1"
+  local target="$2"
+  shift 2
   # Preserve app data while ensuring the previous test process is gone.
   xcrun simctl terminate "$RYHZE_SIMULATOR_ID" com.ryhze.ryhze 2>/dev/null || true
-  python3 tool/run-bounded.py 600 flutter test "$@" -d "$RYHZE_SIMULATOR_ID" --timeout=2m
+  echo "Preparing native XCTest: $phase"
+  python3 tool/run-bounded.py 600 flutter build ios --simulator --debug --config-only --target="$target" "$@"
+  local flutter_root
+  flutter_root="$(sed -n 's/^FLUTTER_ROOT=//p' ios/Flutter/Generated.xcconfig | tr -d '\r')"
+  python3 tool/run-bounded.py 900 xcodebuild test \
+    -workspace ios/Runner.xcworkspace -scheme Runner -configuration Debug \
+    -destination "platform=iOS Simulator,id=$RYHZE_SIMULATOR_ID" \
+    -parallel-testing-enabled NO -maximum-concurrent-test-simulator-destinations 1 \
+    -resultBundlePath "build/ios-test-results/$phase.xcresult" \
+    "HEADER_SEARCH_PATHS=\$(inherited) $flutter_root/packages/integration_test/ios/integration_test/Sources/integration_test/include" \
+    CODE_SIGNING_ALLOWED=NO
 }
-run_test integration_test/website_parity_test.dart
-run_test integration_test/remember_session_test.dart --no-uninstall --dart-define=RYHZE_SESSION_PHASE=seed
-run_test integration_test/remember_session_test.dart --no-uninstall --dart-define=RYHZE_SESSION_PHASE=restore
+mkdir -p build/ios-test-results
+run_test screens integration_test/website_parity_test.dart
+run_test session-seed integration_test/remember_session_test.dart --dart-define=RYHZE_SESSION_PHASE=seed
+run_test session-restore integration_test/remember_session_test.dart --dart-define=RYHZE_SESSION_PHASE=restore

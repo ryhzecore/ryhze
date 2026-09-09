@@ -30,3 +30,7 @@ TestFlight/App Store distribution handles iOS binary updates. The Windows/Androi
 ## Current acceptance status
 
 Apple compilation, signing, simulator execution, physical-device testing and TestFlight upload have not yet run. This Windows workspace does not provide Xcode, and no connected Apple build service has been identified. The configured pipeline is not evidence of a successful Apple build; do not advertise an iOS download until a signed artifact has passed the checks above.
+
+## Native test runner update
+
+The simulator checks now run through xcodebuild and Flutter's XCTest bridge instead of flutter test's VM-service attachment, which stalled in cloud runs. Screens, session seed and session restore remain separate phases on the same simulator. Each native phase has a 15-minute process limit; failures remain blocking and xcresult bundles are retained. This replacement still requires a successful cloud run before being marked verified.
