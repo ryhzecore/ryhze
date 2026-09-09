@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -15,6 +16,8 @@ void main() {
   testWidgets('remembered session across native process restart: $phase', (
     tester,
   ) async {
+    // iOS must render a first frame before the native test runner attaches.
+    await tester.pumpWidget(const SizedBox.shrink());
     expect(['seed', 'restore'], contains(phase));
     final store = SecureSessionStore(key: 'ryhze-qa-session-restart-v1');
     final token = 'd' * 64;
