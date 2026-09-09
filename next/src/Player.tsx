@@ -103,6 +103,7 @@ export function Player({ title, reduced }: { title: Title; reduced: boolean }) {
       )}
       <div
         className="screen"
+        data-artwork-target
         style={{
           backgroundImage: title.image ? `url("${title.image}")` : undefined,
         }}

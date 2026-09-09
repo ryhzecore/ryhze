@@ -1,5 +1,6 @@
 import {
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   useCallback,
@@ -7,6 +8,7 @@ import {
 } from "react";
 import { AnimatePresence, MotionConfig, motion } from "motion/react";
 import { Icon } from "./Icon";
+import { ArtworkFlight, artworkRect, artworkSource, type ArtworkFlightState, type ArtworkRect } from "./ArtworkFlight";
 import { Home } from "./Home";
 import { AuthPage, AdminPage, EditorialPage } from "./Pages";
 import { Player } from "./Player";
@@ -48,6 +50,7 @@ export function App() {
     [query, setQuery] = useState(""),
     [selected, setSelected] = useState<Selection | null>(null),
     [leaving, setLeaving] = useState(false),
+    [flight, setFlight] = useState<ArtworkFlightState | null>(null),
     [saved, setSaved] = useState<string[]>([]),
     [notice, setNotice] = useState(""),
     [hovered, setHovered] = useState<string | null>(null),
@@ -56,6 +59,8 @@ export function App() {
       () => stored<string>("ryhze-motion-v2", "smooth") === "reduced",
     ),
     [sound, setSound] = useState(() => stored("ryhze-sound-v2", false));
+  const openingArtwork = useRef<ArtworkRect | null>(null),
+    flightSequence = useRef(0);
   const app = useRef<HTMLDivElement>(null),
     dialog = useRef<HTMLDivElement>(null),
     focusReturn = useRef<HTMLElement | null>(null),
@@ -71,6 +76,9 @@ export function App() {
     }
   }, [notice]);
   const navigate = useCallback((target: Page) => {
+    setFlight(null);
+    setSelected(null);
+    setLeaving(false);
     history.pushState(null, "", target === "home" ? "/" : "/" + target);
     setPage(target);
     setMenu(false);
@@ -107,6 +115,8 @@ export function App() {
   useEffect(() => {
     void load();
     const pop = () => {
+      setFlight(null);
+      setLeaving(false);
       setPage(currentPage());
       setSelected(null);
       setMenu(false);
@@ -136,12 +146,34 @@ export function App() {
         ? "Ryhze — Entertainment has no limits."
         : page.charAt(0).toUpperCase() + page.slice(1) + " — Ryhze";
   }, [page, selected]);
+  useLayoutEffect(() => {
+    if (!selected || reduced || !selected.title.image) return;
+    const from = openingArtwork.current;
+    const to = artworkRect(dialog.current?.querySelector("[data-artwork-target]") || null);
+    if (from && to) setFlight({ id: ++flightSequence.current, sourceId: selected.sourceId, image: selected.title.image, from, to, returning: false });
+  }, [selected, reduced]);
+  const finishFlight = useCallback(() => {
+    setFlight(null);
+    if (flight?.returning) setSelected(null);
+  }, [flight]);
+  useEffect(() => {
+    if (!flight) return;
+    addEventListener("resize", finishFlight);
+    return () => removeEventListener("resize", finishFlight);
+  }, [flight, finishFlight]);
   const close = useCallback(() => {
-    if (selected) {
-      setLeaving(true);
+    if (!selected || leaving) return;
+    dialog.current?.querySelectorAll("video").forEach(video => video.pause());
+    const from = artworkRect(document.querySelector("[data-artwork-flight]") || dialog.current?.querySelector("[data-artwork-target]") || null);
+    const to = artworkRect(artworkSource(selected.sourceId));
+    setLeaving(true);
+    if (!reduced && selected.title.image && from && to) {
+      setFlight({ id: ++flightSequence.current, sourceId: selected.sourceId, image: selected.title.image, from, to, returning: true });
+    } else {
+      setFlight(null);
       setSelected(null);
     }
-  }, [selected]);
+  }, [selected, leaving, reduced]);
   useEffect(() => {
     const key = (event: KeyboardEvent) => {
       keyboard.current = true;
@@ -263,6 +295,9 @@ export function App() {
       event?.currentTarget || (document.activeElement as HTMLElement);
     setMenu(false);
     setSearch(false);
+    const source = artworkSource(sourceId);
+    const image = source?.querySelector("img");
+    openingArtwork.current = image?.complete && image.naturalWidth ? artworkRect(source) : null;
     setSelected({ title, sourceId });
   }
   function toggleSaved(title: Title) {
@@ -324,7 +359,7 @@ export function App() {
       reducedMotion={reduced ? "always" : "never"}
       transition={{ duration: 0.55, ease }}
     >
-      <div onClick={intercept}>
+      <div onClick={intercept} data-artwork-moving={!!flight}>
         <AnimatePresence>
           {!ready && page !== "home" && (
             <motion.div
@@ -553,7 +588,8 @@ export function App() {
                   {page !== "saved" && (
                     <section className={"hero " + (!hero ? "studio-hero" : "")}>
                       <motion.div
-                        layoutId={hero ? "hero-" + hero.id : undefined}
+                        data-artwork-source={hero ? "hero-" + hero.id : undefined}
+                        style={{ visibility: flight?.sourceId === "hero-" + hero?.id ? "hidden" : undefined }}
                         className="hero-art"
                         aria-hidden="true"
                       >
@@ -698,9 +734,9 @@ export function App() {
                             aria-label={"Explore " + title.title}
                           >
                             <motion.div
-                              layoutId={"card-" + title.id}
+                              data-artwork-source={"card-" + title.id}
                               className="card-surface"
-                              style={{ borderRadius: 24 }}
+                              style={{ borderRadius: 24, visibility: flight?.sourceId === "card-" + title.id ? "hidden" : undefined }}
                             >
                               {title.image ? (
                                 <img src={title.image} alt="" loading="lazy" />
@@ -849,6 +885,7 @@ export function App() {
             </small>
           </footer>
         </div>
+        {flight && <ArtworkFlight flight={flight} onComplete={finishFlight} />}
         <AnimatePresence
           onExitComplete={() => {
             setLeaving(false);
@@ -859,12 +896,12 @@ export function App() {
             <motion.div
               className="modal-layer"
               key="title-modal"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: reduced ? 0 : 0.75 }}
             >
-              <button
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: leaving ? 0 : 1 }}
+                exit={{ opacity: 0, transition: { duration: 0 } }}
+                transition={{ duration: reduced ? 0 : 0.7, ease }}
                 className="modal-backdrop"
                 aria-label="Close title"
                 onClick={close}
@@ -876,7 +913,9 @@ export function App() {
                 aria-modal="true"
                 aria-labelledby="detail-title"
                 tabIndex={-1}
-                layoutId={selected.sourceId}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: leaving ? 0 : 1 }}
+                exit={{ opacity: 0, transition: { duration: 0 } }}
                 style={{ borderRadius: 28 }}
                 transition={{ duration: reduced ? 0 : 0.7, ease }}
               >
@@ -917,12 +956,14 @@ export function App() {
                     <Player title={selected.title} reduced={reduced} />
                   ) : (
                     <figure className="world-art">
+                      <div className="artwork-frame" data-artwork-target>
                       {selected.title.image && (
                         <img
                           src={selected.title.image}
                           alt={"The world of " + selected.title.title}
                         />
                       )}
+                      </div>
                       <figcaption>
                         {selected.title.imageNote ||
                           "Internal reference artwork"}

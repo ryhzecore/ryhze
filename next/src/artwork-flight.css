@@ -1,0 +1,32 @@
+.artwork-flight {
+  position: fixed;
+  z-index: 120;
+  overflow: hidden;
+  pointer-events: none;
+  background: #09090c;
+  opacity: 1;
+}
+.artwork-flight img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+[data-artwork-moving="true"] [data-artwork-target] {
+  visibility: hidden;
+}
+.world-art .artwork-frame {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  max-height: 55dvh;
+  overflow: hidden;
+  border-radius: 16px;
+}
+.world-art .artwork-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-height: none;
+  object-fit: cover;
+  border-radius: 0;
+}
