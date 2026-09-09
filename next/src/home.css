@@ -314,7 +314,7 @@
   line-height: 1.8;
   padding: 12px;
   background: #0003;
-  border-radius: 8px;
+  border-radius: var(--radius-control);
 }
 .other-platforms {
   margin: 24px 6px 0;

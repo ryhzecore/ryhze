@@ -925,7 +925,7 @@ export function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: leaving ? 0 : 1 }}
                 exit={{ opacity: 0, transition: { duration: 0 } }}
-                style={{ borderRadius: "var(--radius-surface)" }}
+                style={{ borderRadius: "var(--radius-panel)" }}
                 transition={{ duration: reduced ? 0 : 0.7, ease }}
               >
                 <header className="detail-header">
