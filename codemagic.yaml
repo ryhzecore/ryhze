@@ -1,0 +1,80 @@
+workflows:
+  apple-verification:
+    name: Ryhze Apple build verification
+    working_directory: app
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: 3.47.2
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Resolve packages
+        script: |
+          set -euo pipefail
+          flutter config --enable-swift-package-manager
+          flutter pub get
+      - name: Validate shared application
+        script: |
+          set -euo pipefail
+          flutter analyze
+          flutter test
+      - name: Build iPhone and iPad simulator application
+        script: flutter build ios --simulator --debug
+      - name: Exercise iOS screens and remembered sign-in
+        script: bash tool/verify-ios.sh
+      - name: Verify device release compilation
+        script: flutter build ios --release --no-codesign
+      - name: Build macOS application
+        script: flutter build macos --release
+    artifacts:
+      - app/build/ios/iphonesimulator/*.app
+      - app/build/macos/Build/Products/Release/*.app
+      - app/.private/qa/*.png
+
+  ios-testflight:
+    name: Ryhze TestFlight release
+    working_directory: app
+    max_build_duration: 60
+    instance_type: mac_mini_m2
+    environment:
+      flutter: 3.47.2
+      xcode: latest
+      cocoapods: default
+      groups:
+        - ryhze_apple_signing
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.ryhze.ryhze
+    scripts:
+      - name: Check release credentials
+        script: |
+          set -euo pipefail
+          : "${APP_STORE_CONNECT_PRIVATE_KEY:?Add the App Store Connect private key to ryhze_apple_signing}"
+          : "${APP_STORE_CONNECT_KEY_IDENTIFIER:?Add the App Store Connect key ID}"
+          : "${APP_STORE_CONNECT_ISSUER_ID:?Add the App Store Connect issuer ID}"
+      - name: Resolve and validate
+        script: |
+          set -euo pipefail
+          flutter config --enable-swift-package-manager
+          flutter pub get
+          flutter analyze
+          flutter test
+      - name: Use configured signing profiles
+        script: xcode-project use-profiles
+      - name: Verify iOS behavior before publishing
+        script: bash tool/verify-ios.sh
+      - name: Build signed release
+        script: |
+          set -euo pipefail
+          : "${PROJECT_BUILD_NUMBER:?Codemagic project build number is required}"
+          flutter build ipa --release --build-number="$((PROJECT_BUILD_NUMBER + 7))" --export-options-plist="$HOME/export_options.plist"
+    artifacts:
+      - app/build/ios/ipa/*.ipa
+      - app/build/ios/archive/*.xcarchive
+    publishing:
+      app_store_connect:
+        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
+        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
+        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
+        submit_to_testflight: true

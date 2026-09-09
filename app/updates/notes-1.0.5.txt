@@ -1,0 +1,1 @@
+Sign-in is now remembered by default for up to 30 days. Saved sessions survive app restarts and switching between Ryhze's main and backup service addresses. You can still uncheck Remember me, and signing out removes the saved session.

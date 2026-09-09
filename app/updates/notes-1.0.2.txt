@@ -1,0 +1,1 @@
+Ryhze now checks for app updates automatically. Download verified updates inside the app, then install when you are ready. Windows reopens after updating; Android uses its installation confirmation screen. Your saved list and preferences stay in place.

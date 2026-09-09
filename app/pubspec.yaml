@@ -1,0 +1,56 @@
+name: ryhze
+description: Films, series and games. Entertainment has no limits.
+publish_to: none
+version: 1.0.6+7
+environment:
+  sdk: '>=3.8.0 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.5.0
+  flutter_secure_storage: ^10.0.0
+  shared_preferences: ^2.5.3
+  url_launcher: ^6.3.2
+  media_kit: ^1.2.0
+  media_kit_video: ^2.0.0
+  media_kit_libs_video: ^1.0.6
+  path_provider: ^2.1.5
+  crypto: ^3.0.6
+  cryptography: ^2.9.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  flutter_launcher_icons: ^0.14.4
+  image: ^4.9.2
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/brand/
+    - assets/art/
+    - assets/update/
+    - assets/catalog.json
+    - assets/fonts/Inter-LICENSE.txt
+    - assets/fonts/SpaceGrotesk-LICENSE.txt
+  fonts:
+    - family: Space Grotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk.ttf
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter.ttf
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: assets/brand/app-icon.png
+  remove_alpha_ios: true
+  background_color_ios: '#09090C'
+  windows:
+    generate: true
+    image_path: assets/brand/app-icon.png
+    icon_size: 256
+  macos:
+    generate: true
+    image_path: assets/brand/app-icon.png

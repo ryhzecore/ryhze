@@ -1,0 +1,9 @@
+{
+  "name": "ryhze-updates",
+  "main": "worker.mjs",
+  "compatibility_date": "2026-09-01",
+  "account_id": "e120ad8b4234f7c9641ac44e0bee43c4",
+  "workers_dev": true,
+  "preview_urls": false,
+  "r2_buckets": [{ "binding": "RELEASES", "bucket_name": "ryhze-streams" }]
+}

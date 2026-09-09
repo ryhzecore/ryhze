@@ -1,0 +1,83 @@
+[
+  {
+    "id": "larcenous-driftscape",
+    "title": "Larcenous Driftscape",
+    "kind": "game",
+    "label": "Ryhze Games",
+    "status": "In development",
+    "description": "An open-world crime and driving game set across San Coronado. From the working docks of Oakhaven to the mountain roads of Cascadia, every route is another way into the story.",
+    "image": "/art/san-coronado.png",
+    "imageNote": "World concept artwork · Not gameplay",
+    "categories": [
+      "Open world",
+      "Driving",
+      "Crime"
+    ],
+    "streams": [],
+    "facts": [
+      {
+        "label": "Perspective",
+        "value": "Top-down 2D"
+      },
+      {
+        "label": "Setting",
+        "value": "San Coronado"
+      },
+      {
+        "label": "Release",
+        "value": "To be announced"
+      }
+    ]
+  },
+  {
+    "id": "internal-grand-theft-auto-vi",
+    "title": "Grand Theft Auto VI",
+    "kind": "game",
+    "label": "Rockstar Games",
+    "status": "Coming 19 November 2026",
+    "description": "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clyde–style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media culture—relying entirely on mutual trust to survive.",
+    "image": "/art/gta-vi.png",
+    "categories": [
+      "Open world",
+      "Action adventure",
+      "Coming soon"
+    ],
+    "streams": [],
+    "seasons": [],
+    "availability": "coming-soon",
+    "facts": [
+      {
+        "label": "Release date",
+        "value": "19 November 2026"
+      },
+      {
+        "label": "Platforms",
+        "value": "PlayStation 5 and Xbox Series X|S"
+      },
+      {
+        "label": "PC release",
+        "value": "Not announced"
+      }
+    ],
+    "imageNote": "Official game artwork"
+  },
+  {
+    "id": "internal-valorant",
+    "title": "Valorant",
+    "kind": "game",
+    "label": "Riot Games",
+    "status": "Available now",
+    "description": "A competitive 5v5 tactical shooter from Riot Games. Choose an agent, combine precise gunplay with unique abilities, and work with your team to win each round.",
+    "image": "/art/valorant.png",
+    "categories": [
+      "Tactical shooter",
+      "Multiplayer",
+      "Free to play"
+    ],
+    "streams": [],
+    "seasons": [],
+    "download": "/media/Games/Valorant/Download/Install.exe",
+    "availability": "available",
+    "imageNote": "Official game artwork"
+  }
+]

@@ -1,0 +1,1 @@
+Sign-in now completes correctly while the catalogue loads. Hovering over a title card's status, categories or save button lifts the entire card, matching the website. Artwork keeps its own zoom and preview behavior, and Reduced motion is respected.
