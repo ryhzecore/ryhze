@@ -32,7 +32,8 @@ run_test() {
     -parallel-testing-enabled NO -maximum-concurrent-test-simulator-destinations 1 \
     -resultBundlePath "build/ios-test-results/$phase.xcresult" \
     "HEADER_SEARCH_PATHS=\$(inherited) $flutter_root/packages/integration_test/ios/integration_test/Sources/integration_test/include" \
-    CODE_SIGNING_ALLOWED=NO
+    CODE_SIGNING_ALLOWED=NO 2>&1 | tee "build/ios-test-results/$phase.log"
+  python3 tool/check-ios-test-log.py "$phase" "build/ios-test-results/$phase.log"
 }
 mkdir -p build/ios-test-results
 run_test screens integration_test/website_parity_test.dart

@@ -32,6 +32,7 @@ workflows:
       - app/build/macos/Build/Products/Release/*.app
       - app/.private/qa/*.png
       - app/build/ios-test-results/*.xcresult
+      - app/build/ios-test-results/*.log
 
   ios-testflight:
     name: Ryhze TestFlight release
@@ -74,6 +75,7 @@ workflows:
       - app/build/ios/ipa/*.ipa
       - app/build/ios/archive/*.xcarchive
       - app/build/ios-test-results/*.xcresult
+      - app/build/ios-test-results/*.log
     publishing:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY

@@ -10,13 +10,15 @@ import 'package:ryhze/core/state.dart';
 
 // Run seed and restore as separate native app processes. This key is isolated
 // from the member's real session; all account responses are local fixtures.
-Future<void> main() async {
+void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
-  runApp(const SizedBox.shrink());
-  await binding.waitUntilFirstFrameRasterized.timeout(
-    const Duration(seconds: 30),
-  );
-  await binding.endOfFrame;
+  setUpAll(() async {
+    runApp(const SizedBox.shrink());
+    await binding.waitUntilFirstFrameRasterized.timeout(
+      const Duration(seconds: 30),
+    );
+    await binding.endOfFrame;
+  });
   const phase = String.fromEnvironment('RYHZE_SESSION_PHASE');
   testWidgets('remembered session across native process restart: $phase', (
     tester,
