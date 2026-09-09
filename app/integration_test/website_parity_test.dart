@@ -8,11 +8,17 @@ void main() {
   // XCTest enables native accessibility during application launch. Finish the
   // initial frame before testWidgets records its semantics-handle baseline.
   setUpAll(() async {
-    runApp(const SizedBox.shrink());
-    await binding.waitUntilFirstFrameRasterized.timeout(
-      const Duration(seconds: 30),
-    );
-    await binding.endOfFrame;
+    final previousPolicy = binding.framePolicy;
+    binding.framePolicy = LiveTestWidgetsFlutterBindingFramePolicy.fullyLive;
+    try {
+      runApp(const SizedBox.shrink());
+      await binding.waitUntilFirstFrameRasterized.timeout(
+        const Duration(seconds: 30),
+      );
+      await binding.endOfFrame.timeout(const Duration(seconds: 30));
+    } finally {
+      binding.framePolicy = previousPolicy;
+    }
   });
   checks.main();
 }
