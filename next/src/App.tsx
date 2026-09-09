@@ -736,7 +736,7 @@ export function App() {
                             <motion.div
                               data-artwork-source={"card-" + title.id}
                               className="card-surface"
-                              style={{ borderRadius: 24, visibility: flight?.sourceId === "card-" + title.id ? "hidden" : undefined }}
+                              style={{ borderRadius: "var(--radius-surface)", visibility: flight?.sourceId === "card-" + title.id ? "hidden" : undefined }}
                             >
                               {title.image ? (
                                 <img src={title.image} alt="" loading="lazy" />
@@ -916,7 +916,7 @@ export function App() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: leaving ? 0 : 1 }}
                 exit={{ opacity: 0, transition: { duration: 0 } }}
-                style={{ borderRadius: 28 }}
+                style={{ borderRadius: "var(--radius-surface)" }}
                 transition={{ duration: reduced ? 0 : 0.7, ease }}
               >
                 <header className="detail-header">

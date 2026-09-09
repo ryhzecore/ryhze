@@ -170,7 +170,7 @@
 .home-world {
   padding: 30px;
   border: 1px solid #ffffff1d;
-  border-radius: 24px;
+  border-radius: var(--radius-surface);
   background: linear-gradient(155deg, #ffffff05, transparent);
   display: flex;
   flex-direction: column;
@@ -273,7 +273,7 @@
   padding: 32px;
   border: 1px solid #ffffff26;
   background: #17141e;
-  border-radius: 24px;
+  border-radius: var(--radius-surface);
 }
 .platform-card h4 {
   font-family: "Space Grotesk Variable", sans-serif;

@@ -20,7 +20,7 @@
   aspect-ratio: 16 / 9;
   max-height: 55dvh;
   overflow: hidden;
-  border-radius: 16px;
+  border-radius: var(--radius-surface);
 }
 .world-art .artwork-frame img {
   display: block;

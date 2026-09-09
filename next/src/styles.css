@@ -14,6 +14,7 @@
 }
 
 :root {
+  --radius-surface: 32px;
   font-family: "Inter Variable", sans-serif;
   color: #f8f7fa;
   background: #09090c;
@@ -180,7 +181,7 @@ select option {
   min-height: 48px;
   flex-shrink: 0;
   border: 1px solid #ffffff26;
-  border-radius: 999px;
+  border-radius: var(--radius-surface);
   background: #ffffff08;
   padding: 13px 21px;
   font-size: 13px;
@@ -364,7 +365,7 @@ select option {
   z-index: 32;
   right: var(--gutter);
   top: 90px;
-  border-radius: 24px;
+  border-radius: var(--radius-surface);
   padding: 22px;
   min-width: 270px;
   max-width: calc(100vw - 40px);
@@ -398,7 +399,7 @@ select option {
   left: 50%;
   transform: translateX(-50%) !important;
   width: min(620px, calc(100% - 40px));
-  border-radius: 24px;
+  border-radius: var(--radius-surface);
   padding: 10px 20px;
   z-index: 34;
 }
@@ -562,7 +563,7 @@ select option {
   width: 38%;
   height: 66%;
   border: 1px solid #ffffff12;
-  border-radius: 40px;
+  border-radius: var(--radius-surface);
   transform: rotate(-12deg);
   box-shadow:
     inset 0 0 100px #5500ff20,
@@ -606,7 +607,7 @@ select option {
 .artwork {
   padding: 0;
   border: 0;
-  border-radius: 24px;
+  border-radius: var(--radius-surface);
   display: block;
   width: 100%;
   background: none;
@@ -702,7 +703,7 @@ select option {
 }
 .empty-library {
   border: 1px solid #ffffff16;
-  border-radius: 28px;
+  border-radius: var(--radius-surface);
   padding: 50px;
   background: linear-gradient(110deg, #17131d, #131215);
   max-width: 780px;
@@ -855,7 +856,7 @@ select option {
   width: 100%;
   max-height: 55vh;
   object-fit: cover;
-  border-radius: 16px;
+  border-radius: var(--radius-surface);
 }
 .world-art figcaption {
   font-size: 10px;
@@ -897,7 +898,7 @@ select option {
   aspect-ratio: 16/9;
   background: #050507 center/cover;
   border: 1px solid #ffffff17;
-  border-radius: 20px;
+  border-radius: var(--radius-surface);
   overflow: hidden;
   display: grid;
   place-items: center;
@@ -1008,7 +1009,7 @@ select option {
   background: radial-gradient(at 80% 40%, #5500ff99, transparent 75%), #181021;
   border: 1px solid #ffffff20;
   padding: 60px;
-  border-radius: 32px;
+  border-radius: var(--radius-surface);
 }
 .brand-statement > span {
   font-size: 12px;
@@ -1080,7 +1081,7 @@ select option {
   pointer-events: none;
 }
 .auth-panel {
-  border-radius: 28px;
+  border-radius: var(--radius-surface);
   padding: 36px;
 }
 .auth-panel h2 {
@@ -1107,7 +1108,7 @@ select option {
 }
 .form-panel {
   padding: 30px;
-  border-radius: 24px;
+  border-radius: var(--radius-surface);
   max-width: 760px;
   margin-top: 40px;
 }
@@ -1337,7 +1338,7 @@ select option {
   }
   .artwork,
   .card-surface {
-    border-radius: 20px !important;
+    border-radius: var(--radius-surface) !important;
   }
   .section-count {
     font-size: 9px;
@@ -1375,7 +1376,7 @@ select option {
   }
   .title-panel {
     max-height: calc(100dvh - 24px);
-    border-radius: 24px !important;
+    border-radius: var(--radius-surface) !important;
   }
   .detail-header {
     padding: 12px;
@@ -1407,7 +1408,7 @@ select option {
     margin: 0 12px;
   }
   .world-art img {
-    border-radius: 14px;
+    border-radius: var(--radius-surface);
   }
   .world-art figcaption {
     font-size: 8px;
@@ -1455,7 +1456,7 @@ select option {
   }
   .brand-statement {
     padding: 30px;
-    border-radius: 24px;
+    border-radius: var(--radius-surface);
   }
   .contact-list a {
     grid-template-columns: 1fr auto;
