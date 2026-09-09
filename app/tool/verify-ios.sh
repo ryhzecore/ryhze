@@ -32,7 +32,9 @@ run_test() {
     -parallel-testing-enabled NO -maximum-concurrent-test-simulator-destinations 1 \
     -resultBundlePath "build/ios-test-results/$phase.xcresult" \
     "HEADER_SEARCH_PATHS=\$(inherited) $flutter_root/packages/integration_test/ios/integration_test/Sources/integration_test/include" \
-    CODE_SIGNING_ALLOWED=NO 2>&1 | tee "build/ios-test-results/$phase.log"
+    CODE_SIGNING_ALLOWED=YES CODE_SIGN_IDENTITY=- \
+    CODE_SIGN_STYLE=Manual DEVELOPMENT_TEAM= \
+    PROVISIONING_PROFILE_SPECIFIER= 2>&1 | tee "build/ios-test-results/$phase.log"
   python3 tool/check-ios-test-log.py "$phase" "build/ios-test-results/$phase.log"
 }
 mkdir -p build/ios-test-results
