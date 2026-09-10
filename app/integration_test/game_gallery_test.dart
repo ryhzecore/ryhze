@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:integration_test/integration_test.dart';
 import 'package:media_kit/media_kit.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:ryhze/core/game_library.dart';
 import 'package:ryhze/core/game_media.dart';
-import 'package:ryhze/ui/game_library.dart';
-import 'package:ryhze/ui/design.dart';
+import 'package:ryhze/main.dart';
+
 import '../test/website_parity_test.dart' show capture;
+import '../test/support.dart';
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -15,8 +16,9 @@ void main() {
     tester,
   ) async {
     MediaKit.ensureInitialized();
-    SharedPreferences.setMockInitialValues({GameLibrary.permissionKey: true});
-    final prefs = await SharedPreferences.getInstance();
+    final state = await fixtureState();
+    final prefs = state.prefs;
+    await prefs.setBool(GameLibrary.permissionKey, true);
     final game = LocalGame(
       id: 'steam:570',
       name: 'Dota 2',
@@ -45,34 +47,35 @@ void main() {
     await tester.pumpWidget(
       RepaintBoundary(
         key: key,
-        child: MaterialApp(
-          theme: ryhzeTheme(),
-          home: Scaffold(
-            body: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(24),
-                child: InstalledGamesPage(library: library, media: media),
-              ),
-            ),
-          ),
-        ),
+        child: RyhzeApp(state: state, gameLibrary: library),
       ),
     );
     await tester.pumpAndSettle();
     await Future<void>.delayed(const Duration(seconds: 2));
     await tester.pump();
+    await Scrollable.ensureVisible(
+      tester.element(find.byType(DropdownButtonFormField<String>)),
+      alignment: .2,
+    );
+    await tester.pumpAndSettle();
     await capture(key, 'native-installed-games');
     await tester.ensureVisible(find.text('Dota 2'));
     await tester.tap(find.text('Dota 2'));
     await tester.pumpAndSettle();
     await Future<void>.delayed(const Duration(seconds: 2));
     await tester.pump();
-    expect(find.text('Trailer 1'), findsOneWidget);
+    await tester.sendKeyEvent(LogicalKeyboardKey.arrowRight);
+    await tester.pumpAndSettle();
+    expect(
+      find.text('2 / ${1 + data.screenshots.length + data.trailers.length}'),
+      findsOneWidget,
+    );
     await capture(key, 'native-game-gallery');
     await tester.tap(find.byTooltip('Close details'));
     await tester.pumpAndSettle();
     await tester.pumpWidget(const SizedBox.shrink());
-    library.dispose();
+
     media.dispose();
+    state.dispose();
   });
 }

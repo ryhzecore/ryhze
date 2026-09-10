@@ -1,4 +1,9 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
+import '../core/models.dart';
+import '../core/state.dart';
+import 'title_card.dart';
+import 'artwork_hero.dart';
 import 'package:flutter/material.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -171,22 +176,14 @@ String lastPlayedText(LocalGame game) {
   return 'Last played ${time.day}/${time.month}/${time.year}';
 }
 
-class InstalledGamesPage extends StatefulWidget {
+class GameLibraryTools extends StatefulWidget {
   final GameLibrary library;
-  final GameMediaStore media;
-  final ValueChanged<bool>? onDetailsChanged;
-  const InstalledGamesPage({
-    super.key,
-    required this.library,
-    required this.media,
-    this.onDetailsChanged,
-  });
+  const GameLibraryTools({super.key, required this.library});
   @override
-  State<InstalledGamesPage> createState() => _InstalledGamesPageState();
+  State<GameLibraryTools> createState() => _GameLibraryToolsState();
 }
 
-class _InstalledGamesPageState extends State<InstalledGamesPage> {
-  String query = '';
+class _GameLibraryToolsState extends State<GameLibraryTools> {
   GameLibrary get library => widget.library;
   Future<void> addLibrary() async {
     final input = TextEditingController();
@@ -276,236 +273,145 @@ class _InstalledGamesPageState extends State<InstalledGamesPage> {
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: library,
-    builder: (context, _) {
-      final games = library.sorted
-          .where(
-            (game) => '${game.name} ${game.source}'.toLowerCase().contains(
-              query.toLowerCase(),
+    builder: (context, _) => PopupMenuButton<String>(
+      tooltip: 'Manage games',
+      icon: const Icon(Icons.tune, size: 20),
+      onSelected: (action) => attempt(context, () async {
+        switch (action) {
+          case 'allow':
+            await gamePermission(context, library);
+          case 'add':
+            await editLocalGame(context, library);
+          case 'scan':
+            await library.scan();
+          case 'folder':
+            await addLibrary();
+          case 'preferences':
+            await settings();
+        }
+      }),
+      itemBuilder: (_) => [
+        if (library.permission != true)
+          const PopupMenuItem(value: 'allow', child: Text('Set up my games')),
+        if (library.permission == true) ...[
+          const PopupMenuItem(value: 'add', child: Text('Add a game')),
+          PopupMenuItem(
+            value: 'scan',
+            enabled: !library.scanning,
+            child: Text(
+              library.scanning ? 'Finding games…' : 'Find installed games',
             ),
-          )
-          .toList();
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 32),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Eyebrow('Your PC. Your worlds.'),
-            const SizedBox(height: 12),
-            Text('Installed games.', style: heading(38)),
-            const SizedBox(height: 16),
-            const Text(
-              'Your games, together. Start here, return to your game, and pick up where you left off.',
-            ),
-            const SizedBox(height: 24),
-            if (library.permission != true)
-              Glass(
-                padding: const EdgeInsets.all(24),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Game discovery is off. Allow access to build your library and remember when you play.',
-                    ),
-                    const SizedBox(height: 20),
-                    Pill(
-                      'Set up my games',
-                      primary: true,
-                      onPressed: () => attempt(
-                        context,
-                        () => gamePermission(context, library),
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Pill('Preferences', icon: Icons.tune, onPressed: settings),
-                  ],
-                ),
-              )
-            else ...[
-              Wrap(
-                spacing: 12,
-                runSpacing: 12,
-                children: [
-                  Pill(
-                    'Add a game',
-                    primary: true,
-                    icon: Icons.add,
-                    onPressed: () => editLocalGame(context, library),
-                  ),
-                  Pill(
-                    library.scanning
-                        ? 'Finding games…'
-                        : 'Find installed games',
-                    icon: Icons.search,
-                    onPressed: library.scanning ? null : () => library.scan(),
-                  ),
-                  Pill(
-                    'Add library folder',
-                    icon: Icons.folder_open,
-                    onPressed: library.scanning ? null : addLibrary,
-                  ),
-                  Pill('Preferences', icon: Icons.tune, onPressed: settings),
-                ],
-              ),
-              const SizedBox(height: 24),
-              TextField(
-                decoration: const InputDecoration(
-                  hintText: 'Search your games or launcher',
-                  prefixIcon: Icon(Icons.search),
-                ),
-                onChanged: (value) => setState(() => query = value),
-              ),
-              if (library.scanning)
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: LinearProgressIndicator(),
-                ),
-              if (library.error != null)
-                Padding(
-                  padding: const EdgeInsets.only(top: 16),
-                  child: Text(
-                    library.error!,
-                    style: const TextStyle(color: Colors.orangeAccent),
-                  ),
-                ),
-              const SizedBox(height: 24),
-              if (games.isEmpty)
-                Glass(
-                  padding: const EdgeInsets.all(28),
-                  child: Text(
-                    query.isNotEmpty
-                        ? 'No games match your search.'
-                        : 'No games found yet. Scan your Steam and Epic libraries, add a Steam library folder on another drive, or choose a game executable.',
-                  ),
-                ),
-              LayoutBuilder(
-                builder: (context, size) {
-                  final columns = size.maxWidth >= 1100
-                      ? 3
-                      : size.maxWidth >= 620
-                      ? 2
-                      : 1;
-                  final width = (size.maxWidth - (columns - 1) * 24) / columns;
-                  return Wrap(
-                    spacing: 24,
-                    runSpacing: 28,
-                    children: [
-                      for (final game in games)
-                        SizedBox(
-                          width: width,
-                          child: _GameCard(
-                            game: game,
-                            library: library,
-                            media: widget.media,
-                            onDetailsChanged: widget.onDetailsChanged,
-                          ),
-                        ),
-                    ],
-                  );
-                },
-              ),
-              const SizedBox(height: 24),
-              const Text(
-                'Activity is tracked while Ryhze is open. Store launchers may need to sign in or finish an update before the game starts.',
-                style: TextStyle(color: muted, fontSize: 12),
-              ),
-            ],
-          ],
+          ),
+          PopupMenuItem(
+            value: 'folder',
+            enabled: !library.scanning,
+            child: const Text('Add library folder'),
+          ),
+        ],
+        const PopupMenuItem(
+          value: 'preferences',
+          child: Text('Game library preferences'),
         ),
-      );
-    },
+      ],
+    ),
   );
 }
 
-class _GameCard extends StatelessWidget {
+class LocalGameCard extends StatelessWidget {
   final LocalGame game;
   final GameLibrary library;
   final GameMediaStore media;
+  final RyhzeState state;
+  final bool previewAllowed;
   final ValueChanged<bool>? onDetailsChanged;
-  const _GameCard({
+  const LocalGameCard({
+    super.key,
     required this.game,
     required this.library,
     required this.media,
+    required this.state,
+    this.previewAllowed = true,
     this.onDetailsChanged,
   });
   @override
-  Widget build(BuildContext context) => Glass(
-    padding: EdgeInsets.zero,
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        InkWell(
-          borderRadius: BorderRadius.circular(surfaceRadius),
-          onTap: () async {
-            onDetailsChanged?.call(true);
-            try {
-              await showDialog<void>(
-                context: context,
-                builder: (context) =>
-                    LocalGameDetail(game: game, library: library, media: media),
-              );
-            } finally {
-              onDetailsChanged?.call(false);
-            }
-          },
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(surfaceRadius),
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: library,
+    builder: (context, _) => FutureBuilder<GameMedia>(
+      future: media.load(game),
+      builder: (context, snapshot) {
+        final playing = library.isRunning(game);
+        final title = RyhzeTitle(
+          id: 'local-${game.id}',
+          title: game.name,
+          kind: 'game',
+          label: game.source,
+          status: playing ? 'Playing now' : 'Installed',
+          description: '',
+          categories: [lastPlayedText(game)],
+        );
+        final artwork = GameArtwork(
+          snapshot.data?.artwork ?? '',
+          name: game.name,
+        );
+        Future<void> open() async {
+          onDetailsChanged?.call(true);
+          try {
+            await Navigator.of(context).push(
+              PageRouteBuilder<void>(
+                opaque: false,
+                barrierColor: Colors.black.withValues(alpha: .7),
+                transitionDuration: Duration(
+                  milliseconds: state.reduced ? 0 : 700,
                 ),
-                child: AspectRatio(
-                  aspectRatio: 460 / 215,
-                  child: FutureBuilder<GameMedia>(
-                    future: media.load(game),
-                    builder: (context, snapshot) => GameArtwork(
-                      snapshot.data?.artwork ?? '',
-                      name: game.name,
-                    ),
+                reverseTransitionDuration: Duration(
+                  milliseconds: state.reduced ? 0 : 700,
+                ),
+                pageBuilder: (_, _, _) => LocalGameDetail(
+                  game: game,
+                  library: library,
+                  media: media,
+                  state: state,
+                  heroTag: 'card-${title.id}',
+                  cover: snapshot.data?.artwork ?? '',
+                ),
+                transitionsBuilder: (_, animation, _, child) => FadeTransition(
+                  opacity: CurvedAnimation(parent: animation, curve: ryhzeEase),
+                  child: child,
+                ),
+              ),
+            );
+          } finally {
+            onDetailsChanged?.call(false);
+          }
+        }
+
+        return RyhzeTitleCard(
+          title: title,
+          state: state,
+          artwork: artwork,
+          previewAllowed: previewAllowed,
+          onOpen: open,
+          onSave: open,
+          trailingAction: Pill(
+            playing ? 'Resume ${game.name}' : 'Start ${game.name}',
+            iconOnly: true,
+            quiet: true,
+            icon: playing ? Icons.play_arrow : Icons.play_arrow_outlined,
+            height: 44,
+            onPressed:
+                library.permission != true ||
+                    library.launching.containsKey(game.id) ||
+                    library.busy.contains(game.id)
+                ? null
+                : () => attempt(
+                    context,
+                    () => playing
+                        ? library.control(game, 'resume')
+                        : library.launchGame(game),
                   ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(22, 20, 22, 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Eyebrow(game.source),
-                    const SizedBox(height: 10),
-                    Text(
-                      game.name,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: heading(23),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      library.isRunning(game)
-                          ? 'Playing now'
-                          : lastPlayedText(game),
-                      style: TextStyle(
-                        color: library.isRunning(game)
-                            ? const Color(0xffa6e8b4)
-                            : muted,
-                        fontSize: 12,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    const Text(
-                      'Details & footage →',
-                      style: TextStyle(color: muted, fontSize: 12),
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(22),
-          child: GameControls(game: game, library: library),
-        ),
-      ],
+        );
+      },
     ),
   );
 }
@@ -628,11 +534,16 @@ class LocalGameDetail extends StatefulWidget {
   final LocalGame game;
   final GameLibrary library;
   final GameMediaStore media;
+  final RyhzeState state;
+  final String heroTag, cover;
   const LocalGameDetail({
     super.key,
     required this.game,
     required this.library,
     required this.media,
+    required this.state,
+    required this.heroTag,
+    this.cover = '',
   });
   @override
   State<LocalGameDetail> createState() => _LocalGameDetailState();
@@ -643,6 +554,7 @@ class _LocalGameDetailState extends State<LocalGameDetail>
   Player? player;
   VideoController? video;
   StreamSubscription<String>? errors;
+  final thumbnails = ScrollController();
   String? selected, playbackError;
   late Future<GameMedia> media = widget.media.load(widget.game);
   @override
@@ -661,14 +573,53 @@ class _LocalGameDetailState extends State<LocalGameDetail>
     WidgetsBinding.instance.removeObserver(this);
     errors?.cancel();
     player?.dispose();
+    thumbnails.dispose();
     super.dispose();
   }
 
-  Future<void> play(String url) async {
-    if (!officialGameMedia(url)) return;
+  List<String> entries(GameMedia data) => [
+    if (data.artwork.isNotEmpty) data.artwork,
+    ...data.screenshots,
+    ...data.trailers,
+  ];
+  String current(GameMedia data) =>
+      selected ??
+      (data.artwork.isNotEmpty
+          ? data.artwork
+          : entries(data).firstOrNull ?? '');
+  Future<void> choose(GameMedia data, String url) async {
+    if (!officialGameMedia(url) && url != 'asset:assets/art/valorant.png') {
+      return;
+    }
+    setState(() {
+      selected = url;
+      playbackError = null;
+    });
+    final index = entries(data).indexOf(url);
+    if (thumbnails.hasClients && index >= 0) {
+      final offset = (index * 130.0).clamp(
+        0.0,
+        thumbnails.position.maxScrollExtent,
+      );
+      if (widget.state.reduced || MotionSettings.of(context)) {
+        thumbnails.jumpTo(offset);
+      } else {
+        unawaited(
+          thumbnails.animateTo(
+            offset,
+            duration: const Duration(milliseconds: 300),
+            curve: ryhzeEase,
+          ),
+        );
+      }
+    }
+    if (!data.trailers.contains(url)) {
+      await player?.pause();
+      return;
+    }
     player ??= Player();
     video ??= VideoController(player!);
-    errors ??= player!.stream.error.listen((error) {
+    errors ??= player!.stream.error.listen((_) {
       if (mounted) {
         setState(
           () => playbackError =
@@ -676,10 +627,7 @@ class _LocalGameDetailState extends State<LocalGameDetail>
         );
       }
     });
-    setState(() {
-      selected = url;
-      playbackError = null;
-    });
+    if (mounted) setState(() {});
     try {
       await player!.open(Media(url));
     } catch (_) {
@@ -691,212 +639,443 @@ class _LocalGameDetailState extends State<LocalGameDetail>
     }
   }
 
+  void move(GameMedia data, int direction) {
+    final all = entries(data);
+    if (all.length < 2) return;
+    final index = all.indexOf(current(data));
+    unawaited(
+      choose(data, all[((index < 0 ? 0 : index) + direction) % all.length]),
+    );
+  }
+
   @override
-  Widget build(BuildContext context) => Dialog(
-    backgroundColor: canvas,
-    insetPadding: const EdgeInsets.all(20),
-    child: ConstrainedBox(
-      constraints: const BoxConstraints(maxWidth: 1040),
-      child: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: FutureBuilder<GameMedia>(
-            future: media,
-            builder: (context, snapshot) {
-              final data = snapshot.data ?? const GameMedia();
-              final game = widget.game;
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Row(
-                    children: [
-                      Expanded(child: Text(game.name, style: heading(32))),
-                      IconButton(
-                        tooltip: 'Close details',
-                        onPressed: () => Navigator.pop(context),
-                        icon: const Icon(Icons.close),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(height: 16),
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(22),
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: MediaQuery.sizeOf(context).height * .48,
-                      child:
-                          selected != null &&
-                              data.trailers.contains(selected) &&
-                              video != null
-                          ? Video(controller: video!)
-                          : GameArtwork(
-                              selected ??
-                                  (data.screenshots.isNotEmpty
-                                      ? data.screenshots.first
-                                      : data.artwork),
-                              name: game.name,
-                              fit: BoxFit.contain,
-                            ),
-                    ),
-                  ),
-                  if (snapshot.connectionState != ConnectionState.done)
-                    const LinearProgressIndicator(),
-                  if (playbackError != null)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Text(
-                        playbackError!,
-                        style: const TextStyle(color: Colors.orangeAccent),
-                      ),
-                    ),
-                  if (data.screenshots.isNotEmpty ||
-                      data.trailers.isNotEmpty) ...[
-                    const SizedBox(height: 14),
-                    SizedBox(
-                      height: 90,
-                      child: ListView(
-                        scrollDirection: Axis.horizontal,
+  Widget build(BuildContext context) => FutureBuilder<GameMedia>(
+    future: media,
+    builder: (context, snapshot) {
+      final data = snapshot.data ?? GameMedia(artwork: widget.cover);
+      final game = widget.game,
+          mobile = MediaQuery.sizeOf(context).width <= 700;
+      final reduced = widget.state.reduced || MotionSettings.of(context);
+      final all = entries(data), selectedUrl = current(data);
+      final index = all.indexOf(selectedUrl);
+      final isVideo = data.trailers.contains(selectedUrl) && video != null;
+      return CallbackShortcuts(
+        bindings: {
+          const SingleActivator(LogicalKeyboardKey.escape): () =>
+              Navigator.pop(context),
+          const SingleActivator(LogicalKeyboardKey.arrowLeft): () =>
+              move(data, -1),
+          const SingleActivator(LogicalKeyboardKey.arrowRight): () =>
+              move(data, 1),
+        },
+        child: Focus(
+          autofocus: true,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SafeArea(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(mobile ? 12 : 24),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1080),
+                    child: Glass(
+                      radius: panelRadius(mobile),
+                      child: Column(
                         children: [
-                          for (int i = 0; i < data.trailers.length; i++)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: SizedBox(
-                                width: 150,
-                                child: InkWell(
-                                  onTap: () => play(data.trailers[i]),
-                                  child: Stack(
-                                    fit: StackFit.expand,
-                                    children: [
-                                      GameArtwork(
-                                        i < data.trailerThumbnails.length
-                                            ? data.trailerThumbnails[i]
-                                            : data.artwork,
-                                        name: '${game.name} trailer ${i + 1}',
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: mobile ? 18 : 28,
+                              vertical: mobile ? 18 : 22,
+                            ),
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment.topCenter,
+                                end: Alignment.bottomCenter,
+                                colors: [Color(0xde111014), Color(0x33111014)],
+                              ),
+                              border: Border(
+                                bottom: BorderSide(color: Color(0x18ffffff)),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Pill(
+                                  'Back',
+                                  backStyle: true,
+                                  icon: Icons.arrow_back,
+                                  iconFirst: true,
+                                  height: 44,
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                const SizedBox(width: 20),
+                                Expanded(child: Eyebrow(game.source)),
+                                Pill(
+                                  'Close details',
+                                  iconOnly: true,
+                                  icon: Icons.close,
+                                  height: 44,
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Expanded(
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: EdgeInsets.all(mobile ? 20 : 36),
+                                child: Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: [
+                                    ListenableBuilder(
+                                      listenable: widget.library,
+                                      builder: (_, _) => Eyebrow(
+                                        widget.library.isRunning(game)
+                                            ? 'Playing now'
+                                            : 'Installed',
                                       ),
-                                      Container(
-                                        color: Colors.black.withValues(
-                                          alpha: .35,
+                                    ),
+                                    const SizedBox(height: 12),
+                                    Text(
+                                      game.name,
+                                      style: heading(
+                                        mobile ? 38 : 56,
+                                      ).copyWith(height: 1.1),
+                                    ),
+                                    const SizedBox(height: 24),
+                                    ArtworkHero(
+                                      tag: widget.heroTag,
+                                      image: '',
+                                      state: widget.state,
+                                      artwork: GameArtwork(
+                                        widget.cover.isEmpty
+                                            ? data.artwork
+                                            : widget.cover,
+                                        name: game.name,
+                                      ),
+                                      child: ClipRSuperellipse(
+                                        borderRadius: BorderRadius.circular(
+                                          surfaceRadius,
+                                        ),
+                                        child: SizedBox(
+                                          height:
+                                              MediaQuery.sizeOf(
+                                                context,
+                                              ).height *
+                                              .48,
+                                          child: ColoredBox(
+                                            color: canvas,
+                                            child: AnimatedSwitcher(
+                                              duration: Duration(
+                                                milliseconds: reduced ? 0 : 300,
+                                              ),
+                                              switchInCurve: ryhzeEase,
+                                              child: isVideo
+                                                  ? Video(
+                                                      key: const ValueKey(
+                                                        'trailer',
+                                                      ),
+                                                      controller: video!,
+                                                    )
+                                                  : SizedBox.expand(
+                                                      key: ValueKey(
+                                                        selectedUrl,
+                                                      ),
+                                                      child: GameArtwork(
+                                                        selectedUrl,
+                                                        name: game.name,
+                                                        fit: BoxFit.contain,
+                                                      ),
+                                                    ),
+                                            ),
+                                          ),
                                         ),
                                       ),
-                                      Center(
-                                        child: Column(
-                                          mainAxisSize: MainAxisSize.min,
-                                          children: [
-                                            const Icon(Icons.play_circle),
-                                            Text(
-                                              'Trailer ${i + 1}',
+                                    ),
+                                    if (snapshot.connectionState !=
+                                        ConnectionState.done)
+                                      const LinearProgressIndicator(),
+                                    if (all.isNotEmpty) ...[
+                                      const SizedBox(height: 14),
+                                      Row(
+                                        children: [
+                                          Pill(
+                                            'Previous image or trailer',
+                                            iconOnly: true,
+                                            icon: Icons.arrow_back,
+                                            height: 44,
+                                            onPressed: all.length > 1
+                                                ? () => move(data, -1)
+                                                : null,
+                                          ),
+                                          const SizedBox(width: 16),
+                                          Expanded(
+                                            child: Text(
+                                              '${index < 0 ? 1 : index + 1} / ${all.length}',
+                                              textAlign: TextAlign.center,
                                               style: const TextStyle(
+                                                color: muted,
                                                 fontSize: 12,
                                               ),
                                             ),
-                                          ],
+                                          ),
+                                          Pill(
+                                            'Next image or trailer',
+                                            iconOnly: true,
+                                            icon: Icons.arrow_forward,
+                                            height: 44,
+                                            onPressed: all.length > 1
+                                                ? () => move(data, 1)
+                                                : null,
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 12),
+                                      SizedBox(
+                                        height: 76,
+                                        child: ListView.separated(
+                                          controller: thumbnails,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: all.length,
+                                          separatorBuilder: (_, _) =>
+                                              const SizedBox(width: 10),
+                                          itemBuilder: (context, i) {
+                                            final trailer = data.trailers
+                                                .indexOf(all[i]);
+                                            final image = trailer >= 0
+                                                ? (trailer <
+                                                          data
+                                                              .trailerThumbnails
+                                                              .length
+                                                      ? data.trailerThumbnails[trailer]
+                                                      : data.artwork)
+                                                : all[i];
+                                            return SizedBox(
+                                              width: 120,
+                                              child: Tooltip(
+                                                message: trailer >= 0
+                                                    ? 'Trailer ${trailer + 1}'
+                                                    : all[i] == data.artwork
+                                                    ? 'Artwork'
+                                                    : 'Screenshot ${data.screenshots.indexOf(all[i]) + 1}',
+                                                child: AnimatedContainer(
+                                                  duration: Duration(
+                                                    milliseconds: reduced
+                                                        ? 0
+                                                        : 300,
+                                                  ),
+                                                  padding: const EdgeInsets.all(
+                                                    2,
+                                                  ),
+                                                  decoration: ShapeDecoration(
+                                                    shape: RoundedSuperellipseBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                            16,
+                                                          ),
+                                                      side: BorderSide(
+                                                        color:
+                                                            all[i] ==
+                                                                selectedUrl
+                                                            ? Colors.white
+                                                            : const Color(
+                                                                0x22ffffff,
+                                                              ),
+                                                        width: 2,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  child: ClipRSuperellipse(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                          14,
+                                                        ),
+                                                    child: InkWell(
+                                                      onTap: () =>
+                                                          choose(data, all[i]),
+                                                      child: Stack(
+                                                        fit: StackFit.expand,
+                                                        children: [
+                                                          GameArtwork(
+                                                            image,
+                                                            name: game.name,
+                                                          ),
+                                                          if (trailer >= 0) ...[
+                                                            Container(
+                                                              color: Colors
+                                                                  .black
+                                                                  .withValues(
+                                                                    alpha: .35,
+                                                                  ),
+                                                            ),
+                                                            Center(
+                                                              child: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  const Icon(
+                                                                    Icons
+                                                                        .play_circle,
+                                                                  ),
+                                                                  Text(
+                                                                    'Trailer ${trailer + 1}',
+                                                                    style: const TextStyle(
+                                                                      fontSize:
+                                                                          11,
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          },
                                         ),
                                       ),
                                     ],
-                                  ),
+                                    if (playbackError != null)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12),
+                                        child: Text(
+                                          playbackError!,
+                                          style: const TextStyle(
+                                            color: Colors.orangeAccent,
+                                          ),
+                                        ),
+                                      ),
+                                    const SizedBox(height: 24),
+                                    GameControls(
+                                      game: game,
+                                      library: widget.library,
+                                    ),
+                                    const SizedBox(height: 20),
+                                    ListenableBuilder(
+                                      listenable: widget.library,
+                                      builder: (_, _) => Text(
+                                        lastPlayedText(game),
+                                        style: const TextStyle(
+                                          color: muted,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(height: 20),
+                                    if (data.description.isNotEmpty)
+                                      Text(data.description),
+                                    if (snapshot.connectionState ==
+                                            ConnectionState.done &&
+                                        all.isEmpty)
+                                      const Text(
+                                        'An official gallery is not available here yet. View the original store, or add the exact Steam app ID for a manually added game.',
+                                      ),
+                                    if (data.source.isNotEmpty)
+                                      Padding(
+                                        padding: const EdgeInsets.only(top: 12),
+                                        child: Text(
+                                          'Artwork and footage: ${data.source}. Media belongs to its respective publishers.',
+                                          style: const TextStyle(
+                                            color: muted,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                      ),
+                                    const SizedBox(height: 24),
+                                    Wrap(
+                                      spacing: 12,
+                                      runSpacing: 12,
+                                      children: [
+                                        if (data.store.isNotEmpty)
+                                          Pill(
+                                            'Official store',
+                                            icon: Icons.open_in_new,
+                                            onPressed: () => attempt(
+                                              context,
+                                              () async {
+                                                if (!await launchUrl(
+                                                  Uri.parse(data.store),
+                                                  mode: LaunchMode
+                                                      .externalApplication,
+                                                )) {
+                                                  throw StateError(
+                                                    'The store could not open.',
+                                                  );
+                                                }
+                                              },
+                                            ),
+                                          ),
+                                        Pill(
+                                          'Refresh media',
+                                          icon: Icons.refresh,
+                                          onPressed: () {
+                                            widget.media.retry(game);
+                                            player?.pause();
+                                            setState(() {
+                                              selected = null;
+                                              media = widget.media.load(game);
+                                            });
+                                          },
+                                        ),
+                                        Pill(
+                                          'Edit game',
+                                          icon: Icons.edit_outlined,
+                                          onPressed: () async {
+                                            await player?.pause();
+                                            if (!context.mounted) return;
+                                            await editLocalGame(
+                                              context,
+                                              widget.library,
+                                              game,
+                                            );
+                                            if (context.mounted) {
+                                              Navigator.pop(context);
+                                            }
+                                          },
+                                        ),
+                                        Pill(
+                                          'Remove from Ryhze',
+                                          icon: Icons.remove_circle_outline,
+                                          onPressed: () => attempt(
+                                            context,
+                                            () async {
+                                              await widget.library.remove(game);
+                                              if (context.mounted) {
+                                                Navigator.pop(context);
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    const SizedBox(height: 18),
+                                    SelectableText(
+                                      'Installed in: ${game.root}',
+                                      style: const TextStyle(
+                                        color: muted,
+                                        fontSize: 12,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ),
-                          for (int i = 0; i < data.screenshots.length; i++)
-                            Padding(
-                              padding: const EdgeInsets.only(right: 10),
-                              child: SizedBox(
-                                width: 150,
-                                child: InkWell(
-                                  onTap: () {
-                                    player?.pause();
-                                    setState(() {
-                                      selected = data.screenshots[i];
-                                      playbackError = null;
-                                    });
-                                  },
-                                  child: GameArtwork(
-                                    data.screenshots[i],
-                                    name: '${game.name} screenshot ${i + 1}',
-                                  ),
-                                ),
-                              ),
-                            ),
+                          ),
                         ],
                       ),
                     ),
-                  ],
-                  const SizedBox(height: 24),
-                  GameControls(game: game, library: widget.library),
-                  const SizedBox(height: 20),
-                  if (data.description.isNotEmpty) Text(data.description),
-                  if (snapshot.connectionState == ConnectionState.done &&
-                      data.artwork.isEmpty)
-                    const Text(
-                      'An official gallery is not available here yet. View the original store, or add the exact Steam app ID when editing a manually added game.',
-                    ),
-                  if (data.source.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 12),
-                      child: Text(
-                        'Artwork and footage: ${data.source}. Media belongs to its respective publishers.',
-                        style: const TextStyle(color: muted, fontSize: 12),
-                      ),
-                    ),
-                  const SizedBox(height: 18),
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: [
-                      if (data.store.isNotEmpty)
-                        Pill(
-                          'Official store',
-                          icon: Icons.open_in_new,
-                          onPressed: () => attempt(context, () async {
-                            if (!await launchUrl(
-                              Uri.parse(data.store),
-                              mode: LaunchMode.externalApplication,
-                            )) {
-                              throw StateError('The store could not open.');
-                            }
-                          }),
-                        ),
-                      Pill(
-                        'Refresh media',
-                        icon: Icons.refresh,
-                        onPressed: () {
-                          widget.media.retry(game);
-                          setState(() {
-                            media = widget.media.load(game);
-                          });
-                        },
-                      ),
-                      Pill(
-                        'Edit game',
-                        icon: Icons.edit_outlined,
-                        onPressed: () async {
-                          player?.pause();
-                          Navigator.pop(context);
-                          await editLocalGame(context, widget.library, game);
-                        },
-                      ),
-                      Pill(
-                        'Remove from Ryhze',
-                        icon: Icons.remove_circle_outline,
-                        onPressed: () => attempt(context, () async {
-                          await widget.library.remove(game);
-                          if (context.mounted) Navigator.pop(context);
-                        }),
-                      ),
-                    ],
                   ),
-                  const SizedBox(height: 18),
-                  SelectableText(
-                    'Installed in: ${game.root}',
-                    style: const TextStyle(color: muted, fontSize: 12),
-                  ),
-                ],
-              );
-            },
+                ),
+              ),
+            ),
           ),
         ),
-      ),
-    ),
+      );
+    },
   );
 }

@@ -1,3 +1,11 @@
+# Ryhze 1.1.2
+
+- Removes the separate Discover / Installed games navigation. Installed games is now a category in the main Games catalogue, alongside the existing categories.
+- Installed titles use the same artwork cards, typography, footer layout, hover lift, focus effects, smooth corners and artwork transitions as other Ryhze games.
+- Expanded galleries add previous/next arrow buttons, left/right keyboard navigation, a media counter, and an animated thumbnail selection. Escape closes the view.
+- Library setup, discovery, folder selection and preferences remain available under Manage games. Start, Resume, Close game and last-played tracking are preserved.
+- Respects reduced-motion preferences and pauses background music while viewing installed-game media.
+
 # Ryhze 1.1.1
 
 - Pauses background music while an installed game's footage/detail view is open, and restores the user's sound preference on return.

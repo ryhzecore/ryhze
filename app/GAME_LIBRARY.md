@@ -1,6 +1,6 @@
-# Windows game library — 1.1.0 (8)
+# Windows game library - 1.1.2 (10)
 
-Games now includes Discover and Installed games. Discover retains the existing catalogue and design. The first launch of this version asks for permission before reading launcher installation records or game activity. Declining is remembered; Installed games allows the user to enable it later.
+Games contains one shared catalogue. Installed games is a category in its Category filter, alongside All games and the existing catalogue genres. Local titles use RyhzeTitleCard and ArtworkHero directly, including the artwork overlay, footer, hover/focus effects and reduced-motion preference. Manage games contains permission setup, scanning, manual paths and preferences. The first launch asks for permission before reading installation records or game activity; declining is remembered.
 
 Automatic discovery reads Steam's registered installation and libraryfolders.vdf, then installed app manifests on all configured volumes. Epic's installed .item manifests supply game and launcher identities. Riot's associated-client records locate installed Valorant; it launches using Riot Client's required product arguments. Missing volumes, invalid manifests and incomplete Epic installs do not prevent other games appearing. Users can add additional Steam library folders and manually select game executables using the Windows file chooser or a full path. Shared launcher executables are rejected as manually tracked games.
 

@@ -7,12 +7,14 @@ class ArtworkHero extends StatelessWidget {
   final String tag, image;
   final RyhzeState state;
   final Widget child;
+  final Widget? artwork;
   const ArtworkHero({
     super.key,
     required this.tag,
     required this.image,
     required this.state,
     required this.child,
+    this.artwork,
   });
   @override
   Widget build(BuildContext context) => HeroMode(
@@ -24,7 +26,10 @@ class ArtworkHero extends StatelessWidget {
           ClipRSuperellipse(
             key: ValueKey('artwork-flight-$tag'),
             borderRadius: BorderRadius.circular(surfaceRadius),
-            child: ColoredBox(color: canvas, child: TitleArt(image, state)),
+            child: ColoredBox(
+              color: canvas,
+              child: artwork ?? TitleArt(image, state),
+            ),
           ),
       child: child,
     ),

@@ -33,7 +33,7 @@ class RyhzeShell extends StatefulWidget {
 
 class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   String page = 'games';
-  bool installedGames = false;
+  String gameCategory = 'All games';
   GameMediaStore? gameMedia;
   final scroll = ScrollController();
   Player? ambient;
@@ -320,7 +320,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) => ListenableBuilder(
-    listenable: state,
+    listenable: Listenable.merge([state, widget.gameLibrary]),
     builder: (_, _) => CallbackShortcuts(
       bindings: {
         const SingleActivator(LogicalKeyboardKey.keyK, control: true): search,
@@ -521,54 +521,25 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     ),
   );
   Widget library(double width, double gutter, double height) {
-    final pcLibrary = widget.gameLibrary;
-    if (page == 'games' && pcLibrary != null) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(height: 24),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: gutter),
-            child: Wrap(
-              spacing: 12,
-              runSpacing: 12,
-              children: [
-                Pill(
-                  'Discover',
-                  primary: !installedGames,
-                  onPressed: () => setState(() => installedGames = false),
-                ),
-                Pill(
-                  'Installed games',
-                  primary: installedGames,
-                  icon: Icons.sports_esports_outlined,
-                  onPressed: () => setState(() => installedGames = true),
-                ),
-              ],
-            ),
-          ),
-          if (installedGames)
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: gutter),
-              child: InstalledGamesPage(
-                library: pcLibrary,
-                media: gameMedia!,
-                onDetailsChanged: (open) {
-                  if (!mounted) return;
-                  setState(() => detailOpen = open);
-                  unawaited(syncAudio());
-                },
-              ),
-            )
-          else
-            catalogueLibrary(width, gutter, height),
-        ],
-      );
-    }
     return catalogueLibrary(width, gutter, height);
   }
 
   Widget catalogueLibrary(double width, double gutter, double height) {
+    final isGames = page == 'games';
+    final categories = {
+      'All games',
+      'Installed games',
+      for (final t in state.titles.where((t) => t.isGame)) ...t.categories,
+    }.toList();
+    final category = categories.contains(gameCategory)
+        ? gameCategory
+        : 'All games';
+    final local =
+        isGames &&
+            widget.gameLibrary?.permission == true &&
+            (category == 'All games' || category == 'Installed games')
+        ? widget.gameLibrary!.sorted
+        : <LocalGame>[];
     final items = state.titles
         .where(
           (t) => page == 'saved'
@@ -579,6 +550,13 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
         )
         .toList();
     final hero = items.isEmpty ? null : items.first;
+    if (isGames && category != 'All games') {
+      items.removeWhere(
+        (t) =>
+            category == 'Installed games' || !t.categories.contains(category),
+      );
+    }
+    final count = items.length + local.length;
     final personal = page == 'saved' || page == 'history';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -621,12 +599,62 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                     ),
                   ),
                   Text(
-                    '${items.length.toString().padLeft(2, '0')} ${items.length == 1 ? 'title' : 'titles'}',
+                    '${count.toString().padLeft(2, '0')} ${count == 1 ? 'title' : 'titles'}',
                     style: const TextStyle(fontSize: 10, color: muted),
                   ),
                 ],
               ),
               const SizedBox(height: 30),
+              if (isGames && widget.gameLibrary != null) ...[
+                Row(
+                  children: [
+                    Expanded(
+                      child: Align(
+                        alignment: Alignment.centerLeft,
+                        child: SizedBox(
+                          width: 250,
+                          child: DropdownButtonFormField<String>(
+                            key: ValueKey(category),
+                            initialValue: category,
+                            decoration: const InputDecoration(
+                              labelText: 'Category',
+                            ),
+                            isExpanded: true,
+                            items: [
+                              for (final category in categories)
+                                DropdownMenuItem(
+                                  value: category,
+                                  child: Text(category),
+                                ),
+                            ],
+                            onChanged: (value) {
+                              if (value != null) {
+                                setState(() => gameCategory = value);
+                              }
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    GameLibraryTools(library: widget.gameLibrary!),
+                  ],
+                ),
+                if (widget.gameLibrary!.scanning)
+                  const Padding(
+                    padding: EdgeInsets.only(top: 16),
+                    child: LinearProgressIndicator(),
+                  ),
+                if (widget.gameLibrary!.error != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 16),
+                    child: Text(
+                      widget.gameLibrary!.error!,
+                      style: const TextStyle(color: Colors.orangeAccent),
+                    ),
+                  ),
+                const SizedBox(height: 28),
+              ],
               if (state.error != null)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 24),
@@ -653,7 +681,23 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                   'Sign in',
                   () => navigate('login'),
                 )
-              else if (items.isEmpty)
+              else if (isGames && widget.gameLibrary != null && count == 0)
+                empty(
+                  'No games in this category.',
+                  widget.gameLibrary?.permission == true
+                      ? 'Use Manage games to find installations or add a game path.'
+                      : 'Allow discovery to include games installed on this PC.',
+                  widget.gameLibrary?.permission == true
+                      ? 'Add a game'
+                      : 'Set up my games',
+                  () => attempt(
+                    context,
+                    () => widget.gameLibrary?.permission == true
+                        ? editLocalGame(context, widget.gameLibrary!)
+                        : gamePermission(context, widget.gameLibrary!),
+                  ),
+                )
+              else if (items.isEmpty && local.isEmpty)
                 empty(
                   personal
                       ? 'Make room for your favourites.'
@@ -683,6 +727,23 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                       children: [
                         for (final title in items)
                           SizedBox(width: cardWidth, child: titleCard(title)),
+                        for (final game in local)
+                          SizedBox(
+                            width: cardWidth,
+                            child: LocalGameCard(
+                              key: ValueKey(game.id),
+                              game: game,
+                              library: widget.gameLibrary!,
+                              media: gameMedia!,
+                              state: state,
+                              previewAllowed: !detailOpen && !overlayOpen,
+                              onDetailsChanged: (open) {
+                                if (!mounted) return;
+                                setState(() => detailOpen = open);
+                                unawaited(syncAudio());
+                              },
+                            ),
+                          ),
                       ],
                     );
                   },

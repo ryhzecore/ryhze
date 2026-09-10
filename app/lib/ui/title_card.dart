@@ -11,6 +11,7 @@ class RyhzeTitleCard extends StatefulWidget {
   final VoidCallback onOpen, onSave;
   final bool previewAllowed;
   final double? progress;
+  final Widget? artwork, trailingAction;
   const RyhzeTitleCard({
     super.key,
     required this.title,
@@ -19,6 +20,8 @@ class RyhzeTitleCard extends StatefulWidget {
     required this.onSave,
     this.previewAllowed = true,
     this.progress,
+    this.artwork,
+    this.trailingAction,
   });
   @override
   State<RyhzeTitleCard> createState() => _RyhzeTitleCardState();
@@ -95,6 +98,7 @@ class _RyhzeTitleCardState extends State<RyhzeTitleCard> {
                         tag: 'card-${title.id}',
                         image: title.image,
                         state: widget.state,
+                        artwork: widget.artwork,
                         child: Container(
                           decoration: ShapeDecoration(
                             shape: RoundedSuperellipseBorder(
@@ -120,11 +124,13 @@ class _RyhzeTitleCardState extends State<RyhzeTitleCard> {
                                       milliseconds: reduced ? 0 : 1200,
                                     ),
                                     curve: ryhzeEase,
-                                    child: ArtworkPreview(
-                                      title: title,
-                                      state: widget.state,
-                                      active: active && !reduced,
-                                    ),
+                                    child:
+                                        widget.artwork ??
+                                        ArtworkPreview(
+                                          title: title,
+                                          state: widget.state,
+                                          active: active && !reduced,
+                                        ),
                                   ),
                                   const IgnorePointer(
                                     child: DecoratedBox(
@@ -254,18 +260,19 @@ class _RyhzeTitleCardState extends State<RyhzeTitleCard> {
                     ),
                   ),
                   const SizedBox(width: 12),
-                  Pill(
-                    widget.state.saved.contains(title.id)
-                        ? 'Remove from My List'
-                        : 'Add to My List',
-                    iconOnly: true,
-                    quiet: true,
-                    height: 44,
-                    icon: widget.state.saved.contains(title.id)
-                        ? Icons.check
-                        : Icons.add,
-                    onPressed: widget.onSave,
-                  ),
+                  widget.trailingAction ??
+                      Pill(
+                        widget.state.saved.contains(title.id)
+                            ? 'Remove from My List'
+                            : 'Add to My List',
+                        iconOnly: true,
+                        quiet: true,
+                        height: 44,
+                        icon: widget.state.saved.contains(title.id)
+                            ? Icons.check
+                            : Icons.add,
+                        onPressed: widget.onSave,
+                      ),
                 ],
               ),
             ),
