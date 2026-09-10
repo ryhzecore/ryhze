@@ -13,17 +13,28 @@ import 'title_card.dart';
 import 'studio.dart';
 import 'artwork_hero.dart';
 import 'home.dart';
+import '../core/game_library.dart';
+import '../core/game_media.dart';
+import 'game_library.dart';
 
 class RyhzeShell extends StatefulWidget {
   final RyhzeState state;
   final AppUpdates? updates;
-  const RyhzeShell({super.key, required this.state, this.updates});
+  final GameLibrary? gameLibrary;
+  const RyhzeShell({
+    super.key,
+    required this.state,
+    this.updates,
+    this.gameLibrary,
+  });
   @override
   State<RyhzeShell> createState() => _RyhzeShellState();
 }
 
 class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   String page = 'games';
+  bool installedGames = false;
+  GameMediaStore? gameMedia;
   final scroll = ScrollController();
   Player? ambient;
   bool active = true, detailOpen = false, overlayOpen = false;
@@ -34,6 +45,16 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     state.addListener(changed);
+    final library = widget.gameLibrary;
+    if (library != null) {
+      gameMedia = GameMediaStore(state.prefs);
+      library.start();
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (mounted && library.permission == null) {
+          await attempt(context, () => gamePermission(context, library));
+        }
+      });
+    }
   }
 
   void changed() {
@@ -86,6 +107,8 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
     scroll.dispose();
     ambient?.dispose();
+    widget.gameLibrary?.dispose();
+    gameMedia?.dispose();
     super.dispose();
   }
 
@@ -498,6 +521,46 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     ),
   );
   Widget library(double width, double gutter, double height) {
+    final pcLibrary = widget.gameLibrary;
+    if (page == 'games' && pcLibrary != null) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 24),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: gutter),
+            child: Wrap(
+              spacing: 12,
+              runSpacing: 12,
+              children: [
+                Pill(
+                  'Discover',
+                  primary: !installedGames,
+                  onPressed: () => setState(() => installedGames = false),
+                ),
+                Pill(
+                  'Installed games',
+                  primary: installedGames,
+                  icon: Icons.sports_esports_outlined,
+                  onPressed: () => setState(() => installedGames = true),
+                ),
+              ],
+            ),
+          ),
+          if (installedGames)
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: gutter),
+              child: InstalledGamesPage(library: pcLibrary, media: gameMedia!),
+            )
+          else
+            catalogueLibrary(width, gutter, height),
+        ],
+      );
+    }
+    return catalogueLibrary(width, gutter, height);
+  }
+
+  Widget catalogueLibrary(double width, double gutter, double height) {
     final items = state.titles
         .where(
           (t) => page == 'saved'

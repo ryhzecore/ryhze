@@ -1,3 +1,12 @@
+# Ryhze 1.1.0
+
+- Windows adds Installed games under Games, with an explicit permission choice before discovery and process activity checks.
+- Discovers Steam libraries across configured drives, Epic installations and Valorant. Other games can be added by executable path; Steam folders can be added manually.
+- Start, Resume, Close game and confirmed Force stop use detected game processes, with full executable/creation-time validation before controlling a process.
+- Paths and last-played history persist locally; tracking can be disabled and history cleared.
+- Expanded game views show official artwork, all available Steam screenshots and trailers, with original-store links and clear media availability states.
+- Android remains on the shared version; Windows game discovery/control is not exposed on phones.
+
 # Ryhze 1.0.6
 
 - Matches the Website task's current corner hierarchy: 32px smooth surfaces, 28px popovers, 44px desktop and 36px mobile detail sheets, capsule buttons and circular icons.

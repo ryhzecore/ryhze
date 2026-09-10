@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'core/api.dart';
 import 'core/state.dart';
 import 'core/updates.dart';
+import 'core/game_library.dart';
 import 'ui/design.dart';
 import 'ui/shell.dart';
 
@@ -13,7 +14,13 @@ Future<void> main() async {
   final prefs = await SharedPreferences.getInstance();
   final state = RyhzeState(RyhzeApi(), prefs);
   final updates = AppUpdates();
-  runApp(RyhzeApp(state: state, updates: updates));
+  runApp(
+    RyhzeApp(
+      state: state,
+      updates: updates,
+      gameLibrary: GameLibrary.supported ? GameLibrary(prefs) : null,
+    ),
+  );
   updates.start();
   await state.initialize();
 }
@@ -21,7 +28,13 @@ Future<void> main() async {
 class RyhzeApp extends StatelessWidget {
   final RyhzeState state;
   final AppUpdates? updates;
-  const RyhzeApp({super.key, required this.state, this.updates});
+  final GameLibrary? gameLibrary;
+  const RyhzeApp({
+    super.key,
+    required this.state,
+    this.updates,
+    this.gameLibrary,
+  });
   @override
   Widget build(BuildContext context) => MaterialApp(
     title: 'Ryhze',
@@ -31,6 +44,6 @@ class RyhzeApp extends StatelessWidget {
       listenable: state,
       builder: (_, _) => MotionSettings(reduced: state.reduced, child: child!),
     ),
-    home: RyhzeShell(state: state, updates: updates),
+    home: RyhzeShell(state: state, updates: updates, gameLibrary: gameLibrary),
   );
 }

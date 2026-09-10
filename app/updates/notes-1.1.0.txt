@@ -1,0 +1,9 @@
+Windows: Your games, together in Ryhze.
+
+New Installed games category under Games, with a first-run permission choice.
+Find Steam and Epic installations across configured drives, plus installed Valorant through Riot Client. Add another Steam library folder or choose other game executables manually.
+Start games through their original launcher, see Playing now, resume their window, and close or force-stop detected game processes.
+Remember game paths and last-played history on this PC, including games started outside Ryhze while it is open. Turn tracking off or clear history at any time.
+Open a game for official artwork, screenshots and trailers available from Steam. Exact-title matches also provide Steam media for games installed elsewhere. Valorant uses the supplied official artwork. Open the original store when a gallery is unavailable.
+
+Android: Version alignment with the shared Ryhze release. PC game discovery and control are Windows-only.
