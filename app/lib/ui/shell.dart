@@ -550,7 +550,15 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
           if (installedGames)
             Padding(
               padding: EdgeInsets.symmetric(horizontal: gutter),
-              child: InstalledGamesPage(library: pcLibrary, media: gameMedia!),
+              child: InstalledGamesPage(
+                library: pcLibrary,
+                media: gameMedia!,
+                onDetailsChanged: (open) {
+                  if (!mounted) return;
+                  setState(() => detailOpen = open);
+                  unawaited(syncAudio());
+                },
+              ),
             )
           else
             catalogueLibrary(width, gutter, height),

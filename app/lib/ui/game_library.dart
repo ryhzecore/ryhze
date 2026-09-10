@@ -174,10 +174,12 @@ String lastPlayedText(LocalGame game) {
 class InstalledGamesPage extends StatefulWidget {
   final GameLibrary library;
   final GameMediaStore media;
+  final ValueChanged<bool>? onDetailsChanged;
   const InstalledGamesPage({
     super.key,
     required this.library,
     required this.media,
+    this.onDetailsChanged,
   });
   @override
   State<InstalledGamesPage> createState() => _InstalledGamesPageState();
@@ -394,6 +396,7 @@ class _InstalledGamesPageState extends State<InstalledGamesPage> {
                             game: game,
                             library: library,
                             media: widget.media,
+                            onDetailsChanged: widget.onDetailsChanged,
                           ),
                         ),
                     ],
@@ -417,10 +420,12 @@ class _GameCard extends StatelessWidget {
   final LocalGame game;
   final GameLibrary library;
   final GameMediaStore media;
+  final ValueChanged<bool>? onDetailsChanged;
   const _GameCard({
     required this.game,
     required this.library,
     required this.media,
+    this.onDetailsChanged,
   });
   @override
   Widget build(BuildContext context) => Glass(
@@ -430,11 +435,18 @@ class _GameCard extends StatelessWidget {
       children: [
         InkWell(
           borderRadius: BorderRadius.circular(surfaceRadius),
-          onTap: () => showDialog<void>(
-            context: context,
-            builder: (context) =>
-                LocalGameDetail(game: game, library: library, media: media),
-          ),
+          onTap: () async {
+            onDetailsChanged?.call(true);
+            try {
+              await showDialog<void>(
+                context: context,
+                builder: (context) =>
+                    LocalGameDetail(game: game, library: library, media: media),
+              );
+            } finally {
+              onDetailsChanged?.call(false);
+            }
+          },
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

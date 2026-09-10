@@ -59,6 +59,7 @@ void main() {
       );
       addTearDown(media.dispose);
       final key = GlobalKey();
+      bool detailsOpen = false;
       await tester.pumpWidget(
         MaterialApp(
           theme: ryhzeTheme(),
@@ -68,7 +69,11 @@ void main() {
               child: SingleChildScrollView(
                 child: Padding(
                   padding: const EdgeInsets.all(20),
-                  child: InstalledGamesPage(library: library, media: media),
+                  child: InstalledGamesPage(
+                    library: library,
+                    media: media,
+                    onDetailsChanged: (open) => detailsOpen = open,
+                  ),
                 ),
               ),
             ),
@@ -84,9 +89,11 @@ void main() {
       await tester.tap(find.text('Dota 2'));
       await tester.pumpAndSettle();
       expect(find.text('Official game details.'), findsOneWidget);
+      expect(detailsOpen, true);
       expect(tester.takeException(), isNull);
       await tester.tap(find.byTooltip('Close details'));
       await tester.pumpAndSettle();
+      expect(detailsOpen, false);
       await tester.enterText(find.byType(TextField).first, 'no-such-title');
       await tester.pumpAndSettle();
       expect(find.text('No games match your search.'), findsOneWidget);

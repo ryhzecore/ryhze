@@ -1,3 +1,8 @@
+# Ryhze 1.1.1
+
+- Pauses background music while an installed game's footage/detail view is open, and restores the user's sound preference on return.
+- Includes the complete Windows game library introduced in 1.1.0.
+
 # Ryhze 1.1.0
 
 - Windows adds Installed games under Games, with an explicit permission choice before discovery and process activity checks.
