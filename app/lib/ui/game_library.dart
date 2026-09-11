@@ -361,12 +361,14 @@ class LocalGameCard extends StatelessWidget {
             await Navigator.of(context).push(
               PageRouteBuilder<void>(
                 opaque: false,
+                barrierDismissible: true,
+                barrierLabel: 'Close game details',
                 barrierColor: Colors.black.withValues(alpha: .7),
                 transitionDuration: Duration(
-                  milliseconds: state.reduced ? 0 : 700,
+                  milliseconds: state.reduced ? 0 : 420,
                 ),
                 reverseTransitionDuration: Duration(
-                  milliseconds: state.reduced ? 0 : 700,
+                  milliseconds: state.reduced ? 0 : 420,
                 ),
                 pageBuilder: (_, _, _) => LocalGameDetail(
                   game: game,
@@ -462,11 +464,13 @@ class LocalGameCard extends StatelessWidget {
 class GameArtwork extends StatelessWidget {
   final String url, name;
   final BoxFit fit;
+  final bool thumbnail;
   const GameArtwork(
     this.url, {
     super.key,
     required this.name,
     this.fit = BoxFit.cover,
+    this.thumbnail = false,
   });
   Widget fallback() => Container(
     decoration: const BoxDecoration(
@@ -487,6 +491,12 @@ class GameArtwork extends StatelessWidget {
       ? fallback()
       : Image.network(
           url,
+          cacheWidth: thumbnail
+              ? (120 * MediaQuery.devicePixelRatioOf(context)).ceil().clamp(
+                  120,
+                  480,
+                )
+              : null,
           fit: fit,
           semanticLabel: '$name official artwork',
           errorBuilder: (_, _, _) => fallback(),
@@ -723,7 +733,7 @@ class _LocalGameDetailState extends State<LocalGameDetail>
                     constraints: const BoxConstraints(maxWidth: 1080),
                     child: Glass(
                       radius: panelRadius(mobile),
-                      frameVisible: !GameFrameMotion.of(context),
+                      frameVisible: !GameFrameMotion.ownsFrame(context),
                       child: Column(
                         children: [
                           Container(
@@ -943,6 +953,7 @@ class _LocalGameDetailState extends State<LocalGameDetail>
                                                           GameArtwork(
                                                             image,
                                                             name: game.name,
+                                                            thumbnail: true,
                                                           ),
                                                           if (trailer >= 0) ...[
                                                             Container(

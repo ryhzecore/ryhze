@@ -8,22 +8,8 @@ import 'package:path_provider/path_provider.dart';
 import '../core/state.dart';
 import '../core/updates.dart';
 import 'design.dart';
-
-Future<Map<String, dynamic>?> raceInstallation() async {
-  if (!Platform.isWindows) return null;
-  final result = await Process.run('powershell.exe', [
-    '-NoProfile',
-    '-NonInteractive',
-    '-Command',
-    r"$r=Get-ItemProperty -LiteralPath 'HKCU:\Software\RACE' -ErrorAction SilentlyContinue; if($r){ @{path=$r.InstallDir;version=$r.Version;build=$r.Build}|ConvertTo-Json -Compress }",
-  ]);
-  final output = '${result.stdout}'.trim();
-  if (output.isEmpty) return null;
-  final value = jsonDecode(output) as Map<String, dynamic>;
-  final executable = '${value['path']}\\race_editor.exe';
-  if (!await File(executable).exists()) return null;
-  return {...value, 'executable': executable};
-}
+import '../core/race_installation.dart';
+export '../core/race_installation.dart' show raceInstallation;
 
 class InstalledEngineCard extends StatefulWidget {
   final RyhzeState state;
@@ -37,34 +23,83 @@ class InstalledEngineCard extends StatefulWidget {
   State<InstalledEngineCard> createState() => _InstalledEngineCardState();
 }
 
-class _InstalledEngineCardState extends State<InstalledEngineCard> {
-  late final installation = raceInstallation();
+class _InstalledEngineCardState extends State<InstalledEngineCard>
+    with WidgetsBindingObserver {
+  late Future<Map<String, dynamic>?> installation;
+  Timer? refreshTimer;
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    installation = raceInstallation(
+      directory: widget.state.prefs.getString(raceDirectoryKey),
+    );
+    refreshTimer = Timer.periodic(
+      const Duration(seconds: 15),
+      (_) => refresh(),
+    );
+  }
+
+  void refresh() {
+    if (!mounted || widget.state.user?.launcherAdmin != true) return;
+    setState(() {
+      installation = raceInstallation(
+        directory: widget.state.prefs.getString(raceDirectoryKey),
+      );
+    });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState value) {
+    if (value == AppLifecycleState.resumed) refresh();
+  }
+
+  @override
+  void dispose() {
+    refreshTimer?.cancel();
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) => FutureBuilder(
     future: installation,
     builder: (context, snapshot) {
-      if (widget.state.user?.launcherAdmin != true || snapshot.data == null) {
+      if (widget.state.user?.launcherAdmin != true) {
         return const SizedBox.shrink();
       }
       return Padding(
         padding: const EdgeInsets.only(bottom: 28),
         child: Glass(
           padding: const EdgeInsets.all(24),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Icon(Icons.view_in_ar_outlined, size: 32),
-              const SizedBox(width: 20),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('RACE', style: heading(28)),
-                    Text('Installed · ${snapshot.data!['version']}'),
-                  ],
-                ),
+              Row(
+                children: [
+                  const Icon(Icons.view_in_ar_outlined, size: 32),
+                  const SizedBox(width: 20),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('RACE', style: heading(28)),
+                        Text(
+                          snapshot.data != null
+                              ? 'Installed · ${snapshot.data!['version']}'
+                              : snapshot.connectionState ==
+                                    ConnectionState.waiting
+                              ? 'Checking this PC…'
+                              : 'Install or locate your engine',
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
+              const SizedBox(height: 16),
               Pill(
-                'Open engine',
+                snapshot.data != null ? 'Open engine' : 'Manage engine',
                 icon: Icons.arrow_forward,
                 onPressed: widget.onOpen,
               ),
@@ -84,7 +119,7 @@ class EnginePage extends StatefulWidget {
   State<EnginePage> createState() => _EnginePageState();
 }
 
-class _EnginePageState extends State<EnginePage> {
+class _EnginePageState extends State<EnginePage> with WidgetsBindingObserver {
   AppRelease? release;
   String? message, executable, installedVersion;
   int installedBuild = 0;
@@ -98,10 +133,16 @@ class _EnginePageState extends State<EnginePage> {
   void initState() {
     super.initState();
     widget.state.addListener(accountChanged);
+    WidgetsBinding.instance.addObserver(this);
     unawaited(check());
     timer = Timer.periodic(const Duration(hours: 6), (_) {
       if (!busy) unawaited(check());
     });
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState value) {
+    if (value == AppLifecycleState.resumed && !busy) unawaited(check());
   }
 
   void accountChanged() {
@@ -111,6 +152,7 @@ class _EnginePageState extends State<EnginePage> {
   @override
   void dispose() {
     widget.state.removeListener(accountChanged);
+    WidgetsBinding.instance.removeObserver(this);
     timer?.cancel();
     operation++;
     client?.close();
@@ -131,7 +173,9 @@ class _EnginePageState extends State<EnginePage> {
   }
 
   Future<void> installed() async {
-    final value = await raceInstallation();
+    final value = await raceInstallation(
+      directory: widget.state.prefs.getString(raceDirectoryKey),
+    );
     executable = value?['executable'] as String?;
     installedBuild = int.tryParse('${value?['build']}') ?? 0;
     installedVersion = value?['version'] as String?;
@@ -146,6 +190,8 @@ class _EnginePageState extends State<EnginePage> {
     });
     try {
       await installed();
+      if (generation != operation || !mounted || !allowed) return;
+      setState(() {});
       final data = await widget.state.api.request('/api/admin/race/manifest');
       if (generation != operation || !mounted || !allowed) return;
       if (data['available'] == false) {
@@ -260,8 +306,30 @@ class _EnginePageState extends State<EnginePage> {
     }
   }
 
+  Future<void> locate() async {
+    final selected = await raceChannel.invokeMethod<String>('pickExecutable');
+    if (selected == null || selected.isEmpty || !mounted || !allowed) return;
+    final value = await raceInstallation(directory: selected, strict: true);
+    if (value == null) {
+      throw StateError(
+        'Choose race_editor.exe from a complete RACE installation.',
+      );
+    }
+    await widget.state.prefs.setString(
+      raceDirectoryKey,
+      value['path'] as String,
+    );
+    if (mounted && allowed) {
+      setState(() {
+        executable = value['executable'] as String;
+        installedVersion = value['version'] as String;
+        installedBuild = (value['build'] as num?)?.toInt() ?? 0;
+      });
+    }
+  }
+
   Future<void> open() async {
-    if (!allowed || executable == null || busy) return;
+    if (!allowed || executable == null || downloading || installing) return;
     await widget.state.api.request('/api/admin/race/manifest');
     if (mounted && allowed) {
       await Process.start(
@@ -333,7 +401,9 @@ class _EnginePageState extends State<EnginePage> {
                   'Open RACE',
                   primary: true,
                   icon: Icons.arrow_forward,
-                  onPressed: busy ? null : () => attempt(context, open),
+                  onPressed: downloading || installing
+                      ? null
+                      : () => attempt(context, open),
                 ),
               if (Platform.isWindows && update)
                 Pill(
@@ -347,6 +417,14 @@ class _EnginePageState extends State<EnginePage> {
                 icon: Icons.refresh,
                 onPressed: busy ? null : check,
               ),
+              if (Platform.isWindows)
+                Pill(
+                  'Locate RACE',
+                  icon: Icons.folder_open,
+                  onPressed: downloading || installing
+                      ? null
+                      : () => attempt(context, locate),
+                ),
               if (downloading) Pill('Cancel download', onPressed: cancel),
             ],
           ),

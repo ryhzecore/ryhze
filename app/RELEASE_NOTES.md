@@ -1,3 +1,9 @@
+# Ryhze 1.1.5
+
+- Game details use one continuous frame from thumbnail expansion through the expanded view and back. The frame no longer changes surface at the end of the animation.
+- Faster 420ms game transitions, native smooth-corner clipping, cached panel painting, and thumbnail-sized gallery image decoding reduce transition work. Moving game frames no longer repeatedly blur the background.
+- RACE detection reads Windows directly and immediately shows local installations while online updates are checked separately. Admin Library entries stay visible, refresh on return, and provide a Locate RACE option for custom installation paths.
+
 # Ryhze 1.1.4
 
 - Engine content aligns with the shared left page margin. The footer stays at the bottom of short pages and scrolls naturally on smaller screens.

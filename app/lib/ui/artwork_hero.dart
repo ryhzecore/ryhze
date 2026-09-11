@@ -32,6 +32,8 @@ class GameFrameMotion extends InheritedWidget {
   static bool of(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<GameFrameMotion>()?.moving ??
       false;
+  static bool ownsFrame(BuildContext context) =>
+      context.dependOnInheritedWidgetOfExactType<GameFrameMotion>() != null;
   @override
   bool updateShouldNotify(GameFrameMotion old) => moving != old.moving;
 }
@@ -68,7 +70,7 @@ class GameFrameTransition extends StatelessWidget {
       );
       return AnimatedBuilder(
         animation: animation,
-        child: child,
+        child: RepaintBoundary(child: child),
         builder: (context, child) {
           final t = reduced || source == null
               ? 1.0
@@ -85,23 +87,17 @@ class GameFrameTransition extends StatelessWidget {
                 child: DecoratedBox(
                   key: const ValueKey('expanding-game-frame'),
                   decoration: ShapeDecoration(
-                    color: t == 1
-                        ? Colors.transparent
-                        : const Color(0xff111014),
+                    color: const Color(0xff111014),
                     shape: RoundedSuperellipseBorder(
                       borderRadius: radius,
-                      side: BorderSide(
-                        color: t == 1
-                            ? Colors.transparent
-                            : const Color(0x25ffffff),
-                      ),
+                      side: const BorderSide(color: Color(0x25ffffff)),
                     ),
                   ),
                 ),
               ),
-              ClipPath(
-                clipper: t == 1 ? null : _FrameClip(rect, radius),
-                clipBehavior: t == 1 ? Clip.none : Clip.antiAlias,
+              ClipRSuperellipse(
+                clipper: _FrameClip(rect, radius),
+                clipBehavior: Clip.antiAlias,
                 child: GameFrameMotion(moving: t != 1, child: child!),
               ),
             ],
@@ -112,13 +108,12 @@ class GameFrameTransition extends StatelessWidget {
   );
 }
 
-class _FrameClip extends CustomClipper<Path> {
+class _FrameClip extends CustomClipper<RSuperellipse> {
   final Rect rect;
   final BorderRadius radius;
   const _FrameClip(this.rect, this.radius);
   @override
-  Path getClip(Size size) =>
-      RoundedSuperellipseBorder(borderRadius: radius).getOuterPath(rect);
+  RSuperellipse getClip(Size size) => radius.toRSuperellipse(rect);
   @override
   bool shouldReclip(_FrameClip old) => rect != old.rect || radius != old.radius;
 }

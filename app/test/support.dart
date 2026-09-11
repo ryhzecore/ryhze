@@ -43,14 +43,16 @@ const gta = RyhzeTitle(
   image: '/art/gta-vi.png',
   availability: 'coming-soon',
 );
-Future<RyhzeState> fixtureState({Member? user}) async {
+Future<RyhzeState> fixtureState({Member? user, http.Client? client}) async {
   SharedPreferences.setMockInitialValues({});
   final state = RyhzeState(
     RyhzeApi(
-      client: MockClient(
-        (r) async =>
-            http.Response(jsonEncode({'error': 'Sign in required.'}), 401),
-      ),
+      client:
+          client ??
+          MockClient(
+            (r) async =>
+                http.Response(jsonEncode({'error': 'Sign in required.'}), 401),
+          ),
       store: MemorySession(),
     ),
     await SharedPreferences.getInstance(),

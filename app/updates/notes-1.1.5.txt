@@ -1,0 +1,1 @@
+Smoother game expansion with one continuous frame and no final frame switch. Reduced rendering work and faster transitions. RACE now uses native Windows detection, stays visible in admin Library, and can be located manually when installed in a custom folder. Local availability appears immediately while online updates are checked.

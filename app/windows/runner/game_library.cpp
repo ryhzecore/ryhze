@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include "game_library.h"
+#include "race_installation.h"
 
 namespace {
 using V = flutter::EncodableValue;
@@ -53,6 +54,10 @@ std::string Field(const M& args, const char* key) {
 std::unique_ptr<flutter::MethodChannel<V>> CreateGameLibrary(flutter::BinaryMessenger* messenger, HWND owner) {
   auto channel = std::make_unique<flutter::MethodChannel<V>>(messenger, "ryhze/game_library", &flutter::StandardMethodCodec::GetInstance());
   channel->SetMethodCallHandler([owner](const auto& call, auto result) {
+    if (call.method_name() == "raceInstallation") {
+      const auto* args = call.arguments() ? std::get_if<M>(call.arguments()) : nullptr;
+      result->Success(FindRaceInstallation(args ? Field(*args, "path") : "")); return;
+    }
     if (call.method_name() == "roots") {
       L steam;
       for (const auto& value : {

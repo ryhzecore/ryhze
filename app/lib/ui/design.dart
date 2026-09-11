@@ -117,6 +117,7 @@ class Glass extends StatelessWidget {
   Widget build(BuildContext context) => ClipRSuperellipse(
     borderRadius: BorderRadius.circular(radius),
     child: BackdropFilter(
+      enabled: frameVisible,
       filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
       child: Container(
         padding: padding,

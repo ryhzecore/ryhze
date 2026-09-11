@@ -47,6 +47,7 @@ class DetailPage extends StatelessWidget {
                         behavior: HitTestBehavior.opaque,
                         onTap: () => Navigator.pop(context),
                         child: BackdropFilter(
+                          enabled: !GameFrameMotion.ownsFrame(context),
                           filter: ImageFilter.blur(sigmaX: 14, sigmaY: 14),
                           child: const SizedBox.expand(),
                         ),
@@ -57,7 +58,7 @@ class DetailPage extends StatelessWidget {
                         margin: EdgeInsets.all(mobile ? 12 : 24),
                         constraints: const BoxConstraints(maxWidth: 1080),
                         decoration: ShapeDecoration(
-                          color: GameFrameMotion.of(context)
+                          color: GameFrameMotion.ownsFrame(context)
                               ? Colors.transparent
                               : const Color(0xd9111014),
                           shape: RoundedSuperellipseBorder(
@@ -65,7 +66,7 @@ class DetailPage extends StatelessWidget {
                               panelRadius(mobile),
                             ),
                             side: BorderSide(
-                              color: GameFrameMotion.of(context)
+                              color: GameFrameMotion.ownsFrame(context)
                                   ? Colors.transparent
                                   : const Color(0x25ffffff),
                             ),

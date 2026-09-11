@@ -32,6 +32,16 @@ void main() {
         ),
       );
       final originalState = field.currentState;
+      final originalFrame = tester.renderObject(
+        find.byKey(const ValueKey('expanding-game-frame')),
+      );
+      final originalDecoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.byKey(const ValueKey('expanding-game-frame')),
+                  )
+                  .decoration
+              as ShapeDecoration;
       Rect frame() =>
           tester.getRect(find.byKey(const ValueKey('expanding-game-frame')));
       expect(frame(), source);
@@ -48,6 +58,28 @@ void main() {
       await tester.pump();
       expect(frame(), target);
       expect(field.currentState, same(originalState));
+      expect(
+        tester.renderObject(find.byKey(const ValueKey('expanding-game-frame'))),
+        same(originalFrame),
+      );
+      final settledDecoration =
+          tester
+                  .widget<DecoratedBox>(
+                    find.byKey(const ValueKey('expanding-game-frame')),
+                  )
+                  .decoration
+              as ShapeDecoration;
+      expect(settledDecoration.color, originalDecoration.color);
+      expect(
+        (settledDecoration.shape as RoundedSuperellipseBorder).side,
+        (originalDecoration.shape as RoundedSuperellipseBorder).side,
+      );
+      expect(
+        tester
+            .widget<ClipRSuperellipse>(find.byType(ClipRSuperellipse).first)
+            .clipper,
+        isNotNull,
+      );
       controller.value = .5;
       await tester.pump();
       expect(frame(), Rect.lerp(source, target, ryhzeEase.transform(.5)));

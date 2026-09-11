@@ -134,10 +134,22 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     await Navigator.of(context).push(
       PageRouteBuilder<void>(
         opaque: false,
+        barrierDismissible: true,
+        barrierLabel: 'Close details',
         barrierColor: Colors.black.withValues(alpha: .7),
-        transitionDuration: Duration(milliseconds: state.reduced ? 0 : 700),
+        transitionDuration: Duration(
+          milliseconds: state.reduced
+              ? 0
+              : title.isGame
+              ? 420
+              : 700,
+        ),
         reverseTransitionDuration: Duration(
-          milliseconds: state.reduced ? 0 : 700,
+          milliseconds: state.reduced
+              ? 0
+              : title.isGame
+              ? 420
+              : 700,
         ),
         pageBuilder: (_, animation, secondary) => DetailPage(
           title: title,
