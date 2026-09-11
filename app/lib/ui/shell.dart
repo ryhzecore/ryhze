@@ -421,7 +421,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                   children: [
                     Container(
                       height: width <= 480
-                          ? 140
+                          ? 118
                           : mobile
                           ? 88
                           : 104,
@@ -438,58 +438,26 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                           bottom: BorderSide(color: Color(0x0cffffff)),
                         ),
                       ),
-                      child: Flex(
-                        direction: width <= 480
-                            ? Axis.vertical
-                            : Axis.horizontal,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Semantics(
-                                label: 'Ryhze home',
-                                button: true,
-                                child: InkWell(
-                                  onTap: () => navigate('home'),
-                                  borderRadius: BorderRadius.circular(8),
-                                  child: Image.asset(
-                                    mobile
-                                        ? 'assets/brand/symbol.png'
-                                        : 'assets/brand/wordmark.png',
-                                    width: mobile
-                                        ? (width <= 350 ? 34 : 40)
-                                        : 124,
-                                    height: mobile
-                                        ? (width <= 350 ? 34 : 40)
-                                        : null,
-                                  ),
-                                ),
+                      child: Builder(
+                        builder: (context) {
+                          final brand = Semantics(
+                            label: 'Ryhze home',
+                            button: true,
+                            child: InkWell(
+                              onTap: () => navigate('home'),
+                              borderRadius: BorderRadius.circular(8),
+                              child: Image.asset(
+                                mobile
+                                    ? 'assets/brand/symbol.png'
+                                    : 'assets/brand/wordmark.png',
+                                width: mobile ? (width <= 350 ? 34 : 40) : 124,
+                                height: mobile
+                                    ? (width <= 350 ? 34 : 40)
+                                    : null,
                               ),
-                              SizedBox(
-                                width: width <= 350
-                                    ? 6
-                                    : width <= 480
-                                    ? 10
-                                    : mobile
-                                    ? 15
-                                    : width <= 1000
-                                    ? 20
-                                    : 30,
-                              ),
-                              BrowseTabs(
-                                page: page,
-                                onChanged: navigate,
-                                engineAvailable:
-                                    state.user?.launcherAdmin == true,
-                              ),
-                            ],
-                          ),
-                          if (width > 480)
-                            const Spacer()
-                          else
-                            const SizedBox(height: 12),
-                          Row(
+                            ),
+                          );
+                          final actions = Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               if (width > 1000) ...[
@@ -551,8 +519,39 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                                 ),
                               ],
                             ],
-                          ),
-                        ],
+                          );
+                          final tabs = BrowseTabs(
+                            page: page,
+                            onChanged: navigate,
+                            engineAvailable: state.user?.launcherAdmin == true,
+                          );
+                          if (width <= 480) {
+                            return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(children: [brand, const Spacer(), actions]),
+                                const SizedBox(height: 10),
+                                tabs,
+                              ],
+                            );
+                          }
+                          return Row(
+                            children: [
+                              brand,
+                              SizedBox(
+                                width: mobile
+                                    ? 15
+                                    : width <= 1000
+                                    ? 20
+                                    : 30,
+                              ),
+                              tabs,
+                              const Spacer(),
+                              actions,
+                            ],
+                          );
+                        },
                       ),
                     ),
                     if (widget.updates?.supported == true)
@@ -702,7 +701,9 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
             category == 'Installed games' || !t.categories.contains(category),
       );
     }
-    final count = items.length + local.length +
+    final count =
+        items.length +
+        local.length +
         (downloaded && state.user?.launcherAdmin == true ? 1 : 0);
     final personal = page == 'saved' || page == 'history';
     return Column(
@@ -969,7 +970,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   ) {
     final mobile = width <= 700;
     final heroHeight = mobile
-        ? (width <= 480 ? 630.0 : 660.0)
+        ? (viewportHeight * .92).clamp(460.0, 620.0)
         : (viewportHeight * .73).clamp(580.0, 840.0);
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: heroHeight),
@@ -1040,9 +1041,9 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
             constraints: BoxConstraints(minHeight: heroHeight),
             padding: EdgeInsets.fromLTRB(
               gutter,
-              mobile ? (width <= 350 ? 80 : 90) : 70,
+              mobile ? 44 : 70,
               gutter,
-              mobile ? 130 : 120,
+              mobile ? 86 : 120,
             ),
             child: Align(
               alignment: mobile ? Alignment.bottomLeft : Alignment.centerLeft,
@@ -1068,9 +1069,9 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                       title?.title ?? 'Stories,\nmade to stay.',
                       style: heading(
                         width <= 350
-                            ? 46
+                            ? 36
                             : width <= 480
-                            ? 52
+                            ? 40
                             : mobile
                             ? (width * .1).clamp(48, 68)
                             : width >= 1900

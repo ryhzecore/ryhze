@@ -1,0 +1,2 @@
+Phone headers now align the brand left and circular actions right, with Games, Films and admin Engine tabs on a separate left-aligned row.
+Mobile hero titles, height and spacing adapt to the available viewport so game actions remain easier to reach.

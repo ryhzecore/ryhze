@@ -41,7 +41,7 @@ void main() {
         if (width > 480) {
           expect(searchRect.left, greaterThanOrEqualTo(tabs.right));
         } else {
-          expect(searchRect.top, greaterThanOrEqualTo(tabs.bottom));
+          expect(tabs.top, greaterThanOrEqualTo(searchRect.bottom));
         }
         final libraryRect = tester.getRect(find.byTooltip('Game library'));
         expect(libraryRect.left, greaterThan(menuRect.right));

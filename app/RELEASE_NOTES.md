@@ -1,3 +1,8 @@
+# Ryhze 1.1.7
+
+- Phone headers now align the brand left and circular actions right, with Games, Films and admin Engine tabs on a separate left-aligned row.
+- Mobile hero titles, height and spacing adapt to the available viewport so game actions remain easier to reach.
+
 # Ryhze 1.1.6
 
 - RACE now uses the same expandable artwork card as games in the admin Engine tab and Library. Open the card to launch, locate, or check for updates.

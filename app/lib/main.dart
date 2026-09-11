@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:media_kit/media_kit.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'core/api.dart';
@@ -42,7 +43,18 @@ class RyhzeApp extends StatelessWidget {
     theme: ryhzeTheme(),
     builder: (context, child) => ListenableBuilder(
       listenable: state,
-      builder: (_, _) => MotionSettings(reduced: state.reduced, child: child!),
+      builder: (_, _) => AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          statusBarColor: canvas,
+          statusBarIconBrightness: Brightness.light,
+          statusBarBrightness: Brightness.dark,
+          systemNavigationBarColor: canvas,
+          systemNavigationBarDividerColor: canvas,
+          systemNavigationBarIconBrightness: Brightness.light,
+          systemNavigationBarContrastEnforced: false,
+        ),
+        child: MotionSettings(reduced: state.reduced, child: child!),
+      ),
     ),
     home: RyhzeShell(state: state, updates: updates, gameLibrary: gameLibrary),
   );
