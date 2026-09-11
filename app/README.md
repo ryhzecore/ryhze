@@ -2,7 +2,7 @@
 
 One Flutter/Dart application for Windows, Android, iPhone/iPad and macOS. The interface ports the existing `next/` website, using the supplied Ryhze wordmark, symbol, artwork, Space Grotesk, Inter, dark glass panels and Games/Films navigation.
 
-Current application version: **1.1.5 (build 13)**. See `RELEASE_NOTES.md` for changes, `GAME_LIBRARY.md` for the Windows game library, and `updates/README.md` for publishing future in-app updates.
+Current application version: **1.1.6 (build 14)**. See `RELEASE_NOTES.md` for changes, `GAME_LIBRARY.md` for the Windows game library, and `updates/README.md` for publishing future in-app updates.
 
 The latest Website task changes are mapped in `WEBSITE_PARITY.md`, including smooth corners, translucent frames, artwork flight, ambient sound defaults and the native brand introduction. Game artwork is losslessly transcoded from the website's AVIF payloads into real PNG files for native decoder compatibility.
 

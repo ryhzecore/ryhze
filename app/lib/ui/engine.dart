@@ -3,6 +3,10 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import '../core/models.dart';
+import 'artwork_hero.dart';
+import 'title_card.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 import '../core/state.dart';
@@ -11,13 +15,165 @@ import 'design.dart';
 import '../core/race_installation.dart';
 export '../core/race_installation.dart' show raceInstallation;
 
+class RaceArtwork extends StatelessWidget {
+  const RaceArtwork({super.key});
+  @override
+  Widget build(BuildContext context) => DecoratedBox(
+    decoration: const BoxDecoration(
+      gradient: LinearGradient(
+        begin: Alignment.topRight,
+        end: Alignment.bottomLeft,
+        colors: [Color(0xff38205f), Color(0xff15121e), Color(0xff08090c)],
+      ),
+    ),
+    child: Center(
+      child: Icon(
+        Icons.view_in_ar_outlined,
+        size: 112,
+        color: Colors.white.withValues(alpha: .72),
+      ),
+    ),
+  );
+}
+
+class EngineCataloguePage extends StatelessWidget {
+  final RyhzeState state;
+  final double horizontalPadding;
+  final ValueChanged<bool>? onDetailsChanged;
+  const EngineCataloguePage({
+    super.key,
+    required this.state,
+    required this.horizontalPadding,
+    this.onDetailsChanged,
+  });
+  @override
+  Widget build(BuildContext context) => Padding(
+    padding: EdgeInsets.symmetric(horizontal: horizontalPadding, vertical: 40),
+    child: InstalledEngineCard(
+      state: state,
+      onDetailsChanged: onDetailsChanged,
+    ),
+  );
+}
+
+class RaceDetail extends StatelessWidget {
+  final RyhzeState state;
+  const RaceDetail({super.key, required this.state});
+  @override
+  Widget build(BuildContext context) => ListenableBuilder(
+    listenable: state,
+    builder: (context, _) {
+      if (state.user?.launcherAdmin != true) return const SizedBox.shrink();
+      final mobile = MediaQuery.sizeOf(context).width <= 700;
+      return CallbackShortcuts(
+        bindings: {
+          const SingleActivator(LogicalKeyboardKey.escape): () =>
+              Navigator.pop(context),
+        },
+        child: Focus(
+          autofocus: true,
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: SafeArea(
+              child: Center(
+                child: Padding(
+                  padding: EdgeInsets.all(mobile ? 12 : 24),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 1080),
+                    child: Column(
+                      children: [
+                        DetailControlsReveal(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20),
+                            child: Row(
+                              children: [
+                                Pill(
+                                  'Back',
+                                  icon: Icons.arrow_back,
+                                  iconFirst: true,
+                                  backStyle: true,
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                                const SizedBox(width: 20),
+                                const Expanded(child: Eyebrow('Ryhze Engine')),
+                                Pill(
+                                  'Close RACE details',
+                                  icon: Icons.close,
+                                  iconOnly: true,
+                                  onPressed: () => Navigator.pop(context),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: Padding(
+                              padding: EdgeInsets.all(mobile ? 20 : 36),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  DetailControlsReveal(
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                        bottom: 24,
+                                      ),
+                                      child: Text(
+                                        'RACE',
+                                        style: heading(mobile ? 38 : 56),
+                                      ),
+                                    ),
+                                  ),
+                                  ArtworkHero(
+                                    tag: 'card-race-engine',
+                                    image: '',
+                                    state: state,
+                                    artwork: const RaceArtwork(),
+                                    child: ClipRSuperellipse(
+                                      borderRadius: BorderRadius.circular(
+                                        surfaceRadius,
+                                      ),
+                                      child: SizedBox(
+                                        height:
+                                            (MediaQuery.sizeOf(context).height *
+                                                    .3)
+                                                .clamp(160, 320),
+                                        child: const RaceArtwork(),
+                                      ),
+                                    ),
+                                  ),
+                                  DetailControlsReveal(
+                                    child: EnginePage(
+                                      state: state,
+                                      horizontalPadding: 0,
+                                      embedded: true,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+      );
+    },
+  );
+}
+
 class InstalledEngineCard extends StatefulWidget {
   final RyhzeState state;
-  final VoidCallback onOpen;
+  final ValueChanged<bool>? onDetailsChanged;
   const InstalledEngineCard({
     super.key,
     required this.state,
-    required this.onOpen,
+    this.onDetailsChanged,
   });
   @override
   State<InstalledEngineCard> createState() => _InstalledEngineCardState();
@@ -61,6 +217,38 @@ class _InstalledEngineCardState extends State<InstalledEngineCard>
     super.dispose();
   }
 
+  Future<void> openDetails() async {
+    if (widget.state.user?.launcherAdmin != true) return;
+    final source = artworkBounds(context, 'card-race-engine');
+    widget.onDetailsChanged?.call(true);
+    try {
+      await Navigator.of(context).push(
+        PageRouteBuilder<void>(
+          opaque: false,
+          barrierDismissible: true,
+          barrierLabel: 'Close RACE details',
+          barrierColor: Colors.black.withValues(alpha: .7),
+          transitionDuration: Duration(
+            milliseconds: widget.state.reduced ? 0 : 420,
+          ),
+          reverseTransitionDuration: Duration(
+            milliseconds: widget.state.reduced ? 0 : 420,
+          ),
+          pageBuilder: (_, _, _) => RaceDetail(state: widget.state),
+          transitionsBuilder: (_, animation, _, child) => GameFrameTransition(
+            animation: animation,
+            source: source,
+            reduced: widget.state.reduced || MotionSettings.of(context),
+            child: child,
+          ),
+        ),
+      );
+    } finally {
+      widget.onDetailsChanged?.call(false);
+      refresh();
+    }
+  }
+
   @override
   Widget build(BuildContext context) => FutureBuilder(
     future: installation,
@@ -68,42 +256,32 @@ class _InstalledEngineCardState extends State<InstalledEngineCard>
       if (widget.state.user?.launcherAdmin != true) {
         return const SizedBox.shrink();
       }
-      return Padding(
-        padding: const EdgeInsets.only(bottom: 28),
-        child: Glass(
-          padding: const EdgeInsets.all(24),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.view_in_ar_outlined, size: 32),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text('RACE', style: heading(28)),
-                        Text(
-                          snapshot.data != null
-                              ? 'Installed · ${snapshot.data!['version']}'
-                              : snapshot.connectionState ==
-                                    ConnectionState.waiting
-                              ? 'Checking this PC…'
-                              : 'Install or locate your engine',
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Pill(
-                snapshot.data != null ? 'Open engine' : 'Manage engine',
-                icon: Icons.arrow_forward,
-                onPressed: widget.onOpen,
-              ),
-            ],
+      final width = MediaQuery.sizeOf(context).width;
+      final title = RyhzeTitle(
+        id: 'race-engine',
+        title: 'RACE',
+        kind: 'game',
+        label: 'Ryhze Engine',
+        status: snapshot.data != null ? 'Installed' : 'Engine',
+        description: '',
+        categories: [
+          snapshot.data != null
+              ? 'Version ${snapshot.data?['version']}'
+              : 'Install or locate',
+        ],
+      );
+      return Align(
+        alignment: Alignment.centerLeft,
+        child: SizedBox(
+          width: width <= 700
+              ? double.infinity
+              : ((width * .91 - 48) / 3).clamp(280, 560),
+          child: RyhzeTitleCard(
+            title: title,
+            state: widget.state,
+            artwork: const RaceArtwork(),
+            onOpen: openDetails,
+            onSave: openDetails,
           ),
         ),
       );
@@ -114,7 +292,13 @@ class _InstalledEngineCardState extends State<InstalledEngineCard>
 class EnginePage extends StatefulWidget {
   final RyhzeState state;
   final double? horizontalPadding;
-  const EnginePage({super.key, required this.state, this.horizontalPadding});
+  final bool embedded;
+  const EnginePage({
+    super.key,
+    required this.state,
+    this.horizontalPadding,
+    this.embedded = false,
+  });
   @override
   State<EnginePage> createState() => _EnginePageState();
 }
@@ -350,15 +534,21 @@ class _EnginePageState extends State<EnginePage> with WidgetsBindingObserver {
         horizontal:
             widget.horizontalPadding ??
             (MediaQuery.sizeOf(context).width <= 700 ? 22 : 56),
-        vertical: MediaQuery.sizeOf(context).width <= 700 ? 32 : 56,
+        vertical: widget.embedded
+            ? 24
+            : MediaQuery.sizeOf(context).width <= 700
+            ? 32
+            : 56,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Eyebrow('Ryhze Advanced Creation Engine'),
-          const SizedBox(height: 20),
-          Text('RACE', style: heading(64)),
-          const SizedBox(height: 20),
+          if (!widget.embedded) ...[
+            const Eyebrow('Ryhze Advanced Creation Engine'),
+            const SizedBox(height: 20),
+            Text('RACE', style: heading(64)),
+            const SizedBox(height: 20),
+          ],
           const Text(
             'Your engine workspace, installed and updated through Ryhze.',
           ),
@@ -398,7 +588,7 @@ class _EnginePageState extends State<EnginePage> with WidgetsBindingObserver {
             children: [
               if (Platform.isWindows && executable != null)
                 Pill(
-                  'Open RACE',
+                  'Launch RACE',
                   primary: true,
                   icon: Icons.arrow_forward,
                   onPressed: downloading || installing

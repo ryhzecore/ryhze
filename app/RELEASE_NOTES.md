@@ -1,3 +1,8 @@
+# Ryhze 1.1.6
+
+- RACE now uses the same expandable artwork card as games in the admin Engine tab and Library. Open the card to launch, locate, or check for updates.
+- Game and engine detail controls stay hidden while the frame expands, then fade and blur into view after expansion completes. Reduced motion is respected.
+
 # Ryhze 1.1.5
 
 - Game details use one continuous frame from thumbnail expansion through the expanded view and back. The frame no longer changes surface at the end of the animation.

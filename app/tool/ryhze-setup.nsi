@@ -3,7 +3,7 @@ Unicode true
 !include "x64.nsh"
 Name "Ryhze"
 !ifndef VERSION
-!define VERSION "1.1.5"
+!define VERSION "1.1.6"
 !endif
 OutFile "..\..\releases\Ryhze-${VERSION}-Windows-Setup.exe"
 InstallDir "$LOCALAPPDATA\Programs\Ryhze"

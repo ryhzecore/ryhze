@@ -126,6 +126,12 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     if (scroll.hasClients) scroll.jumpTo(0);
   }
 
+  void engineDetailsChanged(bool value) {
+    if (!mounted) return;
+    setState(() => detailOpen = value);
+    unawaited(syncAudio());
+  }
+
   Future<void> open(RyhzeTitle title, String tag) async {
     final source = artworkBounds(context, tag);
     setState(() => detailOpen = true);
@@ -571,7 +577,12 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                               children: [
                                 for (final child in previous)
                                   IgnorePointer(
-                                    child: ExcludeSemantics(child: child),
+                                    child: ExcludeSemantics(
+                                      child: HeroMode(
+                                        enabled: false,
+                                        child: child,
+                                      ),
+                                    ),
                                   ),
                                 ?current,
                               ],
@@ -610,9 +621,10 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                                           : null,
                                     )
                                   else if (page == 'engine')
-                                    EnginePage(
+                                    EngineCataloguePage(
                                       state: state,
                                       horizontalPadding: gutter,
+                                      onDetailsChanged: engineDetailsChanged,
                                     )
                                   else if (page == 'admin')
                                     AdminPage(state: state)
@@ -690,7 +702,8 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
             category == 'Installed games' || !t.categories.contains(category),
       );
     }
-    final count = items.length + local.length;
+    final count = items.length + local.length +
+        (downloaded && state.user?.launcherAdmin == true ? 1 : 0);
     final personal = page == 'saved' || page == 'history';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -746,7 +759,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
               if (downloaded && state.user?.launcherAdmin == true)
                 InstalledEngineCard(
                   state: state,
-                  onOpen: () => navigate('engine'),
+                  onDetailsChanged: engineDetailsChanged,
                 ),
               if (isGames && !downloaded && state.user?.launcherAdmin == true)
                 Padding(

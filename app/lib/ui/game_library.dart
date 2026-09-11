@@ -736,41 +736,46 @@ class _LocalGameDetailState extends State<LocalGameDetail>
                       frameVisible: !GameFrameMotion.ownsFrame(context),
                       child: Column(
                         children: [
-                          Container(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: mobile ? 18 : 28,
-                              vertical: mobile ? 18 : 22,
-                            ),
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment.topCenter,
-                                end: Alignment.bottomCenter,
-                                colors: [Color(0xde111014), Color(0x33111014)],
+                          DetailControlsReveal(
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: mobile ? 18 : 28,
+                                vertical: mobile ? 18 : 22,
                               ),
-                              border: Border(
-                                bottom: BorderSide(color: Color(0x18ffffff)),
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [
+                                    Color(0xde111014),
+                                    Color(0x33111014),
+                                  ],
+                                ),
+                                border: Border(
+                                  bottom: BorderSide(color: Color(0x18ffffff)),
+                                ),
                               ),
-                            ),
-                            child: Row(
-                              children: [
-                                Pill(
-                                  'Back',
-                                  backStyle: true,
-                                  icon: Icons.arrow_back,
-                                  iconFirst: true,
-                                  height: 44,
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                                const SizedBox(width: 20),
-                                Expanded(child: Eyebrow(game.source)),
-                                Pill(
-                                  'Close details',
-                                  iconOnly: true,
-                                  icon: Icons.close,
-                                  height: 44,
-                                  onPressed: () => Navigator.pop(context),
-                                ),
-                              ],
+                              child: Row(
+                                children: [
+                                  Pill(
+                                    'Back',
+                                    backStyle: true,
+                                    icon: Icons.arrow_back,
+                                    iconFirst: true,
+                                    height: 44,
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                  const SizedBox(width: 20),
+                                  Expanded(child: Eyebrow(game.source)),
+                                  Pill(
+                                    'Close details',
+                                    iconOnly: true,
+                                    icon: Icons.close,
+                                    height: 44,
+                                    onPressed: () => Navigator.pop(context),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                           Expanded(
@@ -780,343 +785,380 @@ class _LocalGameDetailState extends State<LocalGameDetail>
                                 child: Column(
                                   crossAxisAlignment:
                                       CrossAxisAlignment.stretch,
-                                  children: [
-                                    ListenableBuilder(
-                                      listenable: widget.library,
-                                      builder: (_, _) => Eyebrow(
-                                        widget.library.isRunning(game)
-                                            ? 'Playing now'
-                                            : 'Installed',
-                                      ),
-                                    ),
-                                    const SizedBox(height: 12),
-                                    Text(
-                                      game.name,
-                                      style: heading(
-                                        mobile ? 38 : 56,
-                                      ).copyWith(height: 1.1),
-                                    ),
-                                    const SizedBox(height: 24),
-                                    ArtworkHero(
-                                      tag: widget.heroTag,
-                                      image: '',
-                                      state: widget.state,
-                                      artwork: GameArtwork(
-                                        widget.cover.isEmpty
-                                            ? data.artwork
-                                            : widget.cover,
-                                        name: game.name,
-                                      ),
-                                      child: ClipRSuperellipse(
-                                        borderRadius: BorderRadius.circular(
-                                          surfaceRadius,
-                                        ),
-                                        child: SizedBox(
-                                          height:
-                                              MediaQuery.sizeOf(
-                                                context,
-                                              ).height *
-                                              .48,
-                                          child: ColoredBox(
-                                            color: canvas,
-                                            child: AnimatedSwitcher(
-                                              duration: Duration(
-                                                milliseconds: reduced ? 0 : 300,
+                                  children:
+                                      <Widget>[
+                                            ListenableBuilder(
+                                              listenable: widget.library,
+                                              builder: (_, _) => Eyebrow(
+                                                widget.library.isRunning(game)
+                                                    ? 'Playing now'
+                                                    : 'Installed',
                                               ),
-                                              switchInCurve: ryhzeEase,
-                                              child: isVideo
-                                                  ? Video(
-                                                      key: const ValueKey(
-                                                        'trailer',
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Text(
+                                              game.name,
+                                              style: heading(
+                                                mobile ? 38 : 56,
+                                              ).copyWith(height: 1.1),
+                                            ),
+                                            const SizedBox(height: 24),
+                                            ArtworkHero(
+                                              tag: widget.heroTag,
+                                              image: '',
+                                              state: widget.state,
+                                              artwork: GameArtwork(
+                                                widget.cover.isEmpty
+                                                    ? data.artwork
+                                                    : widget.cover,
+                                                name: game.name,
+                                              ),
+                                              child: ClipRSuperellipse(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                      surfaceRadius,
+                                                    ),
+                                                child: SizedBox(
+                                                  height:
+                                                      MediaQuery.sizeOf(
+                                                        context,
+                                                      ).height *
+                                                      .48,
+                                                  child: ColoredBox(
+                                                    color: canvas,
+                                                    child: AnimatedSwitcher(
+                                                      duration: Duration(
+                                                        milliseconds: reduced
+                                                            ? 0
+                                                            : 300,
                                                       ),
-                                                      controller: video!,
-                                                    )
-                                                  : SizedBox.expand(
-                                                      key: ValueKey(
-                                                        selectedUrl,
-                                                      ),
-                                                      child: GameArtwork(
-                                                        selectedUrl,
-                                                        name: game.name,
-                                                        fit: BoxFit.contain,
+                                                      switchInCurve: ryhzeEase,
+                                                      child: isVideo
+                                                          ? Video(
+                                                              key:
+                                                                  const ValueKey(
+                                                                    'trailer',
+                                                                  ),
+                                                              controller:
+                                                                  video!,
+                                                            )
+                                                          : SizedBox.expand(
+                                                              key: ValueKey(
+                                                                selectedUrl,
+                                                              ),
+                                                              child: GameArtwork(
+                                                                selectedUrl,
+                                                                name: game.name,
+                                                                fit: BoxFit
+                                                                    .contain,
+                                                              ),
+                                                            ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                            if (snapshot.connectionState !=
+                                                ConnectionState.done)
+                                              const LinearProgressIndicator(),
+                                            if (all.isNotEmpty) ...[
+                                              const SizedBox(height: 14),
+                                              Row(
+                                                children: [
+                                                  Pill(
+                                                    'Previous image or trailer',
+                                                    iconOnly: true,
+                                                    icon: Icons.arrow_back,
+                                                    height: 44,
+                                                    onPressed: all.length > 1
+                                                        ? () => move(data, -1)
+                                                        : null,
+                                                  ),
+                                                  const SizedBox(width: 16),
+                                                  Expanded(
+                                                    child: Text(
+                                                      '${index < 0 ? 1 : index + 1} / ${all.length}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: const TextStyle(
+                                                        color: muted,
+                                                        fontSize: 12,
                                                       ),
                                                     ),
+                                                  ),
+                                                  Pill(
+                                                    'Next image or trailer',
+                                                    iconOnly: true,
+                                                    icon: Icons.arrow_forward,
+                                                    height: 44,
+                                                    onPressed: all.length > 1
+                                                        ? () => move(data, 1)
+                                                        : null,
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 12),
+                                              SizedBox(
+                                                height: 76,
+                                                child: ListView.separated(
+                                                  controller: thumbnails,
+                                                  scrollDirection:
+                                                      Axis.horizontal,
+                                                  itemCount: all.length,
+                                                  separatorBuilder: (_, _) =>
+                                                      const SizedBox(width: 10),
+                                                  itemBuilder: (context, i) {
+                                                    final trailer = data
+                                                        .trailers
+                                                        .indexOf(all[i]);
+                                                    final image = trailer >= 0
+                                                        ? (trailer <
+                                                                  data
+                                                                      .trailerThumbnails
+                                                                      .length
+                                                              ? data.trailerThumbnails[trailer]
+                                                              : data.artwork)
+                                                        : all[i];
+                                                    return SizedBox(
+                                                      width: 120,
+                                                      child: Tooltip(
+                                                        message: trailer >= 0
+                                                            ? 'Trailer ${trailer + 1}'
+                                                            : all[i] ==
+                                                                  data.artwork
+                                                            ? 'Artwork'
+                                                            : 'Screenshot ${data.screenshots.indexOf(all[i]) + 1}',
+                                                        child: AnimatedContainer(
+                                                          duration: Duration(
+                                                            milliseconds:
+                                                                reduced
+                                                                ? 0
+                                                                : 300,
+                                                          ),
+                                                          padding:
+                                                              const EdgeInsets.all(
+                                                                2,
+                                                              ),
+                                                          decoration: ShapeDecoration(
+                                                            shape: RoundedSuperellipseBorder(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    16,
+                                                                  ),
+                                                              side: BorderSide(
+                                                                color:
+                                                                    all[i] ==
+                                                                        selectedUrl
+                                                                    ? Colors
+                                                                          .white
+                                                                    : const Color(
+                                                                        0x22ffffff,
+                                                                      ),
+                                                                width: 2,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          child: ClipRSuperellipse(
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                  14,
+                                                                ),
+                                                            child: InkWell(
+                                                              onTap: () =>
+                                                                  choose(
+                                                                    data,
+                                                                    all[i],
+                                                                  ),
+                                                              child: Stack(
+                                                                fit: StackFit
+                                                                    .expand,
+                                                                children: [
+                                                                  GameArtwork(
+                                                                    image,
+                                                                    name: game
+                                                                        .name,
+                                                                    thumbnail:
+                                                                        true,
+                                                                  ),
+                                                                  if (trailer >=
+                                                                      0) ...[
+                                                                    Container(
+                                                                      color: Colors
+                                                                          .black
+                                                                          .withValues(
+                                                                            alpha:
+                                                                                .35,
+                                                                          ),
+                                                                    ),
+                                                                    Center(
+                                                                      child: Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.min,
+                                                                        children: [
+                                                                          const Icon(
+                                                                            Icons.play_circle,
+                                                                          ),
+                                                                          Text(
+                                                                            'Trailer ${trailer + 1}',
+                                                                            style: const TextStyle(
+                                                                              fontSize: 11,
+                                                                            ),
+                                                                          ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    );
+                                                  },
+                                                ),
+                                              ),
+                                            ],
+                                            if (playbackError != null)
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  top: 12,
+                                                ),
+                                                child: Text(
+                                                  playbackError!,
+                                                  style: const TextStyle(
+                                                    color: Colors.orangeAccent,
+                                                  ),
+                                                ),
+                                              ),
+                                            const SizedBox(height: 24),
+                                            GameControls(
+                                              game: game,
+                                              library: widget.library,
                                             ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    if (snapshot.connectionState !=
-                                        ConnectionState.done)
-                                      const LinearProgressIndicator(),
-                                    if (all.isNotEmpty) ...[
-                                      const SizedBox(height: 14),
-                                      Row(
-                                        children: [
-                                          Pill(
-                                            'Previous image or trailer',
-                                            iconOnly: true,
-                                            icon: Icons.arrow_back,
-                                            height: 44,
-                                            onPressed: all.length > 1
-                                                ? () => move(data, -1)
-                                                : null,
-                                          ),
-                                          const SizedBox(width: 16),
-                                          Expanded(
-                                            child: Text(
-                                              '${index < 0 ? 1 : index + 1} / ${all.length}',
-                                              textAlign: TextAlign.center,
+                                            const SizedBox(height: 20),
+                                            ListenableBuilder(
+                                              listenable: widget.library,
+                                              builder: (_, _) => Text(
+                                                lastPlayedText(game),
+                                                style: const TextStyle(
+                                                  color: muted,
+                                                  fontSize: 12,
+                                                ),
+                                              ),
+                                            ),
+                                            const SizedBox(height: 20),
+                                            if (data.description.isNotEmpty)
+                                              Text(data.description),
+                                            if (snapshot.connectionState ==
+                                                    ConnectionState.done &&
+                                                all.isEmpty)
+                                              const Text(
+                                                'An official gallery is not available here yet. View the original store, or add the exact Steam app ID for a manually added game.',
+                                              ),
+                                            if (data.source.isNotEmpty)
+                                              Padding(
+                                                padding: const EdgeInsets.only(
+                                                  top: 12,
+                                                ),
+                                                child: Text(
+                                                  'Artwork and footage: ${data.source}. Media belongs to its respective publishers.',
+                                                  style: const TextStyle(
+                                                    color: muted,
+                                                    fontSize: 12,
+                                                  ),
+                                                ),
+                                              ),
+                                            const SizedBox(height: 24),
+                                            Wrap(
+                                              spacing: 12,
+                                              runSpacing: 12,
+                                              children: [
+                                                if (data.store.isNotEmpty)
+                                                  Pill(
+                                                    'Official store',
+                                                    icon: Icons.open_in_new,
+                                                    onPressed: () => attempt(
+                                                      context,
+                                                      () async {
+                                                        if (!await launchUrl(
+                                                          Uri.parse(data.store),
+                                                          mode: LaunchMode
+                                                              .externalApplication,
+                                                        )) {
+                                                          throw StateError(
+                                                            'The store could not open.',
+                                                          );
+                                                        }
+                                                      },
+                                                    ),
+                                                  ),
+                                                Pill(
+                                                  'Refresh media',
+                                                  icon: Icons.refresh,
+                                                  onPressed: () {
+                                                    widget.media.retry(game);
+                                                    player?.pause();
+                                                    setState(() {
+                                                      selected = null;
+                                                      media = widget.media.load(
+                                                        game,
+                                                      );
+                                                    });
+                                                  },
+                                                ),
+                                                Pill(
+                                                  'Edit game',
+                                                  icon: Icons.edit_outlined,
+                                                  onPressed: () async {
+                                                    await player?.pause();
+                                                    if (!context.mounted) {
+                                                      return;
+                                                    }
+                                                    await editLocalGame(
+                                                      context,
+                                                      widget.library,
+                                                      game,
+                                                    );
+                                                    if (context.mounted) {
+                                                      Navigator.pop(context);
+                                                    }
+                                                  },
+                                                ),
+                                                Pill(
+                                                  'Remove from Ryhze',
+                                                  icon: Icons
+                                                      .remove_circle_outline,
+                                                  onPressed: () => attempt(
+                                                    context,
+                                                    () async {
+                                                      await widget.library
+                                                          .remove(game);
+                                                      if (context.mounted) {
+                                                        Navigator.pop(context);
+                                                      }
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 18),
+                                            SelectableText(
+                                              'Installed in: ${game.root}',
                                               style: const TextStyle(
                                                 color: muted,
                                                 fontSize: 12,
                                               ),
                                             ),
-                                          ),
-                                          Pill(
-                                            'Next image or trailer',
-                                            iconOnly: true,
-                                            icon: Icons.arrow_forward,
-                                            height: 44,
-                                            onPressed: all.length > 1
-                                                ? () => move(data, 1)
-                                                : null,
-                                          ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: 12),
-                                      SizedBox(
-                                        height: 76,
-                                        child: ListView.separated(
-                                          controller: thumbnails,
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: all.length,
-                                          separatorBuilder: (_, _) =>
-                                              const SizedBox(width: 10),
-                                          itemBuilder: (context, i) {
-                                            final trailer = data.trailers
-                                                .indexOf(all[i]);
-                                            final image = trailer >= 0
-                                                ? (trailer <
-                                                          data
-                                                              .trailerThumbnails
-                                                              .length
-                                                      ? data.trailerThumbnails[trailer]
-                                                      : data.artwork)
-                                                : all[i];
-                                            return SizedBox(
-                                              width: 120,
-                                              child: Tooltip(
-                                                message: trailer >= 0
-                                                    ? 'Trailer ${trailer + 1}'
-                                                    : all[i] == data.artwork
-                                                    ? 'Artwork'
-                                                    : 'Screenshot ${data.screenshots.indexOf(all[i]) + 1}',
-                                                child: AnimatedContainer(
-                                                  duration: Duration(
-                                                    milliseconds: reduced
-                                                        ? 0
-                                                        : 300,
+                                          ]
+                                          .map(
+                                            (item) => item is ArtworkHero
+                                                ? item
+                                                : DetailControlsReveal(
+                                                    child: item,
                                                   ),
-                                                  padding: const EdgeInsets.all(
-                                                    2,
-                                                  ),
-                                                  decoration: ShapeDecoration(
-                                                    shape: RoundedSuperellipseBorder(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            16,
-                                                          ),
-                                                      side: BorderSide(
-                                                        color:
-                                                            all[i] ==
-                                                                selectedUrl
-                                                            ? Colors.white
-                                                            : const Color(
-                                                                0x22ffffff,
-                                                              ),
-                                                        width: 2,
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  child: ClipRSuperellipse(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                          14,
-                                                        ),
-                                                    child: InkWell(
-                                                      onTap: () =>
-                                                          choose(data, all[i]),
-                                                      child: Stack(
-                                                        fit: StackFit.expand,
-                                                        children: [
-                                                          GameArtwork(
-                                                            image,
-                                                            name: game.name,
-                                                            thumbnail: true,
-                                                          ),
-                                                          if (trailer >= 0) ...[
-                                                            Container(
-                                                              color: Colors
-                                                                  .black
-                                                                  .withValues(
-                                                                    alpha: .35,
-                                                                  ),
-                                                            ),
-                                                            Center(
-                                                              child: Column(
-                                                                mainAxisSize:
-                                                                    MainAxisSize
-                                                                        .min,
-                                                                children: [
-                                                                  const Icon(
-                                                                    Icons
-                                                                        .play_circle,
-                                                                  ),
-                                                                  Text(
-                                                                    'Trailer ${trailer + 1}',
-                                                                    style: const TextStyle(
-                                                                      fontSize:
-                                                                          11,
-                                                                    ),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                    if (playbackError != null)
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 12),
-                                        child: Text(
-                                          playbackError!,
-                                          style: const TextStyle(
-                                            color: Colors.orangeAccent,
-                                          ),
-                                        ),
-                                      ),
-                                    const SizedBox(height: 24),
-                                    GameControls(
-                                      game: game,
-                                      library: widget.library,
-                                    ),
-                                    const SizedBox(height: 20),
-                                    ListenableBuilder(
-                                      listenable: widget.library,
-                                      builder: (_, _) => Text(
-                                        lastPlayedText(game),
-                                        style: const TextStyle(
-                                          color: muted,
-                                          fontSize: 12,
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 20),
-                                    if (data.description.isNotEmpty)
-                                      Text(data.description),
-                                    if (snapshot.connectionState ==
-                                            ConnectionState.done &&
-                                        all.isEmpty)
-                                      const Text(
-                                        'An official gallery is not available here yet. View the original store, or add the exact Steam app ID for a manually added game.',
-                                      ),
-                                    if (data.source.isNotEmpty)
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 12),
-                                        child: Text(
-                                          'Artwork and footage: ${data.source}. Media belongs to its respective publishers.',
-                                          style: const TextStyle(
-                                            color: muted,
-                                            fontSize: 12,
-                                          ),
-                                        ),
-                                      ),
-                                    const SizedBox(height: 24),
-                                    Wrap(
-                                      spacing: 12,
-                                      runSpacing: 12,
-                                      children: [
-                                        if (data.store.isNotEmpty)
-                                          Pill(
-                                            'Official store',
-                                            icon: Icons.open_in_new,
-                                            onPressed: () => attempt(
-                                              context,
-                                              () async {
-                                                if (!await launchUrl(
-                                                  Uri.parse(data.store),
-                                                  mode: LaunchMode
-                                                      .externalApplication,
-                                                )) {
-                                                  throw StateError(
-                                                    'The store could not open.',
-                                                  );
-                                                }
-                                              },
-                                            ),
-                                          ),
-                                        Pill(
-                                          'Refresh media',
-                                          icon: Icons.refresh,
-                                          onPressed: () {
-                                            widget.media.retry(game);
-                                            player?.pause();
-                                            setState(() {
-                                              selected = null;
-                                              media = widget.media.load(game);
-                                            });
-                                          },
-                                        ),
-                                        Pill(
-                                          'Edit game',
-                                          icon: Icons.edit_outlined,
-                                          onPressed: () async {
-                                            await player?.pause();
-                                            if (!context.mounted) return;
-                                            await editLocalGame(
-                                              context,
-                                              widget.library,
-                                              game,
-                                            );
-                                            if (context.mounted) {
-                                              Navigator.pop(context);
-                                            }
-                                          },
-                                        ),
-                                        Pill(
-                                          'Remove from Ryhze',
-                                          icon: Icons.remove_circle_outline,
-                                          onPressed: () => attempt(
-                                            context,
-                                            () async {
-                                              await widget.library.remove(game);
-                                              if (context.mounted) {
-                                                Navigator.pop(context);
-                                              }
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 18),
-                                    SelectableText(
-                                      'Installed in: ${game.root}',
-                                      style: const TextStyle(
-                                        color: muted,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
+                                          )
+                                          .toList(),
                                 ),
                               ),
                             ),

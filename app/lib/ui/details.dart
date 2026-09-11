@@ -78,70 +78,72 @@ class DetailPage extends StatelessWidget {
                           ),
                           child: Column(
                             children: [
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: mobile ? 18 : 28,
-                                  vertical: mobile ? 18 : 22,
-                                ),
-                                decoration: const BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Color(0xde111014),
-                                      Color(0x33111014),
-                                    ],
+                              DetailControlsReveal(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: mobile ? 18 : 28,
+                                    vertical: mobile ? 18 : 22,
                                   ),
-                                  border: Border(
-                                    bottom: BorderSide(
-                                      color: Color(0x18ffffff),
+                                  decoration: const BoxDecoration(
+                                    gradient: LinearGradient(
+                                      begin: Alignment.topCenter,
+                                      end: Alignment.bottomCenter,
+                                      colors: [
+                                        Color(0xde111014),
+                                        Color(0x33111014),
+                                      ],
                                     ),
-                                  ),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Pill(
-                                      'Back',
-                                      backStyle: true,
-                                      icon: Icons.arrow_back,
-                                      iconFirst: true,
-                                      height: 44,
-                                      reduced: state.reduced,
-                                      onPressed: () => Navigator.pop(context),
-                                    ),
-                                    SizedBox(width: mobile ? 12 : 20),
-                                    Expanded(
-                                      child: Text(
-                                        title.label.toUpperCase(),
-                                        style: TextStyle(
-                                          fontSize: mobile ? 8 : 10,
-                                          letterSpacing: 1.2,
-                                          color: muted,
-                                        ),
+                                    border: Border(
+                                      bottom: BorderSide(
+                                        color: Color(0x18ffffff),
                                       ),
                                     ),
-                                    SizedBox(width: mobile ? 12 : 20),
-                                    Pill(
-                                      state.saved.contains(title.id)
-                                          ? 'Remove from My List'
-                                          : 'Add to My List',
-                                      iconOnly: true,
-                                      icon: state.saved.contains(title.id)
-                                          ? Icons.check
-                                          : Icons.add,
-                                      onPressed: () {
-                                        if (state.user == null) {
-                                          Navigator.pop(context);
-                                          onSignIn();
-                                        } else {
-                                          attempt(
-                                            context,
-                                            () => state.toggleSaved(title),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ],
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Pill(
+                                        'Back',
+                                        backStyle: true,
+                                        icon: Icons.arrow_back,
+                                        iconFirst: true,
+                                        height: 44,
+                                        reduced: state.reduced,
+                                        onPressed: () => Navigator.pop(context),
+                                      ),
+                                      SizedBox(width: mobile ? 12 : 20),
+                                      Expanded(
+                                        child: Text(
+                                          title.label.toUpperCase(),
+                                          style: TextStyle(
+                                            fontSize: mobile ? 8 : 10,
+                                            letterSpacing: 1.2,
+                                            color: muted,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: mobile ? 12 : 20),
+                                      Pill(
+                                        state.saved.contains(title.id)
+                                            ? 'Remove from My List'
+                                            : 'Add to My List',
+                                        iconOnly: true,
+                                        icon: state.saved.contains(title.id)
+                                            ? Icons.check
+                                            : Icons.add,
+                                        onPressed: () {
+                                          if (state.user == null) {
+                                            Navigator.pop(context);
+                                            onSignIn();
+                                          } else {
+                                            attempt(
+                                              context,
+                                              () => state.toggleSaved(title),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                               Expanded(
@@ -149,220 +151,246 @@ class DetailPage extends StatelessWidget {
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.stretch,
-                                    children: [
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                          gutter,
-                                          mobile ? 25 : 30,
-                                          gutter,
-                                          mobile ? 20 : 25,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Eyebrow(title.status),
-                                            const SizedBox(height: 12),
-                                            Text(
-                                              title.title,
-                                              style: heading(
-                                                c.maxWidth <= 350
-                                                    ? 32
-                                                    : mobile
-                                                    ? 38
-                                                    : (c.maxWidth * .045).clamp(
-                                                        32,
-                                                        62,
-                                                      ),
-                                              ).copyWith(height: 1.1),
-                                            ),
-                                            const SizedBox(height: 18),
-                                            Wrap(
-                                              spacing: 8,
-                                              runSpacing: 8,
-                                              children: [
-                                                for (final tag
-                                                    in title.categories)
-                                                  Container(
-                                                    padding:
-                                                        const EdgeInsets.symmetric(
-                                                          horizontal: 12,
-                                                          vertical: 6,
-                                                        ),
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                            99,
-                                                          ),
-                                                      border: Border.all(
-                                                        color: const Color(
-                                                          0x26ffffff,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    child: Text(
-                                                      tag,
-                                                      style: const TextStyle(
-                                                        fontSize: 11,
-                                                        color: muted,
-                                                      ),
-                                                    ),
-                                                  ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      if (!title.isGame ||
-                                          title.streams.isNotEmpty ||
-                                          title.seasons.isNotEmpty)
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: mobile ? 10 : 20,
-                                          ),
-                                          child: RyhzePlayer(
-                                            title: title,
-                                            state: state,
-                                            heroTag: heroTag,
-                                          ),
-                                        )
-                                      else
-                                        Padding(
-                                          padding: EdgeInsets.symmetric(
-                                            horizontal: mobile ? 12 : 20,
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              ArtworkHero(
-                                                tag: heroTag,
-                                                image: title.image,
-                                                state: state,
-                                                child: ClipRSuperellipse(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                        surfaceRadius,
-                                                      ),
-                                                  child: LayoutBuilder(
-                                                    builder:
-                                                        (
-                                                          context,
-                                                          bounds,
-                                                        ) => SizedBox(
-                                                          width:
-                                                              double.infinity,
-                                                          height:
-                                                              (bounds.maxWidth *
-                                                                      9 /
-                                                                      16)
+                                    children:
+                                        <Widget>[
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                  gutter,
+                                                  mobile ? 25 : 30,
+                                                  gutter,
+                                                  mobile ? 20 : 25,
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Eyebrow(title.status),
+                                                    const SizedBox(height: 12),
+                                                    Text(
+                                                      title.title,
+                                                      style: heading(
+                                                        c.maxWidth <= 350
+                                                            ? 32
+                                                            : mobile
+                                                            ? 38
+                                                            : (c.maxWidth *
+                                                                      .045)
                                                                   .clamp(
-                                                                    0.0,
-                                                                    MediaQuery.sizeOf(
-                                                                          context,
-                                                                        ).height *
-                                                                        .55,
+                                                                    32,
+                                                                    62,
                                                                   ),
-                                                          child: TitleArt(
-                                                            title.image,
-                                                            state,
-                                                          ),
-                                                        ),
-                                                  ),
-                                                ),
-                                              ),
-                                              const SizedBox(height: 12),
-                                              Text(
-                                                title.imageNote.isEmpty
-                                                    ? 'Title artwork'
-                                                    : title.imageNote,
-                                                style: const TextStyle(
-                                                  fontSize: 11,
-                                                  color: muted,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      Padding(
-                                        padding: EdgeInsets.fromLTRB(
-                                          gutter,
-                                          mobile ? 25 : 30,
-                                          gutter,
-                                          mobile ? 25 : 45,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              title.id == 'larcenous-driftscape'
-                                                  ? 'One state. Every way out.'
-                                                  : 'About this title',
-                                              style: heading(30),
-                                            ),
-                                            const SizedBox(height: 20),
-                                            Text(title.description),
-                                            const SizedBox(height: 28),
-                                            Wrap(
-                                              spacing: 48,
-                                              runSpacing: 24,
-                                              children: [
-                                                for (final fact in title.facts)
-                                                  SizedBox(
-                                                    width: 210,
-                                                    child: Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .start,
+                                                      ).copyWith(height: 1.1),
+                                                    ),
+                                                    const SizedBox(height: 18),
+                                                    Wrap(
+                                                      spacing: 8,
+                                                      runSpacing: 8,
                                                       children: [
-                                                        Text(
-                                                          fact.label,
-                                                          style:
-                                                              const TextStyle(
-                                                                fontSize: 11,
-                                                                color: muted,
+                                                        for (final tag
+                                                            in title.categories)
+                                                          Container(
+                                                            padding:
+                                                                const EdgeInsets.symmetric(
+                                                                  horizontal:
+                                                                      12,
+                                                                  vertical: 6,
+                                                                ),
+                                                            decoration: BoxDecoration(
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                    99,
+                                                                  ),
+                                                              border: Border.all(
+                                                                color:
+                                                                    const Color(
+                                                                      0x26ffffff,
+                                                                    ),
                                                               ),
-                                                        ),
-                                                        const SizedBox(
-                                                          height: 8,
-                                                        ),
-                                                        Text(
-                                                          fact.value,
-                                                          style:
-                                                              const TextStyle(
-                                                                fontSize: 14,
-                                                                color: Colors
-                                                                    .white,
-                                                              ),
-                                                        ),
+                                                            ),
+                                                            child: Text(
+                                                              tag,
+                                                              style:
+                                                                  const TextStyle(
+                                                                    fontSize:
+                                                                        11,
+                                                                    color:
+                                                                        muted,
+                                                                  ),
+                                                            ),
+                                                          ),
                                                       ],
                                                     ),
-                                                  ),
-                                              ],
-                                            ),
-                                            const SizedBox(height: 30),
-                                            if (title.isGame)
-                                              GameOptions(
-                                                title: title,
-                                                state: state,
-                                                onSignIn: () {
-                                                  Navigator.pop(context);
-                                                  onSignIn();
-                                                },
-                                              ),
-                                            if (title.internal)
-                                              const Text(
-                                                'Internal test content. This is not a Ryhze production or a public release.',
-                                                style: TextStyle(
-                                                  fontSize: 11,
-                                                  color: muted,
+                                                  ],
                                                 ),
                                               ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
+                                              if (!title.isGame ||
+                                                  title.streams.isNotEmpty ||
+                                                  title.seasons.isNotEmpty)
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: mobile
+                                                        ? 10
+                                                        : 20,
+                                                  ),
+                                                  child: RyhzePlayer(
+                                                    title: title,
+                                                    state: state,
+                                                    heroTag: heroTag,
+                                                  ),
+                                                )
+                                              else
+                                                Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: mobile
+                                                        ? 12
+                                                        : 20,
+                                                  ),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      ArtworkHero(
+                                                        tag: heroTag,
+                                                        image: title.image,
+                                                        state: state,
+                                                        child: ClipRSuperellipse(
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                surfaceRadius,
+                                                              ),
+                                                          child: LayoutBuilder(
+                                                            builder: (context, bounds) => SizedBox(
+                                                              width: double
+                                                                  .infinity,
+                                                              height:
+                                                                  (bounds.maxWidth *
+                                                                          9 /
+                                                                          16)
+                                                                      .clamp(
+                                                                        0.0,
+                                                                        MediaQuery.sizeOf(
+                                                                              context,
+                                                                            ).height *
+                                                                            .55,
+                                                                      ),
+                                                              child: TitleArt(
+                                                                title.image,
+                                                                state,
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                        height: 12,
+                                                      ),
+                                                      Text(
+                                                        title.imageNote.isEmpty
+                                                            ? 'Title artwork'
+                                                            : title.imageNote,
+                                                        style: const TextStyle(
+                                                          fontSize: 11,
+                                                          color: muted,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                  gutter,
+                                                  mobile ? 25 : 30,
+                                                  gutter,
+                                                  mobile ? 25 : 45,
+                                                ),
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  children: [
+                                                    Text(
+                                                      title.id ==
+                                                              'larcenous-driftscape'
+                                                          ? 'One state. Every way out.'
+                                                          : 'About this title',
+                                                      style: heading(30),
+                                                    ),
+                                                    const SizedBox(height: 20),
+                                                    Text(title.description),
+                                                    const SizedBox(height: 28),
+                                                    Wrap(
+                                                      spacing: 48,
+                                                      runSpacing: 24,
+                                                      children: [
+                                                        for (final fact
+                                                            in title.facts)
+                                                          SizedBox(
+                                                            width: 210,
+                                                            child: Column(
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .start,
+                                                              children: [
+                                                                Text(
+                                                                  fact.label,
+                                                                  style: const TextStyle(
+                                                                    fontSize:
+                                                                        11,
+                                                                    color:
+                                                                        muted,
+                                                                  ),
+                                                                ),
+                                                                const SizedBox(
+                                                                  height: 8,
+                                                                ),
+                                                                Text(
+                                                                  fact.value,
+                                                                  style: const TextStyle(
+                                                                    fontSize:
+                                                                        14,
+                                                                    color: Colors
+                                                                        .white,
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 30),
+                                                    if (title.isGame)
+                                                      GameOptions(
+                                                        title: title,
+                                                        state: state,
+                                                        onSignIn: () {
+                                                          Navigator.pop(
+                                                            context,
+                                                          );
+                                                          onSignIn();
+                                                        },
+                                                      ),
+                                                    if (title.internal)
+                                                      const Text(
+                                                        'Internal test content. This is not a Ryhze production or a public release.',
+                                                        style: TextStyle(
+                                                          fontSize: 11,
+                                                          color: muted,
+                                                        ),
+                                                      ),
+                                                  ],
+                                                ),
+                                              ),
+                                            ]
+                                            .map(
+                                              (item) =>
+                                                  item is Padding &&
+                                                      item.child is ArtworkHero
+                                                  ? item
+                                                  : DetailControlsReveal(
+                                                      child: item,
+                                                    ),
+                                            )
+                                            .toList(),
                                   ),
                                 ),
                               ),

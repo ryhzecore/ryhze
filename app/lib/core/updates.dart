@@ -8,8 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-const appVersion = '1.1.5';
-const appBuild = 13;
+const appVersion = '1.1.6';
+const appBuild = 14;
 const updateOrigin = 'https://ryhze-updates.live-insights.workers.dev';
 const updatePublicKey = 'gQ7hcr0OkoBlI/oTBDssW6sOswodVMdrtBPAqtatd+Q=';
 

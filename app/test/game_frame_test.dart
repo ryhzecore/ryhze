@@ -4,6 +4,56 @@ import 'package:ryhze/ui/artwork_hero.dart';
 import 'package:ryhze/ui/design.dart';
 
 void main() {
+  testWidgets(
+    'Controls stay invisible until the frame finishes, then blur in',
+    (tester) async {
+      var moving = true;
+      var reduced = false;
+      late StateSetter update;
+      await tester.pumpWidget(
+        MaterialApp(
+          home: StatefulBuilder(
+            builder: (context, setState) {
+              update = setState;
+              return GameFrameMotion(
+                moving: moving,
+                reduced: reduced,
+                child: const DetailControlsReveal(child: Text('Launch')),
+              );
+            },
+          ),
+        ),
+      );
+      final opacity = find.descendant(
+        of: find.byType(DetailControlsReveal),
+        matching: find.byType(Opacity),
+      );
+      expect(tester.widget<Opacity>(opacity).opacity, 0);
+      await tester.pump(const Duration(seconds: 1));
+      expect(tester.widget<Opacity>(opacity).opacity, 0);
+      update(() => moving = false);
+      await tester.pump();
+      expect(tester.widget<Opacity>(opacity).opacity, 0);
+      await tester.pump(const Duration(milliseconds: 100));
+      expect(tester.widget<Opacity>(opacity).opacity, inExclusiveRange(0, 1));
+      expect(
+        tester.widget<ImageFiltered>(find.byType(ImageFiltered)).enabled,
+        true,
+      );
+      await tester.pumpAndSettle();
+      expect(tester.widget<Opacity>(opacity).opacity, 1);
+      expect(
+        tester.widget<ImageFiltered>(find.byType(ImageFiltered)).enabled,
+        false,
+      );
+      update(() => moving = true);
+      await tester.pump();
+      expect(tester.widget<Opacity>(opacity).opacity, 0);
+      update(() => reduced = true);
+      await tester.pump();
+      expect(tester.widget<Opacity>(opacity).opacity, 1);
+    },
+  );
   for (final width in [1280.0, 1400.0]) {
     testWidgets('Game frame follows artwork timing and reverses ($width)', (
       tester,

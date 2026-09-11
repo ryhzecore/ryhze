@@ -61,7 +61,9 @@ void main() {
         await Future<void>.delayed(const Duration(seconds: 2));
       });
       await tester.pumpAndSettle();
-      final engine = tester.getRect(find.text('RACE'));
+      final engine = tester.getRect(
+        find.byKey(const ValueKey('card-open-race-engine')),
+      );
       final expectedGutter = width <= 350
           ? 16.0
           : width <= 700

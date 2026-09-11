@@ -37,7 +37,7 @@ void main() {
     );
     await tester.pump(const Duration(milliseconds: 100));
     expect(find.text('Installed: 0.1.0'), findsOneWidget);
-    final open = tester.widget<Pill>(find.widgetWithText(Pill, 'Open RACE'));
+    final open = tester.widget<Pill>(find.widgetWithText(Pill, 'Launch RACE'));
     expect(open.onPressed, isNotNull);
     expect(find.text('Locate RACE'), findsOneWidget);
     online.complete(http.Response('{"available":false}', 200));
@@ -60,18 +60,20 @@ void main() {
       await tester.pumpWidget(
         MaterialApp(
           theme: ryhzeTheme(),
-          home: Scaffold(
-            body: InstalledEngineCard(state: state, onOpen: () {}),
-          ),
+          home: Scaffold(body: InstalledEngineCard(state: state)),
         ),
       );
       await tester.pumpAndSettle();
       expect(find.text('RACE'), findsOneWidget);
-      expect(find.text('Manage engine'), findsOneWidget);
+      expect(find.text('Install or locate'), findsOneWidget);
       found = installation;
       await tester.pump(const Duration(seconds: 15));
       await tester.pumpAndSettle();
-      expect(find.text('Open engine'), findsOneWidget);
+      expect(find.text('Installed'), findsOneWidget);
+      await tester.tap(find.byKey(const ValueKey('card-open-race-engine')));
+      await tester.pumpAndSettle();
+      expect(find.byType(RaceDetail), findsOneWidget);
+      expect(find.text('Launch RACE'), findsOneWidget);
       await tester.pumpWidget(const SizedBox.shrink());
       state.dispose();
     },

@@ -1,3 +1,4 @@
+import 'dart:ui' show ImageFilter;
 import 'package:flutter/material.dart';
 import '../core/state.dart';
 import 'design.dart';
@@ -24,9 +25,11 @@ Rect? artworkBounds(BuildContext context, String tag) {
 /// Reveal the whole game frame from the same bounds as its artwork flight.
 class GameFrameMotion extends InheritedWidget {
   final bool moving;
+  final bool reduced;
   const GameFrameMotion({
     super.key,
     required this.moving,
+    this.reduced = false,
     required super.child,
   });
   static bool of(BuildContext context) =>
@@ -35,7 +38,8 @@ class GameFrameMotion extends InheritedWidget {
   static bool ownsFrame(BuildContext context) =>
       context.dependOnInheritedWidgetOfExactType<GameFrameMotion>() != null;
   @override
-  bool updateShouldNotify(GameFrameMotion old) => moving != old.moving;
+  bool updateShouldNotify(GameFrameMotion old) =>
+      moving != old.moving || reduced != old.reduced;
 }
 
 class GameFrameTransition extends StatelessWidget {
@@ -98,11 +102,75 @@ class GameFrameTransition extends StatelessWidget {
               ClipRSuperellipse(
                 clipper: _FrameClip(rect, radius),
                 clipBehavior: Clip.antiAlias,
-                child: GameFrameMotion(moving: t != 1, child: child!),
+                child: GameFrameMotion(
+                  moving: t != 1,
+                  reduced: reduced,
+                  child: child!,
+                ),
               ),
             ],
           );
         },
+      );
+    },
+  );
+}
+
+/// Keep controls still and hidden during the artwork flight, then reveal them.
+class DetailControlsReveal extends StatefulWidget {
+  final Widget child;
+  const DetailControlsReveal({super.key, required this.child});
+  @override
+  State<DetailControlsReveal> createState() => _DetailControlsRevealState();
+}
+
+class _DetailControlsRevealState extends State<DetailControlsReveal>
+    with SingleTickerProviderStateMixin {
+  late final controller = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 240),
+  );
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final frame = context.dependOnInheritedWidgetOfExactType<GameFrameMotion>();
+    if (frame == null || frame.reduced || MotionSettings.of(context)) {
+      controller.value = 1;
+    } else if (frame.moving) {
+      controller.value = 0;
+    } else {
+      controller.forward();
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => AnimatedBuilder(
+    animation: controller,
+    child: RepaintBoundary(child: widget.child),
+    builder: (context, child) {
+      final value = Curves.easeOutCubic.transform(controller.value);
+      return IgnorePointer(
+        ignoring: value < 1,
+        child: ExcludeSemantics(
+          excluding: value < 1,
+          child: Opacity(
+            opacity: value,
+            child: ImageFiltered(
+              enabled: value > 0 && value < 1,
+              imageFilter: ImageFilter.blur(
+                sigmaX: 4 * (1 - value),
+                sigmaY: 4 * (1 - value),
+              ),
+              child: child!,
+            ),
+          ),
+        ),
       );
     },
   );

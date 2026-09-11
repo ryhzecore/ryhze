@@ -1,0 +1,2 @@
+RACE now uses the same expandable artwork card as games in the admin Engine tab and Library. Open the card to launch, locate, or check for updates.
+Game and engine detail controls stay hidden while the frame expands, then fade and blur into view after expansion completes. Reduced motion is respected.
