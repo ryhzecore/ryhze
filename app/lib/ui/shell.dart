@@ -127,6 +127,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   }
 
   Future<void> open(RyhzeTitle title, String tag) async {
+    final source = artworkBounds(context, tag);
     setState(() => detailOpen = true);
     await syncAudio();
     if (!mounted) return;
@@ -144,10 +145,17 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
           heroTag: tag,
           onSignIn: () => navigate('login'),
         ),
-        transitionsBuilder: (_, animation, secondary, child) => FadeTransition(
-          opacity: CurvedAnimation(parent: animation, curve: ryhzeEase),
-          child: child,
-        ),
+        transitionsBuilder: (_, animation, secondary, child) => title.isGame
+            ? GameFrameTransition(
+                animation: animation,
+                source: source,
+                reduced: state.reduced || MotionSettings.of(context),
+                child: child,
+              )
+            : FadeTransition(
+                opacity: CurvedAnimation(parent: animation, curve: ryhzeEase),
+                child: child,
+              ),
       ),
     );
     detailOpen = false;
@@ -537,54 +545,74 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                     if (state.loading)
                       const LinearProgressIndicator(minHeight: 2),
                     Expanded(
-                      child: SingleChildScrollView(
-                        controller: scroll,
-                        child: AnimatedSwitcher(
-                          duration: Duration(
-                            milliseconds: MotionSettings.of(context) ? 0 : 320,
-                          ),
-                          layoutBuilder: (current, previous) => Stack(
-                            alignment: Alignment.topCenter,
-                            children: [
-                              for (final child in previous)
-                                IgnorePointer(
-                                  child: ExcludeSemantics(child: child),
-                                ),
-                              ?current,
-                            ],
-                          ),
-                          child: Column(
-                            key: ValueKey(page),
-                            children: [
-                              if ([
-                                'games',
-                                'films',
-                                'saved',
-                                'history',
-                                'library',
-                              ].contains(page))
-                                library(width, gutter, size.maxHeight)
-                              else if (page == 'login' || page == 'activate')
-                                AuthPage(
-                                  state: state,
-                                  activation: page == 'activate',
-                                  onNavigate: navigate,
-                                )
-                              else if (page == 'home')
-                                BrandHome(
-                                  navigate: navigate,
-                                  onUpdates: widget.updates?.supported == true
-                                      ? showUpdates
-                                      : null,
-                                )
-                              else if (page == 'engine')
-                                EnginePage(state: state)
-                              else if (page == 'admin')
-                                AdminPage(state: state)
-                              else
-                                EditorialPage(page: page, navigate: navigate),
-                              footer(gutter),
-                            ],
+                      child: LayoutBuilder(
+                        builder: (context, viewport) => SingleChildScrollView(
+                          controller: scroll,
+                          child: AnimatedSwitcher(
+                            duration: Duration(
+                              milliseconds: MotionSettings.of(context)
+                                  ? 0
+                                  : 320,
+                            ),
+                            layoutBuilder: (current, previous) => Stack(
+                              alignment: Alignment.topCenter,
+                              children: [
+                                for (final child in previous)
+                                  IgnorePointer(
+                                    child: ExcludeSemantics(child: child),
+                                  ),
+                                ?current,
+                              ],
+                            ),
+                            child: ConstrainedBox(
+                              key: ValueKey(page),
+                              constraints: BoxConstraints(
+                                minHeight: viewport.maxHeight,
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  if ([
+                                    'games',
+                                    'films',
+                                    'saved',
+                                    'history',
+                                    'library',
+                                  ].contains(page))
+                                    library(width, gutter, size.maxHeight)
+                                  else if (page == 'login' ||
+                                      page == 'activate')
+                                    AuthPage(
+                                      state: state,
+                                      activation: page == 'activate',
+                                      onNavigate: navigate,
+                                    )
+                                  else if (page == 'home')
+                                    BrandHome(
+                                      navigate: navigate,
+                                      onUpdates:
+                                          widget.updates?.supported == true
+                                          ? showUpdates
+                                          : null,
+                                    )
+                                  else if (page == 'engine')
+                                    EnginePage(
+                                      state: state,
+                                      horizontalPadding: gutter,
+                                    )
+                                  else if (page == 'admin')
+                                    AdminPage(state: state)
+                                  else
+                                    EditorialPage(
+                                      page: page,
+                                      navigate: navigate,
+                                    ),
+                                  footer(gutter),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),

@@ -43,7 +43,7 @@ void main() {
     final payload = utf8.encode(
       jsonEncode({
         'schema': 1,
-        if (product != null) 'product': product,
+        'product': ?product,
         'releases': [value ?? release],
       }),
     );

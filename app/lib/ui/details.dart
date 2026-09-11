@@ -57,12 +57,18 @@ class DetailPage extends StatelessWidget {
                         margin: EdgeInsets.all(mobile ? 12 : 24),
                         constraints: const BoxConstraints(maxWidth: 1080),
                         decoration: ShapeDecoration(
-                          color: const Color(0xd9111014),
+                          color: GameFrameMotion.of(context)
+                              ? Colors.transparent
+                              : const Color(0xd9111014),
                           shape: RoundedSuperellipseBorder(
                             borderRadius: BorderRadius.circular(
                               panelRadius(mobile),
                             ),
-                            side: const BorderSide(color: Color(0x25ffffff)),
+                            side: BorderSide(
+                              color: GameFrameMotion.of(context)
+                                  ? Colors.transparent
+                                  : const Color(0x25ffffff),
+                            ),
                           ),
                         ),
                         child: ClipRSuperellipse(

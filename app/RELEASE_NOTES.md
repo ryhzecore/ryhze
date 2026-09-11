@@ -1,3 +1,9 @@
+# Ryhze 1.1.4
+
+- Engine content aligns with the shared left page margin. The footer stays at the bottom of short pages and scrolls naturally on smaller screens.
+- Catalogue and installed-game detail frames expand from their thumbnail bounds, with matching artwork motion and reduced-motion support.
+- Locally registered RACE installations show Open RACE and distinguish local availability from online update availability.
+
 # Ryhze 1.1.3
 
 - A new Library button beside the menu brings installed games together, with launch, resume and last-played tracking. Duplicate game discoveries share one library entry.

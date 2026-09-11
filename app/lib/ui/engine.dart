@@ -78,7 +78,8 @@ class _InstalledEngineCardState extends State<InstalledEngineCard> {
 
 class EnginePage extends StatefulWidget {
   final RyhzeState state;
-  const EnginePage({super.key, required this.state});
+  final double? horizontalPadding;
+  const EnginePage({super.key, required this.state, this.horizontalPadding});
   @override
   State<EnginePage> createState() => _EnginePageState();
 }
@@ -149,7 +150,9 @@ class _EnginePageState extends State<EnginePage> {
       if (generation != operation || !mounted || !allowed) return;
       if (data['available'] == false) {
         release = null;
-        message = data['message'] as String?;
+        message = executable != null
+            ? 'RACE is installed on this PC. Online updates are not available yet.'
+            : data['message'] as String?;
       } else {
         release = await AppRelease.verify(
           jsonEncode(data),
@@ -275,8 +278,11 @@ class _EnginePageState extends State<EnginePage> {
     if (!allowed) return const SizedBox.shrink();
     final update = release != null && release!.build > installedBuild;
     return Padding(
-      padding: EdgeInsets.all(
-        MediaQuery.sizeOf(context).width <= 700 ? 22 : 56,
+      padding: EdgeInsets.symmetric(
+        horizontal:
+            widget.horizontalPadding ??
+            (MediaQuery.sizeOf(context).width <= 700 ? 22 : 56),
+        vertical: MediaQuery.sizeOf(context).width <= 700 ? 32 : 56,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -355,6 +355,7 @@ class LocalGameCard extends StatelessWidget {
           name: game.name,
         );
         Future<void> open() async {
+          final source = artworkBounds(context, 'card-${title.id}');
           onDetailsChanged?.call(true);
           try {
             await Navigator.of(context).push(
@@ -375,10 +376,13 @@ class LocalGameCard extends StatelessWidget {
                   heroTag: 'card-${title.id}',
                   cover: snapshot.data?.artwork ?? '',
                 ),
-                transitionsBuilder: (_, animation, _, child) => FadeTransition(
-                  opacity: CurvedAnimation(parent: animation, curve: ryhzeEase),
-                  child: child,
-                ),
+                transitionsBuilder: (_, animation, _, child) =>
+                    GameFrameTransition(
+                      animation: animation,
+                      source: source,
+                      reduced: state.reduced || MotionSettings.of(context),
+                      child: child,
+                    ),
               ),
             );
           } finally {
@@ -719,6 +723,7 @@ class _LocalGameDetailState extends State<LocalGameDetail>
                     constraints: const BoxConstraints(maxWidth: 1080),
                     child: Glass(
                       radius: panelRadius(mobile),
+                      frameVisible: !GameFrameMotion.of(context),
                       child: Column(
                         children: [
                           Container(

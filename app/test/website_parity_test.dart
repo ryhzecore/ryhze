@@ -26,6 +26,19 @@ Future<void> capture(GlobalKey key, String name) async {
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
+  setUpAll(() async {
+    await (FontLoader(
+      'MaterialIcons',
+    )..addFont(rootBundle.load('fonts/MaterialIcons-Regular.otf'))).load();
+    for (final font in [
+      ('Inter', 'Inter'),
+      ('Space Grotesk', 'SpaceGrotesk'),
+    ]) {
+      await (FontLoader(
+        font.$1,
+      )..addFont(rootBundle.load('assets/fonts/${font.$2}.ttf'))).load();
+    }
+  });
   testWidgets('bundled game artwork decodes with the native image codec', (
     tester,
   ) async {
@@ -66,7 +79,7 @@ void main() {
       );
       await tester.pumpAndSettle();
       expect(tester.takeException(), isNull);
-      await capture(key, 'brand-home-${width.toInt()}');
+      await tester.runAsync(() => capture(key, 'brand-home-${width.toInt()}'));
       await tester.ensureVisible(find.text('Explore Ryhze'));
       await tester.tap(find.text('Explore Ryhze'));
       expect(destination, 'games');
@@ -200,10 +213,30 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
-      await capture(key, 'library-desktop');
+      await tester.runAsync(() => capture(key, 'library-desktop'));
       await tester.tap(find.text('Explore the game'));
+      await tester.pump();
+      await tester.pump(const Duration(milliseconds: 250));
+      expect(
+        find.byKey(const ValueKey('expanding-game-frame')),
+        findsOneWidget,
+      );
+      await tester.runAsync(() => capture(key, 'detail-expanding-desktop'));
       await tester.pumpAndSettle();
-      await capture(key, 'detail-desktop');
+      await tester.runAsync(() => capture(key, 'detail-desktop'));
+      expect(
+        tester.getRect(find.byKey(const ValueKey('expanding-game-frame'))),
+        tester
+            .getRect(
+              find
+                  .descendant(
+                    of: find.byType(DetailPage),
+                    matching: find.byType(ClipRSuperellipse),
+                  )
+                  .first,
+            )
+            .inflate(1),
+      );
       final artwork = find.descendant(
         of: find.byType(DetailPage),
         matching: find.byType(TitleArt),
@@ -211,14 +244,14 @@ void main() {
       expect(tester.getSize(artwork).width, greaterThan(1000));
       tester.view.physicalSize = const Size(390, 844);
       await tester.pumpAndSettle();
-      await capture(key, 'detail-phone');
+      await tester.runAsync(() => capture(key, 'detail-phone'));
       expect(tester.getSize(artwork).width, greaterThan(330));
       expect(tester.takeException(), isNull);
       await tester.tap(find.text('Back'));
       await tester.pump(const Duration(milliseconds: 900));
       await tester.pumpAndSettle();
       expect(find.text('Back'), findsNothing);
-      await capture(key, 'library-phone');
+      await tester.runAsync(() => capture(key, 'library-phone'));
       await tester.pumpWidget(const SizedBox());
       state.api.close();
       state.dispose();

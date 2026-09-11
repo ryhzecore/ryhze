@@ -1,0 +1,1 @@
+Engine content now aligns with the left page margin, and the footer stays at the bottom of short pages. Game detail frames expand from their thumbnails with synchronized artwork motion. Registered local RACE installations show Open RACE, with clearer online update availability.

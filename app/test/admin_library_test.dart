@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ryhze/core/models.dart';
 import 'package:ryhze/main.dart';
 import 'package:ryhze/ui/design.dart';
+import 'package:ryhze/ui/studio.dart';
 import 'support.dart';
 import 'website_parity_test.dart' show capture;
 
@@ -54,6 +55,26 @@ void main() {
         () => capture(boundary, 'admin-library-${width.toInt()}'),
       );
       expect(find.text('Made to explore.'), findsNothing);
+      await tester.runAsync(() async {
+        await tester.tap(find.byKey(const ValueKey('browse-engine')));
+        await tester.pump();
+        await Future<void>.delayed(const Duration(seconds: 2));
+      });
+      await tester.pumpAndSettle();
+      final engine = tester.getRect(find.text('RACE'));
+      final expectedGutter = width <= 350
+          ? 16.0
+          : width <= 700
+          ? 22.0
+          : (width * .045).clamp(20.0, 88.0);
+      expect(engine.left, closeTo(expectedGutter, .1));
+      final footer = tester.getRect(find.byType(RyhzeFooter));
+      expect(footer.bottom, greaterThanOrEqualTo(900));
+      if (width >= 1000) expect(footer.bottom, closeTo(900, .1));
+      expect(tester.takeException(), isNull);
+      await tester.runAsync(
+        () => capture(boundary, 'engine-layout-${width.toInt()}'),
+      );
       state.user = null;
       state.notifyListeners();
       await tester.pumpAndSettle();

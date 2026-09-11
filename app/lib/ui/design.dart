@@ -105,11 +105,13 @@ class Glass extends StatelessWidget {
   final Widget child;
   final double radius;
   final EdgeInsetsGeometry padding;
+  final bool frameVisible;
   const Glass({
     super.key,
     required this.child,
     this.radius = surfaceRadius,
     this.padding = EdgeInsets.zero,
+    this.frameVisible = true,
   });
   @override
   Widget build(BuildContext context) => ClipRSuperellipse(
@@ -121,12 +123,18 @@ class Glass extends StatelessWidget {
         decoration: ShapeDecoration(
           shape: RoundedSuperellipseBorder(
             borderRadius: BorderRadius.circular(radius),
-            side: const BorderSide(color: Color(0x22ffffff)),
+            side: BorderSide(
+              color: frameVisible
+                  ? const Color(0x22ffffff)
+                  : Colors.transparent,
+            ),
           ),
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [Color(0xe027272e), Color(0xe01a1a20)],
+            colors: frameVisible
+                ? const [Color(0xe027272e), Color(0xe01a1a20)]
+                : const [Colors.transparent, Colors.transparent],
           ),
         ),
         child: Material(type: MaterialType.transparency, child: child),
