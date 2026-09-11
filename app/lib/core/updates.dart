@@ -8,8 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:path_provider/path_provider.dart';
 
-const appVersion = '1.1.2';
-const appBuild = 10;
+const appVersion = '1.1.3';
+const appBuild = 11;
 const updateOrigin = 'https://ryhze-updates.live-insights.workers.dev';
 const updatePublicKey = 'gQ7hcr0OkoBlI/oTBDssW6sOswodVMdrtBPAqtatd+Q=';
 
@@ -31,6 +31,7 @@ class AppRelease {
     String envelope,
     String platform, {
     String publicKey = updatePublicKey,
+    String product = 'Ryhze',
   }) async {
     final data = jsonDecode(envelope) as Map<String, dynamic>;
     if (data['keyId'] != 'ryhze-updates-2026') {
@@ -48,6 +49,9 @@ class AppRelease {
       throw const FormatException('Invalid update signature');
     }
     final manifest = jsonDecode(utf8.decode(payload)) as Map<String, dynamic>;
+    if (product == 'RACE' && manifest['product'] != 'race') {
+      throw const FormatException('Not a RACE release');
+    }
     if (manifest['schema'] != 1) {
       throw const FormatException('Unknown update format');
     }
@@ -72,7 +76,10 @@ class AppRelease {
         bytes > 1024 * 1024 * 1024 ||
         !RegExp(r'^[0-9a-f]{64}$').hasMatch(sha) ||
         notes.length > 4000 ||
-        path != '/releases/$version/Ryhze-$version-$extension') {
+        path !=
+            (product == 'RACE'
+                ? '/api/admin/race/releases/$version/RACE-$version-$extension'
+                : '/releases/$version/Ryhze-$version-$extension')) {
       throw const FormatException('Invalid release information');
     }
     return AppRelease(

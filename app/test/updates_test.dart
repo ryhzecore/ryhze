@@ -39,10 +39,11 @@ void main() {
     await folder.delete(recursive: true);
   });
 
-  Future<String> signed({Map<String, Object>? value}) async {
+  Future<String> signed({Map<String, Object>? value, String? product}) async {
     final payload = utf8.encode(
       jsonEncode({
         'schema': 1,
+        if (product != null) 'product': product,
         'releases': [value ?? release],
       }),
     );
@@ -53,6 +54,48 @@ void main() {
       'signature': base64Encode(signature.bytes),
     });
   }
+
+  test(
+    'RACE accepts only its signed private release path and product',
+    () async {
+      final race = {
+        ...release,
+        'path': '/api/admin/race/releases/1.0.4/RACE-1.0.4-Windows-Setup.exe',
+      };
+      final envelope = await signed(value: race, product: 'race');
+      expect(
+        (await AppRelease.verify(
+          envelope,
+          'windows',
+          publicKey: publicKey,
+          product: 'RACE',
+        ))!.filename,
+        'RACE-1.0.4-Windows-Setup.exe',
+      );
+      await expectLater(
+        AppRelease.verify(envelope, 'windows', publicKey: publicKey),
+        throwsFormatException,
+      );
+      await expectLater(
+        AppRelease.verify(
+          await signed(value: race),
+          'windows',
+          publicKey: publicKey,
+          product: 'RACE',
+        ),
+        throwsFormatException,
+      );
+      await expectLater(
+        AppRelease.verify(
+          await signed(),
+          'windows',
+          publicKey: publicKey,
+          product: 'RACE',
+        ),
+        throwsFormatException,
+      );
+    },
+  );
 
   AppUpdates controller(
     String index, {

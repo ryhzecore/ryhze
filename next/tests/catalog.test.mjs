@@ -7,7 +7,7 @@ const publicTitles = JSON.parse(
 const internalTitles = JSON.parse(
   readFileSync(new URL("../server/internal-catalog.json", import.meta.url)),
 );
-test("release catalogue contains no QA fixture or third-party public title", () => {
+test("release catalogue contains no QA fixture or internal public title", () => {
   assert.ok(publicTitles.every((t) => !t.internal));
   assert.ok(internalTitles.every((t) => t.internal));
   assert.ok(
@@ -22,5 +22,11 @@ test("release catalogue contains no QA fixture or third-party public title", () 
       assert.match(stream.url, /^\/media\/(Films|Games)\//);
     if (title.internal && title.image)
       assert.match(title.image, /^\/private-art\//);
+  }
+});
+
+test("GTA VI and Valorant are removed from the shared catalogue", () => {
+  for (const id of ["internal-valorant", "internal-grand-theft-auto-vi"]) {
+    assert.ok(![...publicTitles, ...internalTitles].some(title => title.id === id));
   }
 });

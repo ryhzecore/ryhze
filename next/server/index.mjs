@@ -2,6 +2,7 @@ import { download } from "./downloads.mjs";
 import auth, { session } from "./auth.mjs";
 import originals from "./catalog.json" with { type: "json" };
 import internal from "./internal-catalog.json" with { type: "json" };
+import { catalogue } from './game-catalog.mjs';
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), {
     status,
@@ -40,14 +41,14 @@ async function handle(request, env) {
   if (path.startsWith("/downloads/")) return download(request, env);
   if (path === "/api/discover")
     return request.method === "GET"
-      ? json(originals)
+      ? json(await catalogue(env, originals))
       : json({ error: "Method not allowed" }, 405);
   if (path === "/api/catalog") {
     if (request.method !== "GET")
       return json({ error: "Method not allowed" }, 405);
     if (!(await session(request, env)))
       return json({ error: "Sign in required." }, 401);
-    return json([...originals, ...internal]);
+    return json(await catalogue(env, [...originals, ...internal], { includeInternal: true }));
   }
   if (path.startsWith("/api/") || path.startsWith("/media/"))
     return auth.fetch(request, env);

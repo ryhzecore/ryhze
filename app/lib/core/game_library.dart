@@ -16,6 +16,12 @@ String gamePath(String path) {
   return value.startsWith(r'\\') ? '\\$normalized' : normalized;
 }
 
+String gameNameKey(String name) => name
+    .toLowerCase()
+    .replaceAll(RegExp(r'[™®©]'), '')
+    .replaceAll(RegExp(r'\s+'), ' ')
+    .trim();
+
 bool insideGame(String file, String root) =>
     gamePath(file).startsWith('${gamePath(root)}\\');
 
@@ -280,17 +286,40 @@ class GameLibrary extends ChangeNotifier {
     }
   }
   bool? get permission => prefs.getBool(permissionKey);
-  List<LocalGame> get sorted => [...games]
-    ..sort((a, b) {
-      final active = (isRunning(b) ? 1 : 0).compareTo(isRunning(a) ? 1 : 0);
-      if (active != 0) return active;
-      final last = (b.lastPlayed?.millisecondsSinceEpoch ?? 0).compareTo(
-        a.lastPlayed?.millisecondsSinceEpoch ?? 0,
-      );
-      return last != 0
-          ? last
-          : a.name.toLowerCase().compareTo(b.name.toLowerCase());
-    });
+  List<LocalGame> get sorted {
+    final ordered = [...games]
+      ..sort((a, b) {
+        final active = (isRunning(b) ? 1 : 0).compareTo(isRunning(a) ? 1 : 0);
+        if (active != 0) return active;
+        final last = (b.lastPlayed?.millisecondsSinceEpoch ?? 0).compareTo(
+          a.lastPlayed?.millisecondsSinceEpoch ?? 0,
+        );
+        return last != 0
+            ? last
+            : a.name.toLowerCase().compareTo(b.name.toLowerCase());
+      });
+    final names = <String>{};
+    final stores = <String>{};
+    final paths = <String>{};
+    return ordered.where((game) {
+      final storeKey = game.source == 'Epic Games'
+          ? 'epic:${game.namespace}:${game.storeId}'
+          : 'steam:${game.storeId}';
+      final name = gameNameKey(game.name),
+          path = gamePath(
+            game.executable.isEmpty ? game.root : game.executable,
+          );
+      final duplicate =
+          names.contains(name) ||
+          (game.storeId.isNotEmpty && stores.contains(storeKey)) ||
+          (path.isNotEmpty && paths.contains(path));
+      names.add(name);
+      if (game.storeId.isNotEmpty) stores.add(storeKey);
+      if (path.isNotEmpty) paths.add(path);
+      return !duplicate;
+    }).toList();
+  }
+
   void emit() {
     if (!_disposed) notifyListeners();
   }

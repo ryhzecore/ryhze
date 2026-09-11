@@ -12,6 +12,59 @@ import 'package:ryhze/core/game_media.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
   test(
+    'duplicate launcher entries share one card and prefer the running game',
+    () async {
+      SharedPreferences.setMockInitialValues({});
+      final library = GameLibrary(
+        await SharedPreferences.getInstance(),
+        autoPoll: false,
+      );
+      addTearDown(library.dispose);
+      final steam = LocalGame(
+        id: 'steam-1',
+        name: 'Same Game',
+        source: 'Steam',
+        root: r'D:\Steam\Game',
+        storeId: '123',
+      );
+      final epic = LocalGame(
+        id: 'epic-1',
+        name: 'Same Game',
+        source: 'Epic Games',
+        root: r'E:\Epic\Game',
+        lastPlayed: DateTime(2026),
+      );
+      final sequel = LocalGame(
+        id: 'steam-2',
+        name: 'Same Game 2',
+        source: 'Steam',
+        root: r'D:\Steam\Game2',
+        storeId: '456',
+      );
+      library.games = [steam, epic, sequel];
+      expect(library.sorted.map((g) => g.id), ['epic-1', 'steam-2']);
+      library.running = {
+        'steam-1': [
+          {'pid': 1},
+        ],
+      };
+      expect(library.sorted.first.id, 'steam-1');
+      expect(library.games.length, 3);
+      library.games.add(
+        LocalGame(
+          id: 'epic-other',
+          name: 'Another Game',
+          source: 'Epic Games',
+          root: r'E:\Epic\Another',
+          storeId: '123',
+          namespace: 'another',
+        ),
+      );
+      expect(library.sorted.any((game) => game.id == 'epic-other'), true);
+      expect(gameNameKey('SAME GAME\u2122'), gameNameKey('Same Game'));
+    },
+  );
+  test(
     'Riot discovers Valorant on another drive and normalizes doubled separators',
     () async {
       final temp = await Directory.systemTemp.createTemp('ryhze-riot-test-');

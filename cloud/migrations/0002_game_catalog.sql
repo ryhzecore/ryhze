@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS game_catalog (
+ id TEXT PRIMARY KEY,
+ document TEXT NOT NULL,
+ revision INTEGER NOT NULL DEFAULT 1,
+ hidden INTEGER NOT NULL DEFAULT 0,
+ updated_by TEXT NOT NULL REFERENCES users(id),
+ updated_at INTEGER NOT NULL
+);

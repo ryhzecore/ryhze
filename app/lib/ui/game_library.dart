@@ -11,6 +11,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../core/game_library.dart';
 import '../core/game_media.dart';
 import 'design.dart';
+import 'admin_games.dart';
 
 Future<void> gamePermission(BuildContext context, GameLibrary library) async {
   final allow = await showDialog<bool>(
@@ -392,23 +393,61 @@ class LocalGameCard extends StatelessWidget {
           previewAllowed: previewAllowed,
           onOpen: open,
           onSave: open,
-          trailingAction: Pill(
-            playing ? 'Resume ${game.name}' : 'Start ${game.name}',
-            iconOnly: true,
-            quiet: true,
-            icon: playing ? Icons.play_arrow : Icons.play_arrow_outlined,
-            height: 44,
-            onPressed:
-                library.permission != true ||
-                    library.launching.containsKey(game.id) ||
-                    library.busy.contains(game.id)
-                ? null
-                : () => attempt(
-                    context,
-                    () => playing
-                        ? library.control(game, 'resume')
-                        : library.launchGame(game),
-                  ),
+          trailingAction: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (state.user?.launcherAdmin == true)
+                Pill(
+                  'Edit catalogue game',
+                  icon: Icons.edit_outlined,
+                  iconOnly: true,
+                  quiet: true,
+                  height: 44,
+                  onPressed: () {
+                    final matches = state.titles.where(
+                      (t) =>
+                          t.isGame &&
+                          (gameNameKey(t.title) == gameNameKey(game.name) ||
+                              (game.source != 'Epic Games' &&
+                                  t.storeId.isNotEmpty &&
+                                  t.storeId == game.storeId)),
+                    );
+                    final entry = matches.isNotEmpty
+                        ? matches.first
+                        : RyhzeTitle(
+                            id: 'game-${game.name.toLowerCase().replaceAll(RegExp(r'[^a-z0-9]+'), '-')}',
+                            title: game.name,
+                            kind: 'game',
+                            label: game.source,
+                            status: 'Available',
+                            description: '',
+                            image: '',
+                            storeId: game.source == 'Epic Games'
+                                ? ''
+                                : game.storeId,
+                          );
+                    editCatalogueGame(context, state, entry);
+                  },
+                ),
+              Pill(
+                playing ? 'Resume ${game.name}' : 'Start ${game.name}',
+                iconOnly: true,
+                quiet: true,
+                icon: playing ? Icons.play_arrow : Icons.play_arrow_outlined,
+                height: 44,
+                onPressed:
+                    library.permission != true ||
+                        library.launching.containsKey(game.id) ||
+                        library.busy.contains(game.id)
+                    ? null
+                    : () => attempt(
+                        context,
+                        () => playing
+                            ? library.control(game, 'resume')
+                            : library.launchGame(game),
+                      ),
+              ),
+            ],
           ),
         );
       },

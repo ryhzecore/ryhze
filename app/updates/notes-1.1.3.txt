@@ -1,0 +1,4 @@
+﻿A new Library button beside the menu brings installed games together, with launch, resume and last-played tracking. Duplicate game discoveries share one library entry.
+Andru and Leo can add and edit the shared game catalogue. GTA VI and Valorant have been removed from Ryhze's catalogue; locally installed games remain available.
+Admins have an Engine tab and can access installed RACE from the library. Verified RACE installations and updates become available when a signed engine release is published.
+Navigation now follows your drag, and search and menu expand from their source buttons. Reduced-motion preferences are respected.

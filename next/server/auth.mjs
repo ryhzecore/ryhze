@@ -1,5 +1,8 @@
 import { randomBytes, createHash, scrypt, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
+import originals from './catalog.json' with { type: 'json' };
+import { launcherAdmin, catalogue, saveGame } from './game-catalog.mjs';
+import { raceDownloads } from './race-downloads.mjs';
 const derive = promisify(scrypt);
 const cookieName = "__Host-ryhze_session";
 const now = () => Math.floor(Date.now() / 1000);
@@ -82,7 +85,7 @@ async function limited(env, key, limit) {
     .first();
   return record.count > limit;
 }
-async function bodyJson(request) {
+async function bodyJson(request, limit = 4096) {
   if (!request.headers.get("Content-Type")?.startsWith("application/json"))
     throw new Error("JSON required");
   const reader = request.body?.getReader();
@@ -93,7 +96,7 @@ async function bodyJson(request) {
     const { done, value } = await reader.read();
     if (done) break;
     size += value.length;
-    if (size > 4096) {
+    if (size > limit) {
       await reader.cancel();
       throw new Error("Too large");
     }
@@ -283,6 +286,19 @@ async function handle(request, env) {
   if (path.startsWith("/api/admin/")) {
     if (user?.role !== "admin")
       return fail("Administrator access required.", 403);
+    if (path.startsWith('/api/admin/race/')) {
+      if (!launcherAdmin(user)) return fail('Launcher administrator access required.', 403);
+      return raceDownloads(request, env);
+    }
+    if (path === '/api/admin/games') {
+      if (!launcherAdmin(user)) return fail('Launcher administrator access required.', 403);
+      if (request.method === 'GET') return json(await catalogue(env, originals, { includeHidden: true }));
+      if (request.method !== 'POST') return fail('Method not allowed', 405);
+      try {
+        const changed = await saveGame(env, user, await bodyJson(request, 16384));
+        return changed ? json({ ok: true }) : fail('This game was changed by another admin. Reload and try again.', 409);
+      } catch (error) { return fail(error.message || 'Invalid game.'); }
+    }
     if (path === "/api/admin/users" && request.method === "GET")
       return json(
         (

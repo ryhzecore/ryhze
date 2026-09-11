@@ -4,6 +4,8 @@ class RyhzeTitle {
   final List<Season> seasons;
   final List<TitleFact> facts;
   final String? preview, download, availability;
+  final String storeId;
+  final int revision;
   final bool internal;
   const RyhzeTitle({
     required this.id,
@@ -22,6 +24,8 @@ class RyhzeTitle {
     this.download,
     this.availability,
     this.internal = false,
+    this.storeId = '',
+    this.revision = 0,
   });
   bool get isGame => kind == 'game';
   bool get upcoming => availability == 'coming-soon';
@@ -51,6 +55,8 @@ class RyhzeTitle {
     download: j['download'],
     availability: j['availability'],
     internal: j['internal'] == true,
+    storeId: j['storeId'] as String? ?? '',
+    revision: j['revision'] as int? ?? 0,
   );
 }
 
@@ -83,6 +89,8 @@ class Episode {
 class Member {
   final String username, role;
   const Member(this.username, this.role);
+  bool get launcherAdmin =>
+      role == 'admin' && ['andru', 'leo'].contains(username.toLowerCase());
   factory Member.fromJson(Map<String, dynamic> j) =>
       Member(j['username'], j['role']);
 }

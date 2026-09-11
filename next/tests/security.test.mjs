@@ -14,6 +14,7 @@ function environment() {
       "utf8",
     ),
   );
+  sqlite.exec(fs.readFileSync(new URL("../../cloud/migrations/0002_game_catalog.sql", import.meta.url), "utf8"));
   const wrap = (sql, args = []) => ({
     bind(...values) {
       return wrap(sql, values);
@@ -47,7 +48,7 @@ function environment() {
       },
     },
     ASSETS: { fetch: () => new Response("private page") },
-    MEDIA: { head: async () => null },
+    MEDIA: { head: async () => null, get: async () => null },
   };
 }
 const request = (path, body, cookie = "", origin = "https://ryhze.com") =>
@@ -404,4 +405,43 @@ test("administration cannot elevate invitations or disable the current administr
     ).status,
     409,
   );
+});
+test("only Andru and Leo can edit games and access private RACE releases", async () => {
+  const env = environment();
+  const document = {id:'test-game',title:'Test game',categories:['Driving'],revision:0};
+  for (const [i, name, role] of [[1,'Andru','admin'],[2,'Leo','admin'],[3,'Other','admin'],[4,'Member','viewer']]) {
+    const token = String(i).repeat(64), cookie='__Host-ryhze_session='+token;
+    env.sqlite.prepare('INSERT INTO users VALUES (?,?,?,?,?,?)').run(name,name,null,role,0,1);
+    env.sqlite.prepare('INSERT INTO sessions VALUES (?,?,?)').run(digest(token),name,Math.floor(Date.now()/1000)+1000);
+    const allowed = i <= 2;
+    assert.equal((await worker.fetch(request('/api/admin/games',undefined,cookie),env)).status,allowed?200:403);
+    const race = await worker.fetch(request('/api/admin/race/manifest',undefined,cookie),env);
+    assert.equal(race.status,allowed?200:403);
+    if(allowed) assert.equal((await race.json()).available,false);
+    if(!allowed) assert.equal((await worker.fetch(request('/api/admin/games',document,cookie),env)).status,403);
+  }
+  const cookie='__Host-ryhze_session='+'1'.repeat(64);
+  assert.equal((await worker.fetch(request('/api/admin/games',document,cookie),env)).status,200);
+  assert.equal((await worker.fetch(request('/api/admin/games',document,cookie),env)).status,409);
+  let titles=await (await worker.fetch(request('/api/discover'),env)).json();
+  assert.equal(titles.find(t=>t.id===document.id).revision,1);
+  assert.equal((await worker.fetch(request('/api/admin/games',{...document,revision:1,hidden:true},cookie),env)).status,200);
+  titles=await (await worker.fetch(request('/api/discover'),env)).json();
+  assert.ok(!titles.some(t=>t.id===document.id));
+  assert.equal((await worker.fetch(request('/api/admin/games',{...document,id:'bad-image',image:'https://attacker.example/a'},cookie),env)).status,400);
+  assert.equal((await worker.fetch(request('/api/admin/games',document,cookie,'https://attacker.example'),env)).status,403);
+  assert.equal((await worker.fetch(request('/api/admin/race/manifest'),env)).status,403);
+  assert.equal((await worker.fetch(request('/api/admin/race/releases/1.0.0/RACE-1.0.0-Windows-Setup.exe'),env)).status,403);
+});
+test('RACE rejects an unsigned release and internal overrides stay private', async () => {
+  const env=environment(), token='9'.repeat(64), cookie='__Host-ryhze_session='+token;
+  env.sqlite.prepare('INSERT INTO users VALUES (?,?,?,?,?,?)').run('andru','Andru',null,'admin',0,1);
+  env.sqlite.prepare('INSERT INTO sessions VALUES (?,?,?)').run(digest(token),'andru',Math.floor(Date.now()/1000)+1000);
+  env.MEDIA.get=async()=>({text:async()=>JSON.stringify({keyId:'ryhze-updates-2026',payload:Buffer.from('{}').toString('base64'),signature:Buffer.alloc(64).toString('base64')})});
+  assert.equal((await worker.fetch(request('/api/admin/race/manifest',undefined,cookie),env)).status,503);
+  env.sqlite.prepare('INSERT INTO game_catalog VALUES (?,?,?,?,?,?)').run('private-game',JSON.stringify({id:'private-game',kind:'game',title:'Private game',internal:true}),1,0,'andru',1);
+  const publicTitles=await(await worker.fetch(request('/api/discover'),env)).json();
+  assert.ok(!publicTitles.some(t=>t.id==='private-game'));
+  const privateTitles=await(await worker.fetch(request('/api/catalog',undefined,cookie),env)).json();
+  assert.ok(privateTitles.some(t=>t.id==='private-game'));
 });

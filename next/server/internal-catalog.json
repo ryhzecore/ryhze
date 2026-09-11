@@ -11,32 +11,5 @@
     "streams": [],
     "seasons": [],
     "internal": true
-  },
-  {
-    "id": "internal-grand-theft-auto-vi",
-    "title": "Grand Theft Auto VI",
-    "kind": "game",
-    "label": "Internal testing",
-    "status": "Internal preview",
-    "description": "Set in Leonida, a parody of modern Florida, Grand Theft Auto VI centers on Jason Duval and Lucia Caminos, a criminal couple navigating a Bonnie and Clyde–style partnership. Starting with low-level robberies to build a life together, their plans crumble when an easy score goes wrong, trapping them in a massive statewide criminal conspiracy. Forced onto the run, the duo must execute high-stakes heists while dodging corrupt cops, rival syndicates, and viral-media culture—relying entirely on mutual trust to survive.",
-    "image": "/private-art/Games/Grand%20Theft%20Auto%20VI/Thumbnail/OfficialImage.png?v=639235732426863946",
-    "categories": ["Exclusives", "Up & Coming"],
-    "streams": [],
-    "seasons": [],
-    "internal": true
-  },
-  {
-    "id": "internal-valorant",
-    "title": "Valorant",
-    "kind": "game",
-    "label": "Internal testing",
-    "status": "Internal preview",
-    "description": "After escaping with the Tesseract in Avengers: Endgame, the God of Mischief is captured by the Time Variance Authority, forcing him to navigate the unraveling multiverse alongside an unlikely band of allies.",
-    "image": "/private-art/Games/Valorant/Thumbnail/OfficialImage.png?v=png-20260909",
-    "categories": ["Exclusives", "Up & Coming", "Marvel"],
-    "streams": [],
-    "seasons": [],
-    "download": "/media/Games/Valorant/Download/Install.exe",
-    "internal": true
   }
 ]

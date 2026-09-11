@@ -323,7 +323,13 @@ class _PillState extends State<Pill> {
 class BrowseTabs extends StatefulWidget {
   final String page;
   final ValueChanged<String> onChanged;
-  const BrowseTabs({super.key, required this.page, required this.onChanged});
+  final bool engineAvailable;
+  const BrowseTabs({
+    super.key,
+    required this.page,
+    required this.onChanged,
+    this.engineAvailable = false,
+  });
   @override
   State<BrowseTabs> createState() => _BrowseTabsState();
 }
@@ -336,6 +342,11 @@ class _BrowseTabsState extends State<BrowseTabs> {
   Offset? down;
   final trackKey = GlobalKey();
   String get page => widget.page;
+  List<String> get modes => [
+    'games',
+    'films',
+    if (widget.engineAvailable) 'engine',
+  ];
   void onChanged(String page) => widget.onChanged(page);
 
   Offset local(Offset global) =>
@@ -354,9 +365,8 @@ class _BrowseTabsState extends State<BrowseTabs> {
     final commit = dragging && !cancel && point.dy >= -24 && point.dy <= 68;
     suppressTap = dragging || cancel;
     Future.microtask(() => suppressTap = false);
-    final target = ((dragX ?? 0) / (cell + gap)).round() == 1
-        ? 'films'
-        : 'games';
+    final target =
+        modes[((dragX ?? 0) / (cell + gap)).round().clamp(0, modes.length - 1)];
     setState(() {
       pointer = null;
       dragX = null;
@@ -380,18 +390,16 @@ class _BrowseTabsState extends State<BrowseTabs> {
     final gap = compact ? 2.0 : 4.0;
     final selected = dragX == null
         ? page
-        : (dragX! / (cell + gap)).round() == 1
-        ? 'films'
-        : 'games';
+        : modes[(dragX! / (cell + gap)).round().clamp(0, modes.length - 1)];
     final stretch = dragging && !MotionSettings.of(context)
-        ? .16 * (1 - (2 * dragX! / (cell + gap) - 1).abs())
+        ? .16 * (1 - (2 * ((dragX! / (cell + gap)) % 1) - 1).abs())
         : 0.0;
     return Glass(
       radius: 999,
       padding: EdgeInsets.all(compact ? 4 : 5),
       child: SizedBox(
         key: trackKey,
-        width: cell * 2 + gap,
+        width: cell * modes.length + gap * (modes.length - 1),
         height: 44,
         child: Listener(
           onPointerDown: (event) {
@@ -408,7 +416,10 @@ class _BrowseTabsState extends State<BrowseTabs> {
             if (!dragging && (position.dx - down!.dx).abs() < 4) return;
             setState(() {
               dragging = true;
-              dragX = (position.dx - cell / 2).clamp(0.0, cell + gap);
+              dragX = (position.dx - cell / 2).clamp(
+                0.0,
+                (cell + gap) * (modes.length - 1),
+              );
             });
           },
           onPointerUp: (event) => finish(event, cell, gap),
@@ -422,7 +433,10 @@ class _BrowseTabsState extends State<BrowseTabs> {
                       : 300,
                 ),
                 curve: ryhzeEase,
-                left: dragX ?? (page == 'films' ? cell + gap : 0),
+                left:
+                    dragX ??
+                    modes.indexOf(page).clamp(0, modes.length - 1) *
+                        (cell + gap),
                 top: 0,
                 width: cell,
                 height: 44,
@@ -447,9 +461,7 @@ class _BrowseTabsState extends State<BrowseTabs> {
                       child: DecoratedBox(
                         key: const ValueKey('browse-selection'),
                         decoration: BoxDecoration(
-                          color:
-                              pointer != null ||
-                                  ['games', 'films'].contains(page)
+                          color: pointer != null || modes.contains(page)
                               ? const Color(0xfffaf9fc)
                               : Colors.transparent,
                           borderRadius: BorderRadius.circular(999),
@@ -461,8 +473,8 @@ class _BrowseTabsState extends State<BrowseTabs> {
               ),
               Row(
                 children: [
-                  for (final mode in ['games', 'films']) ...[
-                    if (mode == 'films') SizedBox(width: gap),
+                  for (final mode in modes) ...[
+                    if (mode != modes.first) SizedBox(width: gap),
                     SizedBox(
                       width: cell,
                       height: 44,
@@ -521,7 +533,13 @@ class _BrowseTabsState extends State<BrowseTabs> {
                               ),
                             ),
                           ),
-                          child: Text(mode == 'games' ? 'Games' : 'Films'),
+                          child: Text(
+                            mode == 'games'
+                                ? 'Games'
+                                : mode == 'films'
+                                ? 'Films'
+                                : 'Engine',
+                          ),
                         ),
                       ),
                     ),

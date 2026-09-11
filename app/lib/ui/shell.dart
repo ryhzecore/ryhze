@@ -17,6 +17,8 @@ import '../core/game_library.dart';
 import '../core/game_media.dart';
 import 'game_library.dart';
 import 'expanding_surface.dart';
+import 'admin_games.dart';
+import 'engine.dart';
 
 class RyhzeShell extends StatefulWidget {
   final RyhzeState state;
@@ -61,6 +63,9 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   }
 
   void changed() {
+    if (page == 'engine' && state.user?.launcherAdmin != true) {
+      page = 'games';
+    }
     if (state.notice != null) {
       final message = state.notice!;
       state.notice = null;
@@ -116,6 +121,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   }
 
   void navigate(String target) {
+    if (target == 'engine' && state.user?.launcherAdmin != true) return;
     setState(() => page = target);
     if (scroll.hasClients) scroll.jumpTo(0);
   }
@@ -388,7 +394,11 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                 return Column(
                   children: [
                     Container(
-                      height: mobile ? 88 : 104,
+                      height: width <= 480
+                          ? 140
+                          : mobile
+                          ? 88
+                          : 104,
                       padding: EdgeInsets.symmetric(
                         horizontal: width <= 350 ? 14 : gutter,
                       ),
@@ -402,87 +412,120 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                           bottom: BorderSide(color: Color(0x0cffffff)),
                         ),
                       ),
-                      child: Row(
+                      child: Flex(
+                        direction: width <= 480
+                            ? Axis.vertical
+                            : Axis.horizontal,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Semantics(
-                            label: 'Ryhze home',
-                            button: true,
-                            child: InkWell(
-                              onTap: () => navigate('home'),
-                              borderRadius: BorderRadius.circular(8),
-                              child: Image.asset(
-                                mobile
-                                    ? 'assets/brand/symbol.png'
-                                    : 'assets/brand/wordmark.png',
-                                width: mobile ? (width <= 350 ? 34 : 40) : 124,
-                                height: mobile
-                                    ? (width <= 350 ? 34 : 40)
-                                    : null,
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Semantics(
+                                label: 'Ryhze home',
+                                button: true,
+                                child: InkWell(
+                                  onTap: () => navigate('home'),
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.asset(
+                                    mobile
+                                        ? 'assets/brand/symbol.png'
+                                        : 'assets/brand/wordmark.png',
+                                    width: mobile
+                                        ? (width <= 350 ? 34 : 40)
+                                        : 124,
+                                    height: mobile
+                                        ? (width <= 350 ? 34 : 40)
+                                        : null,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          SizedBox(
-                            width: width <= 350
-                                ? 6
-                                : width <= 480
-                                ? 10
-                                : mobile
-                                ? 15
-                                : width <= 1000
-                                ? 20
-                                : 30,
-                          ),
-                          BrowseTabs(page: page, onChanged: navigate),
-                          const Spacer(),
-                          if (width > 1000) ...[
-                            TextButton(
-                              onPressed: () => navigate('about'),
-                              child: const Text(
-                                'Our story',
-                                style: TextStyle(fontSize: 13),
+                              SizedBox(
+                                width: width <= 350
+                                    ? 6
+                                    : width <= 480
+                                    ? 10
+                                    : mobile
+                                    ? 15
+                                    : width <= 1000
+                                    ? 20
+                                    : 30,
                               ),
-                            ),
-                            const SizedBox(width: 20),
-                          ],
-                          Opacity(
-                            opacity: expandedSource == 'search' ? 0 : 1,
-                            child: Pill(
-                              key: searchSource,
-                              'Search Ryhze',
-                              height: mobile ? 44 : 48,
-                              icon: Icons.search,
-                              iconOnly: true,
-                              onPressed: search,
-                              reduced: state.reduced,
-                            ),
+                              BrowseTabs(
+                                page: page,
+                                onChanged: navigate,
+                                engineAvailable:
+                                    state.user?.launcherAdmin == true,
+                              ),
+                            ],
                           ),
-                          SizedBox(
-                            width: width <= 350
-                                ? 4
-                                : mobile
-                                ? 7
-                                : 10,
+                          if (width > 480)
+                            const Spacer()
+                          else
+                            const SizedBox(height: 12),
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (width > 1000) ...[
+                                TextButton(
+                                  onPressed: () => navigate('about'),
+                                  child: const Text(
+                                    'Our story',
+                                    style: TextStyle(fontSize: 13),
+                                  ),
+                                ),
+                                const SizedBox(width: 20),
+                              ],
+                              Opacity(
+                                opacity: expandedSource == 'search' ? 0 : 1,
+                                child: Pill(
+                                  key: searchSource,
+                                  'Search Ryhze',
+                                  height: mobile ? 44 : 48,
+                                  icon: Icons.search,
+                                  iconOnly: true,
+                                  onPressed: search,
+                                  reduced: state.reduced,
+                                ),
+                              ),
+                              SizedBox(
+                                width: width <= 350
+                                    ? 4
+                                    : mobile
+                                    ? 7
+                                    : 10,
+                              ),
+                              Opacity(
+                                opacity: expandedSource == 'menu' ? 0 : 1,
+                                child: Pill(
+                                  key: menuSource,
+                                  'Account and settings',
+                                  height: mobile ? 44 : 48,
+                                  icon: Icons.menu,
+                                  iconOnly: true,
+                                  onPressed: menu,
+                                  reduced: state.reduced,
+                                ),
+                              ),
+                              const SizedBox(width: 10),
+                              Pill(
+                                'Game library',
+                                height: mobile ? 44 : 48,
+                                icon: Icons.library_books_outlined,
+                                iconOnly: true,
+                                onPressed: () => navigate('library'),
+                                reduced: state.reduced,
+                              ),
+                              if (!mobile && state.user == null) ...[
+                                const SizedBox(width: 14),
+                                Pill(
+                                  'Sign in',
+                                  icon: Icons.arrow_forward,
+                                  onPressed: () => navigate('login'),
+                                ),
+                              ],
+                            ],
                           ),
-                          Opacity(
-                            opacity: expandedSource == 'menu' ? 0 : 1,
-                            child: Pill(
-                              key: menuSource,
-                              'Account and settings',
-                              height: mobile ? 44 : 48,
-                              icon: Icons.menu,
-                              iconOnly: true,
-                              onPressed: menu,
-                              reduced: state.reduced,
-                            ),
-                          ),
-                          if (!mobile && state.user == null) ...[
-                            const SizedBox(width: 14),
-                            Pill(
-                              'Sign in',
-                              icon: Icons.arrow_forward,
-                              onPressed: () => navigate('login'),
-                            ),
-                          ],
                         ],
                       ),
                     ),
@@ -518,6 +561,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                                 'films',
                                 'saved',
                                 'history',
+                                'library',
                               ].contains(page))
                                 library(width, gutter, size.maxHeight)
                               else if (page == 'login' || page == 'activate')
@@ -533,6 +577,8 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                                       ? showUpdates
                                       : null,
                                 )
+                              else if (page == 'engine')
+                                EnginePage(state: state)
                               else if (page == 'admin')
                                 AdminPage(state: state)
                               else
@@ -557,7 +603,8 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   }
 
   Widget catalogueLibrary(double width, double gutter, double height) {
-    final isGames = page == 'games';
+    final downloaded = page == 'library';
+    final isGames = page == 'games' || downloaded;
     final categories = {
       'All games',
       'Installed games',
@@ -569,12 +616,16 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     final local =
         isGames &&
             widget.gameLibrary?.permission == true &&
-            (category == 'All games' || category == 'Installed games')
+            (downloaded ||
+                category == 'All games' ||
+                category == 'Installed games')
         ? widget.gameLibrary!.sorted
         : <LocalGame>[];
     final items = state.titles
         .where(
-          (t) => page == 'saved'
+          (t) => downloaded
+              ? false
+              : page == 'saved'
               ? state.saved.contains(t.id)
               : page == 'history'
               ? state.history.containsKey(t.id)
@@ -582,7 +633,18 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
         )
         .toList();
     final hero = items.isEmpty ? null : items.first;
-    if (isGames && category != 'All games') {
+    if (isGames) {
+      items.removeWhere(
+        (title) => local.any(
+          (game) =>
+              gameNameKey(game.name) == gameNameKey(title.title) ||
+              (game.source != 'Epic Games' &&
+                  title.storeId.isNotEmpty &&
+                  title.storeId == game.storeId),
+        ),
+      );
+    }
+    if (isGames && !downloaded && category != 'All games') {
       items.removeWhere(
         (t) =>
             category == 'Installed games' || !t.categories.contains(category),
@@ -593,7 +655,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        if (!personal) heroSection(hero, width, gutter, height),
+        if (!personal && !downloaded) heroSection(hero, width, gutter, height),
         Padding(
           padding: EdgeInsets.fromLTRB(
             gutter,
@@ -612,13 +674,17 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Eyebrow(
-                          personal
+                          downloaded
+                              ? 'Ready when you are'
+                              : personal
                               ? 'Keep your favourites close'
                               : 'Find your next world',
                         ),
                         const SizedBox(height: 10),
                         Text(
-                          page == 'saved'
+                          downloaded
+                              ? 'Your library.'
+                              : page == 'saved'
                               ? 'My List.'
                               : page == 'history'
                               ? 'Continue watching.'
@@ -637,37 +703,55 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                 ],
               ),
               const SizedBox(height: 30),
+              if (downloaded && state.user?.launcherAdmin == true)
+                InstalledEngineCard(
+                  state: state,
+                  onOpen: () => navigate('engine'),
+                ),
+              if (isGames && !downloaded && state.user?.launcherAdmin == true)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 20),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Pill(
+                      'Add game',
+                      icon: Icons.add,
+                      onPressed: () => editCatalogueGame(context, state),
+                    ),
+                  ),
+                ),
               if (isGames && widget.gameLibrary != null) ...[
                 Row(
                   children: [
-                    Expanded(
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: SizedBox(
-                          width: 250,
-                          child: DropdownButtonFormField<String>(
-                            key: ValueKey(category),
-                            initialValue: category,
-                            decoration: const InputDecoration(
-                              labelText: 'Category',
+                    if (!downloaded)
+                      Expanded(
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: SizedBox(
+                            width: 250,
+                            child: DropdownButtonFormField<String>(
+                              key: ValueKey(category),
+                              initialValue: category,
+                              decoration: const InputDecoration(
+                                labelText: 'Category',
+                              ),
+                              isExpanded: true,
+                              items: [
+                                for (final category in categories)
+                                  DropdownMenuItem(
+                                    value: category,
+                                    child: Text(category),
+                                  ),
+                              ],
+                              onChanged: (value) {
+                                if (value != null) {
+                                  setState(() => gameCategory = value);
+                                }
+                              },
                             ),
-                            isExpanded: true,
-                            items: [
-                              for (final category in categories)
-                                DropdownMenuItem(
-                                  value: category,
-                                  child: Text(category),
-                                ),
-                            ],
-                            onChanged: (value) {
-                              if (value != null) {
-                                setState(() => gameCategory = value);
-                              }
-                            },
                           ),
                         ),
                       ),
-                    ),
                     const SizedBox(width: 12),
                     GameLibraryTools(library: widget.gameLibrary!),
                   ],
@@ -715,7 +799,9 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                 )
               else if (isGames && widget.gameLibrary != null && count == 0)
                 empty(
-                  'No games in this category.',
+                  downloaded
+                      ? 'Your library is ready for games.'
+                      : 'No games in this category.',
                   widget.gameLibrary?.permission == true
                       ? 'Use Manage games to find installations or add a game path.'
                       : 'Allow discovery to include games installed on this PC.',
@@ -728,6 +814,10 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                         ? editLocalGame(context, widget.gameLibrary!)
                         : gamePermission(context, widget.gameLibrary!),
                   ),
+                )
+              else if (downloaded && widget.gameLibrary == null)
+                const Text(
+                  'Installed PC games are available in the Ryhze Windows app. Open Ryhze on your PC to find and launch your games.',
                 )
               else if (items.isEmpty && local.isEmpty)
                 empty(
@@ -1038,6 +1128,27 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     previewAllowed: !detailOpen && !overlayOpen,
     onOpen: () => open(title, 'card-${title.id}'),
     onSave: () => save(title),
+    trailingAction: title.isGame && state.user?.launcherAdmin == true
+        ? Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Pill(
+                'Edit ${title.title}',
+                iconOnly: true,
+                quiet: true,
+                icon: Icons.edit_outlined,
+                onPressed: () => editCatalogueGame(context, state, title),
+              ),
+              Pill(
+                'Add to My List',
+                iconOnly: true,
+                quiet: true,
+                icon: state.saved.contains(title.id) ? Icons.check : Icons.add,
+                onPressed: () => save(title),
+              ),
+            ],
+          )
+        : null,
     progress: page == 'history'
         ? ((state.history[title.id]?['position'] ?? 0) /
                   ((state.history[title.id]?['duration'] ?? 1) as num).clamp(
