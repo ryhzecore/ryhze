@@ -320,10 +320,52 @@ class _PillState extends State<Pill> {
 }
 
 /// Both the painted pill and the hit targets use the same cell geometry.
-class BrowseTabs extends StatelessWidget {
+class BrowseTabs extends StatefulWidget {
   final String page;
   final ValueChanged<String> onChanged;
   const BrowseTabs({super.key, required this.page, required this.onChanged});
+  @override
+  State<BrowseTabs> createState() => _BrowseTabsState();
+}
+
+class _BrowseTabsState extends State<BrowseTabs> {
+  int? pointer;
+  double? dragX;
+  bool dragging = false;
+  bool suppressTap = false;
+  Offset? down;
+  final trackKey = GlobalKey();
+  String get page => widget.page;
+  void onChanged(String page) => widget.onChanged(page);
+
+  Offset local(Offset global) =>
+      (trackKey.currentContext!.findRenderObject() as RenderBox).globalToLocal(
+        global,
+      );
+
+  void finish(
+    PointerEvent event,
+    double cell,
+    double gap, {
+    bool cancel = false,
+  }) {
+    if (pointer != event.pointer) return;
+    final point = local(event.position);
+    final commit = dragging && !cancel && point.dy >= -24 && point.dy <= 68;
+    suppressTap = dragging || cancel;
+    Future.microtask(() => suppressTap = false);
+    final target = ((dragX ?? 0) / (cell + gap)).round() == 1
+        ? 'films'
+        : 'games';
+    setState(() {
+      pointer = null;
+      dragX = null;
+      dragging = false;
+      down = null;
+    });
+    if (commit) onChanged(target);
+  }
+
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.sizeOf(context).width;
@@ -336,94 +378,158 @@ class BrowseTabs extends StatelessWidget {
         ? 66.0
         : 80.0;
     final gap = compact ? 2.0 : 4.0;
+    final selected = dragX == null
+        ? page
+        : (dragX! / (cell + gap)).round() == 1
+        ? 'films'
+        : 'games';
+    final stretch = dragging && !MotionSettings.of(context)
+        ? .16 * (1 - (2 * dragX! / (cell + gap) - 1).abs())
+        : 0.0;
     return Glass(
       radius: 999,
       padding: EdgeInsets.all(compact ? 4 : 5),
       child: SizedBox(
+        key: trackKey,
         width: cell * 2 + gap,
         height: 44,
-        child: Stack(
-          children: [
-            AnimatedPositioned(
-              duration: Duration(
-                milliseconds: MotionSettings.of(context) ? 0 : 650,
-              ),
-              curve: ryhzeEase,
-              left: page == 'films' ? cell + gap : 0,
-              top: 0,
-              width: cell,
-              height: 44,
-              child: IgnorePointer(
-                child: DecoratedBox(
-                  key: const ValueKey('browse-selection'),
-                  decoration: BoxDecoration(
-                    color: ['games', 'films'].contains(page)
-                        ? const Color(0xfffaf9fc)
-                        : Colors.transparent,
-                    borderRadius: BorderRadius.circular(999),
-                  ),
+        child: Listener(
+          onPointerDown: (event) {
+            if (pointer != null || event.buttons != 1) return;
+            setState(() {
+              suppressTap = false;
+              pointer = event.pointer;
+              down = local(event.position);
+            });
+          },
+          onPointerMove: (event) {
+            if (pointer != event.pointer) return;
+            final position = local(event.position);
+            if (!dragging && (position.dx - down!.dx).abs() < 4) return;
+            setState(() {
+              dragging = true;
+              dragX = (position.dx - cell / 2).clamp(0.0, cell + gap);
+            });
+          },
+          onPointerUp: (event) => finish(event, cell, gap),
+          onPointerCancel: (event) => finish(event, cell, gap, cancel: true),
+          child: Stack(
+            children: [
+              AnimatedPositioned(
+                duration: Duration(
+                  milliseconds: MotionSettings.of(context) || dragging
+                      ? 0
+                      : 300,
                 ),
-              ),
-            ),
-            Row(
-              children: [
-                for (final mode in ['games', 'films']) ...[
-                  if (mode == 'films') SizedBox(width: gap),
-                  SizedBox(
-                    width: cell,
-                    height: 44,
-                    child: Semantics(
-                      selected: page == mode,
-                      child: TextButton(
-                        key: ValueKey('browse-$mode'),
-                        onPressed: () => onChanged(mode),
-                        style: ButtonStyle(
-                          padding: const WidgetStatePropertyAll(
-                            EdgeInsets.zero,
-                          ),
-                          minimumSize: const WidgetStatePropertyAll(Size.zero),
-                          shape: const WidgetStatePropertyAll(StadiumBorder()),
-                          overlayColor: const WidgetStatePropertyAll(
-                            Colors.transparent,
-                          ),
-                          backgroundColor: WidgetStateProperty.resolveWith(
-                            (s) =>
-                                page != mode && s.contains(WidgetState.hovered)
-                                ? const Color(0x16ffffff)
-                                : Colors.transparent,
-                          ),
-                          side: WidgetStateProperty.resolveWith(
-                            (s) => BorderSide(
-                              color: s.contains(WidgetState.focused)
-                                  ? Colors.white
-                                  : Colors.transparent,
-                            ),
-                          ),
-                          foregroundColor: WidgetStateProperty.resolveWith(
-                            (s) => page == mode
-                                ? const Color(0xff1a1420)
-                                : s.contains(WidgetState.hovered)
-                                ? Colors.white
-                                : const Color(0xffb8b4c3),
-                          ),
-                          textStyle: WidgetStatePropertyAll(
-                            TextStyle(
-                              fontFamily: 'Inter',
-                              fontSize: width <= 700 ? 12 : 13,
-                              fontWeight: FontWeight.w400,
-                              height: 1.3,
-                              leadingDistribution: TextLeadingDistribution.even,
-                            ),
-                          ),
+                curve: ryhzeEase,
+                left: dragX ?? (page == 'films' ? cell + gap : 0),
+                top: 0,
+                width: cell,
+                height: 44,
+                child: IgnorePointer(
+                  child: AnimatedScale(
+                    scale: pointer != null && !MotionSettings.of(context)
+                        ? 1.08
+                        : 1,
+                    duration: Duration(
+                      milliseconds: MotionSettings.of(context) ? 0 : 180,
+                    ),
+                    curve: ryhzeEase,
+                    child: AnimatedContainer(
+                      duration: Duration(
+                        milliseconds: dragging || MotionSettings.of(context)
+                            ? 0
+                            : 180,
+                      ),
+                      curve: ryhzeEase,
+                      transformAlignment: Alignment.center,
+                      transform: Matrix4.diagonal3Values(1 + stretch, 1, 1),
+                      child: DecoratedBox(
+                        key: const ValueKey('browse-selection'),
+                        decoration: BoxDecoration(
+                          color:
+                              pointer != null ||
+                                  ['games', 'films'].contains(page)
+                              ? const Color(0xfffaf9fc)
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(999),
                         ),
-                        child: Text(mode == 'games' ? 'Games' : 'Films'),
                       ),
                     ),
                   ),
+                ),
+              ),
+              Row(
+                children: [
+                  for (final mode in ['games', 'films']) ...[
+                    if (mode == 'films') SizedBox(width: gap),
+                    SizedBox(
+                      width: cell,
+                      height: 44,
+                      child: Semantics(
+                        selected: page == mode,
+                        child: TextButton(
+                          key: ValueKey('browse-$mode'),
+                          onPressed: () {
+                            if (pointer == null && !suppressTap) {
+                              onChanged(mode);
+                            }
+                          },
+                          style: ButtonStyle(
+                            animationDuration: Duration.zero,
+                            padding: const WidgetStatePropertyAll(
+                              EdgeInsets.zero,
+                            ),
+                            minimumSize: const WidgetStatePropertyAll(
+                              Size.zero,
+                            ),
+                            shape: const WidgetStatePropertyAll(
+                              StadiumBorder(),
+                            ),
+                            overlayColor: const WidgetStatePropertyAll(
+                              Colors.transparent,
+                            ),
+                            backgroundColor: WidgetStateProperty.resolveWith(
+                              (s) =>
+                                  selected != mode &&
+                                      s.contains(WidgetState.hovered)
+                                  ? const Color(0x16ffffff)
+                                  : Colors.transparent,
+                            ),
+                            side: WidgetStateProperty.resolveWith(
+                              (s) => BorderSide(
+                                color: s.contains(WidgetState.focused)
+                                    ? Colors.white
+                                    : Colors.transparent,
+                              ),
+                            ),
+                            foregroundColor: WidgetStateProperty.resolveWith(
+                              (s) => selected == mode
+                                  ? const Color(0xff1a1420)
+                                  : s.contains(WidgetState.hovered)
+                                  ? Colors.white
+                                  : const Color(0xffb8b4c3),
+                            ),
+                            textStyle: WidgetStatePropertyAll(
+                              TextStyle(
+                                fontFamily: 'Inter',
+                                fontSize: width <= 700 ? 12 : 13,
+                                fontWeight: FontWeight.w400,
+                                height: 1.3,
+                                leadingDistribution:
+                                    TextLeadingDistribution.even,
+                              ),
+                            ),
+                          ),
+                          child: Text(mode == 'games' ? 'Games' : 'Films'),
+                        ),
+                      ),
+                    ),
+                  ],
                 ],
-              ],
-            ),
-          ],
+              ),
+            ],
+          ),
         ),
       ),
     );

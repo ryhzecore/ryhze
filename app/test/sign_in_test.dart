@@ -62,7 +62,7 @@ void main() {
       await tester.pumpAndSettle();
       await tester.tap(
         find.descendant(
-          of: find.byType(Dialog),
+          of: find.byKey(const ValueKey('expanding-surface')),
           matching: find.text('Sign in'),
         ),
       );

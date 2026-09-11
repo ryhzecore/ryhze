@@ -16,6 +16,7 @@ import 'home.dart';
 import '../core/game_library.dart';
 import '../core/game_media.dart';
 import 'game_library.dart';
+import 'expanding_surface.dart';
 
 class RyhzeShell extends StatefulWidget {
   final RyhzeState state;
@@ -35,6 +36,8 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   String page = 'games';
   String gameCategory = 'All games';
   GameMediaStore? gameMedia;
+  final searchSource = GlobalKey(), menuSource = GlobalKey();
+  String? expandedSource;
   final scroll = ScrollController();
   Player? ambient;
   bool active = true, detailOpen = false, overlayOpen = false;
@@ -155,13 +158,25 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   }
 
   Future<void> search() async {
-    setState(() => overlayOpen = true);
-    final result = await showDialog<RyhzeTitle>(
+    if (overlayOpen) return;
+    setState(() {
+      overlayOpen = true;
+      expandedSource = 'search';
+    });
+    final result = await expandingSurface<RyhzeTitle>(
       context: context,
-      builder: (_) => SearchPanel(state: state),
+      source: searchSource,
+      icon: Icons.search,
+      width: 620,
+      height: (114 + state.titles.length * 72.0).clamp(220, 480),
+      reduced: state.reduced,
+      builder: (_) => SearchPanel(state: state, embedded: true),
     );
     if (!mounted) return;
-    setState(() => overlayOpen = false);
+    setState(() {
+      overlayOpen = false;
+      expandedSource = null;
+    });
     if (result != null) await open(result, 'search-${result.id}');
   }
 
@@ -178,24 +193,28 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   }
 
   Future<void> menu() async {
-    setState(() => overlayOpen = true);
-    await showDialog<void>(
+    if (overlayOpen) return;
+    setState(() {
+      overlayOpen = true;
+      expandedSource = 'menu';
+    });
+    await expandingSurface<void>(
       context: context,
+      source: menuSource,
+      icon: Icons.menu,
+      width: 320,
+      height:
+          (state.user == null ? 520.0 : 640.0) +
+          (state.user?.role == 'admin' ? 56 : 0) +
+          (widget.updates?.supported == true ? 56 : 0),
+      rightAligned: true,
+      reduced: state.reduced,
       builder: (dialogContext) => ListenableBuilder(
         listenable: state,
-        builder: (_, _) => Dialog(
-          alignment: Alignment.topRight,
-          backgroundColor: Colors.transparent,
-          insetPadding: EdgeInsets.fromLTRB(
-            20,
-            MediaQuery.sizeOf(context).width <= 700 ? 78 : 90,
-            (MediaQuery.sizeOf(context).width * .045).clamp(20, 88),
-            24,
-          ),
+        builder: (_, _) => SizedBox(
           child: SizedBox(
             width: 300,
-            child: Glass(
-              radius: popoverRadius,
+            child: Padding(
               padding: const EdgeInsets.all(22),
               child: SingleChildScrollView(
                 child: Column(
@@ -315,7 +334,12 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
         ),
       ),
     );
-    if (mounted) setState(() => overlayOpen = false);
+    if (mounted) {
+      setState(() {
+        overlayOpen = false;
+        expandedSource = null;
+      });
+    }
   }
 
   @override
@@ -420,13 +444,17 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                             ),
                             const SizedBox(width: 20),
                           ],
-                          Pill(
-                            'Search Ryhze',
-                            height: mobile ? 44 : 48,
-                            icon: Icons.search,
-                            iconOnly: true,
-                            onPressed: search,
-                            reduced: state.reduced,
+                          Opacity(
+                            opacity: expandedSource == 'search' ? 0 : 1,
+                            child: Pill(
+                              key: searchSource,
+                              'Search Ryhze',
+                              height: mobile ? 44 : 48,
+                              icon: Icons.search,
+                              iconOnly: true,
+                              onPressed: search,
+                              reduced: state.reduced,
+                            ),
                           ),
                           SizedBox(
                             width: width <= 350
@@ -435,13 +463,17 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                                 ? 7
                                 : 10,
                           ),
-                          Pill(
-                            'Account and settings',
-                            height: mobile ? 44 : 48,
-                            icon: Icons.menu,
-                            iconOnly: true,
-                            onPressed: menu,
-                            reduced: state.reduced,
+                          Opacity(
+                            opacity: expandedSource == 'menu' ? 0 : 1,
+                            child: Pill(
+                              key: menuSource,
+                              'Account and settings',
+                              height: mobile ? 44 : 48,
+                              icon: Icons.menu,
+                              iconOnly: true,
+                              onPressed: menu,
+                              reduced: state.reduced,
+                            ),
                           ),
                           if (!mobile && state.user == null) ...[
                             const SizedBox(width: 14),
@@ -1021,90 +1053,111 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
 
 class SearchPanel extends StatefulWidget {
   final RyhzeState state;
-  const SearchPanel({super.key, required this.state});
+  final bool embedded;
+  const SearchPanel({super.key, required this.state, this.embedded = false});
   @override
   State<SearchPanel> createState() => _SearchPanelState();
 }
 
 class _SearchPanelState extends State<SearchPanel> {
   String query = '';
+  final inputFocus = FocusNode();
+  Animation<double>? opening;
+  void focusAfterExpansion(AnimationStatus status) {
+    if (status == AnimationStatus.completed && mounted) {
+      inputFocus.requestFocus();
+    }
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final next = ModalRoute.of(context)?.animation;
+    if (opening == next) return;
+    opening?.removeStatusListener(focusAfterExpansion);
+    opening = next;
+    opening?.addStatusListener(focusAfterExpansion);
+    if (opening == null || opening!.isCompleted) inputFocus.requestFocus();
+  }
+
+  @override
+  void dispose() {
+    opening?.removeStatusListener(focusAfterExpansion);
+    inputFocus.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final results = widget.state.titles.where((t) => t.matches(query)).toList();
+    final content = Padding(
+      padding: const EdgeInsets.all(20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.search),
+              const SizedBox(width: 12),
+              Expanded(
+                child: TextField(
+                  focusNode: inputFocus,
+                  decoration: const InputDecoration(
+                    hintText: 'Find your next world',
+                    border: InputBorder.none,
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                    fillColor: Colors.transparent,
+                  ),
+                  onChanged: (v) => setState(() => query = v),
+                ),
+              ),
+              Pill(
+                'Close search',
+                iconOnly: true,
+                onPressed: () => Navigator.pop(context),
+                icon: Icons.close,
+              ),
+            ],
+          ),
+          const Divider(),
+          Flexible(
+            child: results.isEmpty
+                ? Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Text('No matches for “$query”. Try another title.'),
+                  )
+                : ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: results.length,
+                    itemBuilder: (_, i) {
+                      final t = results[i];
+                      return ListTile(
+                        title: Text(t.title),
+                        subtitle: Text(
+                          '${t.isGame ? 'Game' : 'Film'} · ${t.status}',
+                          style: const TextStyle(fontSize: 11),
+                        ),
+                        trailing: const Icon(Icons.arrow_forward, size: 18),
+                        onTap: () => Navigator.pop(context, t),
+                      );
+                    },
+                  ),
+          ),
+        ],
+      ),
+    );
+    if (widget.embedded) return content;
     return Dialog(
       alignment: Alignment.topCenter,
-      insetPadding: EdgeInsets.fromLTRB(
-        20,
-        MediaQuery.sizeOf(context).width <= 700 ? 78 : 92,
-        20,
-        20,
-      ),
+      insetPadding: const EdgeInsets.fromLTRB(20, 78, 20, 20),
       backgroundColor: Colors.transparent,
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: 620,
           maxHeight: MediaQuery.sizeOf(context).height * .65,
         ),
-        child: Glass(
-          radius: popoverRadius,
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                children: [
-                  const Icon(Icons.search),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: TextField(
-                      autofocus: true,
-                      decoration: const InputDecoration(
-                        hintText: 'Find your next world',
-                        border: InputBorder.none,
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        fillColor: Colors.transparent,
-                      ),
-                      onChanged: (v) => setState(() => query = v),
-                    ),
-                  ),
-                  Pill(
-                    'Close search',
-                    iconOnly: true,
-                    onPressed: () => Navigator.pop(context),
-                    icon: Icons.close,
-                  ),
-                ],
-              ),
-              const Divider(),
-              Flexible(
-                child: results.isEmpty
-                    ? Padding(
-                        padding: const EdgeInsets.all(20),
-                        child: Text(
-                          'No matches for “$query”. Try another title.',
-                        ),
-                      )
-                    : ListView.builder(
-                        shrinkWrap: true,
-                        itemCount: results.length,
-                        itemBuilder: (_, i) {
-                          final t = results[i];
-                          return ListTile(
-                            title: Text(t.title),
-                            subtitle: Text(
-                              '${t.isGame ? 'Game' : 'Film'} · ${t.status}',
-                              style: const TextStyle(fontSize: 11),
-                            ),
-                            trailing: const Icon(Icons.arrow_forward, size: 18),
-                            onTap: () => Navigator.pop(context, t),
-                          );
-                        },
-                      ),
-              ),
-            ],
-          ),
-        ),
+        child: Glass(radius: popoverRadius, child: content),
       ),
     );
   }

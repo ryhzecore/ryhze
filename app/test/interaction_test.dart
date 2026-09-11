@@ -44,7 +44,10 @@ void main() {
         expect(searchRect.width, closeTo(searchRect.height, .01));
         await tester.tap(search);
         await tester.pumpAndSettle();
-        expect(tester.getTopLeft(find.byType(Dialog)).dy, lessThan(110));
+        expect(
+          tester.getTopLeft(find.byKey(const ValueKey('expanding-surface'))).dy,
+          lessThan(110),
+        );
         await tester.enterText(find.byType(TextField), 'nothing found');
         await tester.pumpAndSettle();
         expect(find.textContaining('No matches'), findsOneWidget);
