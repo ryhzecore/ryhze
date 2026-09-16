@@ -1,6 +1,6 @@
 # RACE integration
 
-The Engine tab, catalogue editing, and private RACE download endpoints require an enabled server account whose role is `admin` and whose username is Andru or Leo (case insensitive). The app repeats this check for navigation. Download authorization is enforced by the server on every request.
+The Engine tab and the private RACE download endpoints require an enabled server account whose role is `admin` and whose username is Andru or Leo (case insensitive). Catalogue editing, covering both games and films, requires only the `admin` role. These are two separate checks on purpose: widening who can edit the catalogue must never widen who can reach private engine builds. The app repeats both checks for navigation. Download authorization is enforced by the server on every request.
 
 The existing public Ryhze update feed must never contain RACE packages. RACE has a separate private release route. Until the engine owner supplies a qualified installer, `/api/admin/race/manifest` returns `available: false`; there is no fabricated download.
 

@@ -1,7 +1,7 @@
 import { randomBytes, createHash, scrypt, timingSafeEqual } from "node:crypto";
 import { promisify } from "node:util";
 import originals from './catalog.json' with { type: 'json' };
-import { launcherAdmin, catalogue, saveGame } from './game-catalog.mjs';
+import { launcherAdmin, catalogueAdmin, catalogue, saveGame } from './game-catalog.mjs';
 import { raceDownloads } from './race-downloads.mjs';
 const derive = promisify(scrypt);
 const cookieName = "__Host-ryhze_session";
@@ -291,7 +291,7 @@ async function handle(request, env) {
       return raceDownloads(request, env);
     }
     if (path === '/api/admin/games') {
-      if (!launcherAdmin(user)) return fail('Launcher administrator access required.', 403);
+      if (!catalogueAdmin(user)) return fail('Administrator access required.', 403);
       if (request.method === 'GET') return json(await catalogue(env, originals, { includeHidden: true }));
       if (request.method !== 'POST') return fail('Method not allowed', 405);
       try {

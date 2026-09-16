@@ -120,4 +120,11 @@ void main() {
     expect(const Member('Leo', 'viewer').launcherAdmin, false);
     expect(const Member('Other', 'admin').launcherAdmin, false);
   });
+  test('Catalogue editing is open to any administrator, not just the launcher owners', () {
+    expect(const Member('Andru', 'admin').catalogueAdmin, true);
+    expect(const Member('Other', 'admin').catalogueAdmin, true);
+    expect(const Member('Leo', 'viewer').catalogueAdmin, false);
+    // Widening catalogue editing must not widen private engine access.
+    expect(const Member('Other', 'admin').launcherAdmin, false);
+  });
 }

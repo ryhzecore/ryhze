@@ -1182,7 +1182,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     previewAllowed: !detailOpen && !overlayOpen,
     onOpen: () => open(title, 'card-${title.id}'),
     onSave: () => save(title),
-    trailingAction: title.isGame && state.user?.launcherAdmin == true
+    trailingAction: state.user?.catalogueAdmin == true
         ? Row(
             mainAxisSize: MainAxisSize.min,
             children: [

@@ -8,7 +8,7 @@ Future<void> editCatalogueGame(
   RyhzeState state, [
   RyhzeTitle? title,
 ]) async {
-  if (state.user?.launcherAdmin != true) return;
+  if (state.user?.catalogueAdmin != true) return;
   await showDialog<void>(
     context: context,
     builder: (_) => _GameEditor(state: state, title: title),
@@ -66,6 +66,7 @@ class _GameEditorState extends State<_GameEditor> {
               .map((s) => s.trim())
               .where((s) => s.isNotEmpty)
               .toList(),
+          'kind': widget.title?.kind ?? 'game',
           'revision': widget.title?.revision ?? 0,
           'hidden': hidden,
         },

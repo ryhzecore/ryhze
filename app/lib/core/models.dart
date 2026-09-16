@@ -89,8 +89,11 @@ class Episode {
 class Member {
   final String username, role;
   const Member(this.username, this.role);
+  // Private RACE engine builds stay restricted to the named launcher owners.
   bool get launcherAdmin =>
       role == 'admin' && ['andru', 'leo'].contains(username.toLowerCase());
+  // Catalogue editing (games and films) is open to any administrator.
+  bool get catalogueAdmin => role == 'admin';
   factory Member.fromJson(Map<String, dynamic> j) =>
       Member(j['username'], j['role']);
 }

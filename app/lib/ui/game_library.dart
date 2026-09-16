@@ -402,9 +402,9 @@ class LocalGameCard extends StatelessWidget {
           trailingAction: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              if (state.user?.launcherAdmin == true)
+              if (state.user?.catalogueAdmin == true)
                 Pill(
-                  'Edit catalogue game',
+                  'Edit catalogue entry',
                   icon: Icons.edit_outlined,
                   iconOnly: true,
                   quiet: true,

@@ -406,19 +406,20 @@ test("administration cannot elevate invitations or disable the current administr
     409,
   );
 });
-test("only Andru and Leo can edit games and access private RACE releases", async () => {
+test("any administrator edits the catalogue, but only Andru and Leo reach private RACE releases", async () => {
   const env = environment();
   const document = {id:'test-game',title:'Test game',categories:['Driving'],revision:0};
   for (const [i, name, role] of [[1,'Andru','admin'],[2,'Leo','admin'],[3,'Other','admin'],[4,'Member','viewer']]) {
     const token = String(i).repeat(64), cookie='__Host-ryhze_session='+token;
     env.sqlite.prepare('INSERT INTO users VALUES (?,?,?,?,?,?)').run(name,name,null,role,0,1);
     env.sqlite.prepare('INSERT INTO sessions VALUES (?,?,?)').run(digest(token),name,Math.floor(Date.now()/1000)+1000);
-    const allowed = i <= 2;
-    assert.equal((await worker.fetch(request('/api/admin/games',undefined,cookie),env)).status,allowed?200:403);
+    const catalogueAllowed = role === 'admin';
+    const raceAllowed = i <= 2;
+    assert.equal((await worker.fetch(request('/api/admin/games',undefined,cookie),env)).status,catalogueAllowed?200:403);
     const race = await worker.fetch(request('/api/admin/race/manifest',undefined,cookie),env);
-    assert.equal(race.status,allowed?200:403);
-    if(allowed) assert.equal((await race.json()).available,false);
-    if(!allowed) assert.equal((await worker.fetch(request('/api/admin/games',document,cookie),env)).status,403);
+    assert.equal(race.status,raceAllowed?200:403);
+    if(raceAllowed) assert.equal((await race.json()).available,false);
+    if(!catalogueAllowed) assert.equal((await worker.fetch(request('/api/admin/games',document,cookie),env)).status,403);
   }
   const cookie='__Host-ryhze_session='+'1'.repeat(64);
   assert.equal((await worker.fetch(request('/api/admin/games',document,cookie),env)).status,200);
@@ -444,4 +445,22 @@ test('RACE rejects an unsigned release and internal overrides stay private', asy
   assert.ok(!publicTitles.some(t=>t.id==='private-game'));
   const privateTitles=await(await worker.fetch(request('/api/catalog',undefined,cookie),env)).json();
   assert.ok(privateTitles.some(t=>t.id==='private-game'));
+});
+
+test('administrators can edit films, and a title cannot change kind', async () => {
+  const env = environment(), token='7'.repeat(64), cookie='__Host-ryhze_session='+token;
+  env.sqlite.prepare('INSERT INTO users VALUES (?,?,?,?,?,?)').run('other','Other',null,'admin',0,1);
+  env.sqlite.prepare('INSERT INTO sessions VALUES (?,?,?)').run(digest(token),'other',Math.floor(Date.now()/1000)+1000);
+  const film={id:'test-film',kind:'film',title:'Test film',categories:['Drama'],revision:0};
+  assert.equal((await worker.fetch(request('/api/admin/games',film,cookie),env)).status,200);
+  const titles=await (await worker.fetch(request('/api/admin/games',undefined,cookie),env)).json();
+  assert.equal(titles.find(t=>t.id==='test-film').kind,'film');
+  // A saved film must not be silently converted into a game by reusing its ID.
+  assert.equal((await worker.fetch(request('/api/admin/games',{...film,kind:'game',revision:1},cookie),env)).status,400);
+  // A Steam app ID is meaningless for a film and is rejected.
+  assert.equal((await worker.fetch(request('/api/admin/games',{id:'test-film-two',kind:'film',title:'Second film',categories:[],storeId:'12345',revision:0},cookie),env)).status,400);
+  // The existing seeded film keeps its kind when edited.
+  assert.equal((await worker.fetch(request('/api/admin/games',{id:'test-game-two',title:'A game',categories:[],revision:0},cookie),env)).status,200);
+  const after=await (await worker.fetch(request('/api/admin/games',undefined,cookie),env)).json();
+  assert.equal(after.find(t=>t.id==='test-game-two').kind,'game');
 });

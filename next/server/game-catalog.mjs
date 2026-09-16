@@ -1,6 +1,9 @@
 import originals from './catalog.json' with { type: 'json' };
 import internal from './internal-catalog.json' with { type: 'json' };
+// Private RACE engine builds stay restricted to the named launcher owners.
 export const launcherAdmin = user => user?.role === 'admin' && ['andru', 'leo'].includes(user.username?.toLowerCase());
+// Catalogue editing (games and films) is open to any administrator.
+export const catalogueAdmin = user => user?.role === 'admin';
 
 export async function catalogue(env, base, { includeHidden = false, includeInternal = false } = {}) {
   const records = (await env.DB.prepare('SELECT id,document,revision,hidden FROM game_catalog').all()).results;
@@ -20,24 +23,26 @@ export function gameDocument(body) {
     if (typeof v !== 'string' || v.length > max || (required && !v.trim())) throw Error(`Invalid ${key}.`);
     return v.trim();
   };
+  const kind = body.kind === 'film' ? 'film' : 'game';
   const id = text('id', 100, true);
-  if (!/^[a-z0-9][a-z0-9-]*$/.test(id)) throw Error('Use lowercase letters, numbers and hyphens for the game ID.');
+  if (!/^[a-z0-9][a-z0-9-]*$/.test(id)) throw Error(`Use lowercase letters, numbers and hyphens for the ${kind} ID.`);
   const image = text('image', 500);
   if (image && !/^\/art\/[a-zA-Z0-9_./-]+$/.test(image)) throw Error('Artwork must use a Ryhze /art/ path.');
   if (image.includes('..')) throw Error('Invalid artwork path.');
   const storeId = text('storeId', 20);
   if (storeId && !/^\d+$/.test(storeId)) throw Error('Steam app ID must contain digits only.');
+  if (storeId && kind !== 'game') throw Error('Only games can carry a Steam app ID.');
   if (!Array.isArray(body.categories) || body.categories.length > 10 || body.categories.some(v => typeof v !== 'string' || v.length > 60)) throw Error('Invalid categories.');
-  return { id, kind: 'game', title: text('title', 160, true), label: text('label', 100), status: text('status', 120), description: text('description', 2400), image, imageNote: text('imageNote', 200), categories: body.categories.map(v => v.trim()).filter(Boolean), storeId, streams: [], facts: [] };
+  return { id, kind, title: text('title', 160, true), label: text('label', 100), status: text('status', 120), description: text('description', 2400), image, imageNote: text('imageNote', 200), categories: body.categories.map(v => v.trim()).filter(Boolean), storeId, streams: [], facts: [] };
 }
 
 export async function saveGame(env, user, body) {
   const document = gameDocument(body);
   const stored = await env.DB.prepare('SELECT document FROM game_catalog WHERE id=?').bind(document.id).first();
   const original = stored ? JSON.parse(stored.document) : [...originals, ...internal].find(t => t.id === document.id);
-  if (original && original.kind !== 'game') throw Error('This ID belongs to a film. Choose a different game ID.');
+  if (original && original.kind !== document.kind) throw Error(`This ID already belongs to a ${original.kind}. Choose a different ID.`);
   if (original) {
-    for (const key of ['facts', 'streams', 'availability', 'internal']) {
+    for (const key of ['facts', 'streams', 'seasons', 'availability', 'internal']) {
       if (key in original) document[key] = original[key];
     }
   }
