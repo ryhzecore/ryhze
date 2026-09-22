@@ -1,0 +1,60 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:integration_test/integration_test.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:ryhze/core/models.dart';
+import 'package:ryhze/main.dart';
+import 'package:ryhze/ui/artwork_hero.dart';
+import '../test/support.dart';
+import '../test/website_parity_test.dart' show capture;
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets('separate libraries, collections, continued film and connected details', (tester) async {
+    MediaKit.ensureInitialized();
+    final state = await fixtureState(user: const Member('alice','viewer'));
+    final film = RyhzeTitle(id:'qa-film',title:'Film library preview',kind:'film',label:'Ryhze Studio',status:'In development',description:'QA fixture',image:sample.image);
+    state.titles=[sample,film];
+    await state.prefs.setBool('ambient-sound',false);
+    await state.library.attach('alice');
+    while(state.library.syncing) { await Future<void>.delayed(const Duration(milliseconds:20)); }
+    await state.library.change('progress:qa-film',{'stream':'','position':25,'duration':100,'watched':false,'updated':DateTime.now().toIso8601String()});
+    final boundary=GlobalKey();
+    await tester.pumpWidget(RepaintBoundary(key:boundary,child:RyhzeApp(state:state)));
+    await tester.pumpAndSettle();
+    await tester.tap(find.byTooltip('Game library')); await tester.pumpAndSettle();
+    expect(find.text('Games Library'),findsOneWidget);
+    expect(find.text('Film library preview'),findsNothing);
+    await tester.tap(find.text('New collection')); await tester.pumpAndSettle();
+    await tester.enterText(find.descendant(of:find.byType(AlertDialog),matching:find.byType(TextField)),'Weekend');
+    await tester.tap(find.text('Save')); await tester.pumpAndSettle();
+    await capture(boundary,'games-library');
+    final collection=state.library.entries.entries.singleWhere((e)=>e.key.startsWith('collection:'));
+    expect(collection.value['value']['name'],'Weekend');
+    await tester.ensureVisible(find.byTooltip('Library options').first);
+    await tester.tap(find.byTooltip('Library options').first); await tester.pumpAndSettle();
+    await tester.tap(find.text('Weekend').last); await tester.pumpAndSettle();
+    expect(state.library.value('member:${collection.key.substring(11)}:${sample.id}'),true);
+    await tester.ensureVisible(find.text('Films Library'));
+    await tester.tap(find.text('Films Library')); await tester.pumpAndSettle();
+    expect(find.text('Films Library'),findsOneWidget);
+    expect(find.text(sample.title),findsNothing);
+    await capture(boundary,'films-library');
+    final card=find.byKey(const ValueKey('card-open-qa-film'));
+    await tester.ensureVisible(card); await tester.tap(card); await tester.pump();
+    await tester.pump(const Duration(milliseconds:150));
+    expect(find.byType(GameFrameTransition),findsOneWidget);
+    await capture(boundary,'film-opening');
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Back').first); await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byTooltip('Library options').first);
+    await tester.tap(find.byTooltip('Library options').first); await tester.pumpAndSettle();
+    await tester.tap(find.text('Mark watched')); await tester.pumpAndSettle();
+    expect(state.history['qa-film']['watched'],true);
+    await tester.tap(find.byTooltip('Library options').first); await tester.pumpAndSettle();
+    await tester.tap(find.text('Remove from Continue')); await tester.pumpAndSettle();
+    expect(state.history.containsKey('qa-film'),false);
+    expect(tester.takeException(),isNull);
+    await tester.pumpWidget(const SizedBox()); state.dispose();
+  });
+}

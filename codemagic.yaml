@@ -1,7 +1,7 @@
 workflows:
   apple-verification:
     name: Ryhze Apple build verification
-    working_directory: app
+    working_directory: RyhzeApp/Launcher
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
@@ -22,21 +22,21 @@ workflows:
       - name: Build iPhone and iPad simulator application
         script: flutter build ios --simulator --debug
       - name: Exercise iOS screens and remembered sign-in
-        script: bash tool/verify-ios.sh
+        script: bash ../Build/verify-ios.sh
       - name: Verify device release compilation
         script: flutter build ios --release --no-codesign
       - name: Build macOS application
         script: flutter build macos --release
     artifacts:
-      - app/build/ios/iphonesimulator/*.app
-      - app/build/macos/Build/Products/Release/*.app
-      - app/.private/qa/*.png
-      - app/build/ios-test-results/*.xcresult
-      - app/build/ios-test-results/*.log
+      - RyhzeApp/Launcher/build/ios/iphonesimulator/*.app
+      - RyhzeApp/Launcher/build/macos/Build/Products/Release/*.app
+      - RyhzeApp/Launcher/.private/qa/*.png
+      - RyhzeApp/Launcher/build/ios-test-results/*.xcresult
+      - RyhzeApp/Launcher/build/ios-test-results/*.log
 
   ios-testflight:
     name: Ryhze TestFlight release
-    working_directory: app
+    working_directory: RyhzeApp/Launcher
     max_build_duration: 60
     instance_type: mac_mini_m2
     environment:
@@ -65,17 +65,17 @@ workflows:
       - name: Use configured signing profiles
         script: xcode-project use-profiles
       - name: Verify iOS behavior before publishing
-        script: bash tool/verify-ios.sh
+        script: bash ../Build/verify-ios.sh
       - name: Build signed release
         script: |
           set -euo pipefail
           : "${PROJECT_BUILD_NUMBER:?Codemagic project build number is required}"
           flutter build ipa --release --build-number="$((PROJECT_BUILD_NUMBER + 7))" --export-options-plist="$HOME/export_options.plist"
     artifacts:
-      - app/build/ios/ipa/*.ipa
-      - app/build/ios/archive/*.xcarchive
-      - app/build/ios-test-results/*.xcresult
-      - app/build/ios-test-results/*.log
+      - RyhzeApp/Launcher/build/ios/ipa/*.ipa
+      - RyhzeApp/Launcher/build/ios/archive/*.xcarchive
+      - RyhzeApp/Launcher/build/ios-test-results/*.xcresult
+      - RyhzeApp/Launcher/build/ios-test-results/*.log
     publishing:
       app_store_connect:
         api_key: $APP_STORE_CONNECT_PRIVATE_KEY
