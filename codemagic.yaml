@@ -39,22 +39,16 @@ workflows:
     working_directory: RyhzeApp/Launcher
     max_build_duration: 60
     instance_type: mac_mini_m2
+    integrations:
+      app_store_connect: Ryhze TestFlight
     environment:
       flutter: 3.47.2
       xcode: latest
       cocoapods: default
-      groups:
-        - ryhze_apple_signing
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.ryhze.ryhze
     scripts:
-      - name: Check release credentials
-        script: |
-          set -euo pipefail
-          : "${APP_STORE_CONNECT_PRIVATE_KEY:?Add the App Store Connect private key to ryhze_apple_signing}"
-          : "${APP_STORE_CONNECT_KEY_IDENTIFIER:?Add the App Store Connect key ID}"
-          : "${APP_STORE_CONNECT_ISSUER_ID:?Add the App Store Connect issuer ID}"
       - name: Resolve and validate
         script: |
           set -euo pipefail
@@ -63,14 +57,15 @@ workflows:
           flutter analyze
           flutter test
       - name: Use configured signing profiles
-        script: xcode-project use-profiles
+        script: |
+          xcode-project use-profiles --custom-export-options='{"testFlightInternalTestingOnly": true}'
       - name: Verify iOS behavior before publishing
         script: bash ../Build/verify-ios.sh
       - name: Build signed release
         script: |
           set -euo pipefail
           : "${PROJECT_BUILD_NUMBER:?Codemagic project build number is required}"
-          flutter build ipa --release --build-number="$((PROJECT_BUILD_NUMBER + 7))" --export-options-plist="$HOME/export_options.plist"
+          flutter build ipa --release --build-number="$((PROJECT_BUILD_NUMBER + 34))" --export-options-plist="$HOME/export_options.plist"
     artifacts:
       - RyhzeApp/Launcher/build/ios/ipa/*.ipa
       - RyhzeApp/Launcher/build/ios/archive/*.xcarchive
@@ -78,7 +73,6 @@ workflows:
       - RyhzeApp/Launcher/build/ios-test-results/*.log
     publishing:
       app_store_connect:
-        api_key: $APP_STORE_CONNECT_PRIVATE_KEY
-        key_id: $APP_STORE_CONNECT_KEY_IDENTIFIER
-        issuer_id: $APP_STORE_CONNECT_ISSUER_ID
-        submit_to_testflight: true
+        auth: integration
+        beta_groups:
+          - Ryhze Internal

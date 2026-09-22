@@ -21,15 +21,15 @@ The simulator script requires an installed iOS runtime. It uses an isolated test
 
 ## TestFlight distribution
 
-The repository is connected to Codemagic. Configure the Apple Developer team, an App Store Connect app for the bundle identifier, and matching App Store distribution certificate and provisioning profile. Configure the `ryhze_apple_signing` secret group with `APP_STORE_CONNECT_PRIVATE_KEY`, `APP_STORE_CONNECT_KEY_IDENTIFIER`, and `APP_STORE_CONNECT_ISSUER_ID`; keep these in the service's secret settings, outside the repository.
+The repository is connected to Codemagic. Apple team `B45M4C7CDW` has registered `com.ryhze.ryhze` and created App Store Connect app `6815007396`. The `Ryhze Internal` TestFlight group includes `crplll.leo@gmail.com`. Apple API access and a dedicated `Ryhze TestFlight` Codemagic Developer Portal integration are still required, followed by a matching App Store distribution certificate and provisioning profile. Keep the Apple private key in Codemagic's encrypted integration, outside the repository.
 
-Run `ios-testflight`. It stops on failed checks, performs native simulator checks and exports a signed IPA before uploading to TestFlight. Build numbers use Codemagic's project-wide sequence plus 7; preserve that sequence when rerunning releases. If migrating the pipeline to another Codemagic project, adjust the offset above the latest uploaded Apple build first.
+Run `ios-testflight` after `apple-verification` passes. It stops on failed checks, performs native simulator checks, exports a signed IPA for internal TestFlight testing, and assigns it to `Ryhze Internal`. It does not submit the app for public App Store review. Build numbers use Codemagic's project-wide sequence plus 34; if migrating the pipeline, keep the number above the latest uploaded Apple build.
 
 TestFlight/App Store distribution handles iOS binary updates. The Windows/Android executable updater is intentionally unsupported on iOS. Catalogue content continues to refresh from Ryhze's website API.
 
 ## Current acceptance status
 
-Codemagic verified simulator behavior, Keychain persistence and unsigned release compilation on 10 September 2026 at commit `66b2468`; see `IOS_VERIFICATION.md`. That does not verify the current source. Apple distribution signing, physical-device testing and TestFlight upload have not yet run. Do not advertise an iOS download until a signed current-source build has passed those checks.
+Codemagic's current-source `apple-verification` build passed on 23 September 2026 at commit `da453af`: shared analysis and tests, iPhone/iPad simulator build, native iOS screen and Keychain persistence checks, unsigned device release compilation, and macOS release compilation. Build: https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab3058a155e6f23080124a8 . Apple distribution signing, physical-device testing and TestFlight upload have not yet run. Do not advertise an iOS download until a signed current-source build has passed those checks.
 
 ## Native test runner update
 
