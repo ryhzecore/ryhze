@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -82,7 +83,13 @@ void main() {
         () => capture(key, 'race-opening-${width.toInt()}'),
       );
       await tester.pumpAndSettle();
-      expect(find.text('Launch selected version'), findsOneWidget);
+      if (Platform.isWindows) {
+        expect(find.text('Launch selected version'), findsOneWidget);
+      } else {
+        expect(find.text('Install and launch RACE from Ryhze on Windows.'),
+            findsOneWidget);
+        expect(find.text('Launch selected version'), findsNothing);
+      }
       await tester.runAsync(() => capture(key, 'race-detail-${width.toInt()}'));
       expect(tester.takeException(), isNull);
       await tester.tap(find.text('Back'));

@@ -37,6 +37,15 @@ void main() {
         final executable = await File(
           '${folder.path}/selected.exe',
         ).writeAsBytes([0]);
+        if (!Platform.isWindows) {
+          await expectLater(
+            library.addManual('Example', executable.path, previous: game),
+            throwsStateError,
+          );
+          expect(library.games.single.id, game.id);
+          expect(library.games.single.addedAt, added);
+          return;
+        }
         await library.addManual('Example', executable.path, previous: game);
         final repaired = library.games.single;
         expect(repaired.id, game.id);

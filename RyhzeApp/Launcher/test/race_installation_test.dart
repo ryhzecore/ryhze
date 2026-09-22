@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
@@ -36,6 +37,17 @@ void main() {
       ),
     );
     await tester.pump(const Duration(milliseconds: 100));
+    if (!Platform.isWindows) {
+      expect(find.text('Local installation (unverified)'), findsNothing);
+      expect(find.text('Install and launch RACE from Ryhze on Windows.'),
+          findsOneWidget);
+      online.complete(http.Response('{"schema":1,"releases":[]}', 200));
+      await tester.pumpAndSettle();
+      expect(find.text('Launch selected version'), findsNothing);
+      await tester.pumpWidget(const SizedBox.shrink());
+      state.dispose();
+      return;
+    }
     expect(find.text('Local installation (unverified)'), findsOneWidget);
     expect(find.textContaining('Executable reports 0.1.0.'), findsOneWidget);
     expect(find.text('V0.1.0 - Local Build'), findsNothing);
@@ -78,6 +90,17 @@ void main() {
       found = installation;
       await tester.pump(const Duration(seconds: 15));
       await tester.pumpAndSettle();
+      if (!Platform.isWindows) {
+        expect(find.text('Installed'), findsNothing);
+        await tester.tap(find.byKey(const ValueKey('card-open-race-engine')));
+        await tester.pumpAndSettle();
+        expect(find.text('Install and launch RACE from Ryhze on Windows.'),
+            findsOneWidget);
+        expect(find.text('Launch selected version'), findsNothing);
+        await tester.pumpWidget(const SizedBox.shrink());
+        state.dispose();
+        return;
+      }
       expect(find.text('Installed'), findsOneWidget);
       await tester.tap(find.byKey(const ValueKey('card-open-race-engine')));
       await tester.pumpAndSettle();
@@ -95,6 +118,14 @@ void main() {
         (call) async =>
             (call.arguments as Map)['path'] == '' ? installation : null,
       );
+      if (!Platform.isWindows) {
+        expect(await raceInstallation(directory: r'F:\old'), isNull);
+        expect(
+          await raceInstallation(directory: r'F:\wrong.exe', strict: true),
+          isNull,
+        );
+        return;
+      }
       expect(await raceInstallation(directory: r'F:\old'), installation);
       expect(
         await raceInstallation(directory: r'F:\wrong.exe', strict: true),
