@@ -29,7 +29,9 @@ TestFlight/App Store distribution handles iOS binary updates. The Windows/Androi
 
 ## Current acceptance status
 
-The 23 September 2026 [`apple-verification` build](https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab32c27f5ee0a012941c9ec) passed with the Liquid Glass app source at commit `f1801c4`: shared analysis and tests, iPhone simulator compilation, native screen and Keychain tests, unsigned device release compilation, and macOS compilation. A later [capture-only build](https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab332b909b7d560af645974) attached the native screenshot as a downloadable artifact; visual review remains open. Apple API access, distribution signing, physical-device testing, and TestFlight upload have not yet run. App Store Connect currently has no Ryhze TestFlight build. Do not advertise an iOS download until a signed build passes those checks.
+The 23 September 2026 [`apple-verification` build](https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab33bb45910d4898608a413) passed on the corrected iOS source at branch commit `5751fe7`: shared analysis and tests, iPhone/iPad simulator compilation, native screen and Keychain tests, unsigned device release compilation, and macOS compilation. The [capture build](https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab339cea56dee762d5d9344) succeeded. Its iPhone 17 Pro simulator screen was inspected after the Games/Films alignment fix and is saved in [Google Drive](https://docs.google.com/document/d/17OvnsHBGy17-HmG7loyA98pkR4x34ZSfHiNvxc7AeRE/edit?tab=t.0). This proves the iOS 26.5 simulator result, not behavior on a physical iOS 27 beta device.
+
+App Store Connect still has no signed Ryhze TestFlight build. Apple API access, distribution signing, signed upload, and physical-device testing remain open. The internal tester email will receive an invitation only after a build is assigned to its group. Do not advertise an iOS download before that build is available and verified.
 
 ## Native test runner update
 
