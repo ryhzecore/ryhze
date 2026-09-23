@@ -29,7 +29,7 @@ TestFlight/App Store distribution handles iOS binary updates. The Windows/Androi
 
 ## Current acceptance status
 
-Codemagic's current-source `apple-verification` build passed on 23 September 2026 at commit `da453af`: shared analysis and tests, iPhone/iPad simulator build, native iOS screen and Keychain persistence checks, unsigned device release compilation, and macOS release compilation. Build: https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab3058a155e6f23080124a8 . Apple distribution signing, physical-device testing and TestFlight upload have not yet run. Do not advertise an iOS download until a signed current-source build has passed those checks.
+The 23 September 2026 [`apple-verification` build](https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab32c27f5ee0a012941c9ec) passed with the Liquid Glass app source at commit `f1801c4`: shared analysis and tests, iPhone simulator compilation, native screen and Keychain tests, unsigned device release compilation, and macOS compilation. A later [capture-only build](https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab332b909b7d560af645974) attached the native screenshot as a downloadable artifact; visual review remains open. Apple API access, distribution signing, physical-device testing, and TestFlight upload have not yet run. App Store Connect currently has no Ryhze TestFlight build. Do not advertise an iOS download until a signed build passes those checks.
 
 ## Native test runner update
 
