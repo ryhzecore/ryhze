@@ -60,6 +60,16 @@ workflows:
           sleep 8
           mkdir -p "$CM_EXPORT_DIR"
           xcrun simctl io "$SIM_ID" screenshot "$CM_EXPORT_DIR/ios-glass-home.png"
+          sips -s format jpeg -s formatOptions 72 -Z 1400 "$CM_EXPORT_DIR/ios-glass-home.png" --out /tmp/ios-glass-preview.jpg >/dev/null
+          python3 - <<'PY'
+          import base64
+          from pathlib import Path
+          encoded = base64.b64encode(Path('/tmp/ios-glass-preview.jpg').read_bytes()).decode('ascii')
+          print('RZIMG_BEGIN')
+          for offset in range(0, len(encoded), 900):
+              print('RZIMG:' + encoded[offset:offset + 900])
+          print('RZIMG_END')
+          PY
     artifacts:
       - $CM_EXPORT_DIR/ios-glass-home.png
 
