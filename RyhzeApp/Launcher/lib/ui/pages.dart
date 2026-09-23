@@ -157,7 +157,7 @@ class _AuthPageState extends State<AuthPage> {
                       width: double.infinity,
                       child: Pill(
                         websiteBusy
-                            ? 'Opening Ryhze.comâ€¦'
+                            ? 'Opening Ryhze.com...'
                             : 'Continue with Ryhze.com',
                         primary: true,
                         icon: Icons.open_in_browser,
