@@ -21,9 +21,9 @@ The simulator script requires an installed iOS runtime. It uses an isolated test
 
 ## TestFlight distribution
 
-The repository is connected to Codemagic. Apple team `B45M4C7CDW` has registered `com.ryhze.ryhze` and created App Store Connect app `6815007396`. The `Ryhze Internal` TestFlight group includes `crplll.leo@gmail.com`. Apple API access and a dedicated `Ryhze TestFlight` Codemagic Developer Portal integration are still required, followed by a matching App Store distribution certificate and provisioning profile. Keep the Apple private key in Codemagic's encrypted integration, outside the repository.
+The repository is connected to Codemagic. Apple team `B45M4C7CDW` has registered `com.ryhze.ryhze` and created App Store Connect app `6815007396`. The `Ryhze Internal` TestFlight group includes `crplll.leo@gmail.com`. Apple API access was approved on 23 September 2026. Add the dedicated App Manager key to the Codemagic Developer Portal integration under the name `Ryhze TestFlight`, then configure a matching App Store distribution certificate and provisioning profile. Keep the downloaded `.p8` key in Codemagic's encrypted integration, outside the repository.
 
-Run `ios-testflight` after `apple-verification` passes. It stops on failed checks, performs native simulator checks, exports a signed IPA for internal TestFlight testing, and assigns it to `Ryhze Internal`. It does not submit the app for public App Store review. Build numbers use Codemagic's project-wide sequence plus 34; if migrating the pipeline, keep the number above the latest uploaded Apple build.
+Run `ios-testflight` after verification passes. It stops on failed checks, performs native simulator checks, exports a signed IPA for internal TestFlight testing, and assigns it to `Ryhze Internal`. It does not submit the app for public App Store review. The first workflow run uses build 34 (`BUILD_NUMBER` 1 plus 33); later runs increase within that workflow. If migrating the pipeline, keep the next number above the latest uploaded Apple build.
 
 TestFlight/App Store distribution handles iOS binary updates. The Windows/Android executable updater is intentionally unsupported on iOS. Catalogue content continues to refresh from Ryhze's website API.
 
@@ -31,7 +31,7 @@ TestFlight/App Store distribution handles iOS binary updates. The Windows/Androi
 
 The 23 September 2026 [`apple-verification` build](https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab33bb45910d4898608a413) passed on the corrected iOS source at branch commit `5751fe7`: shared analysis and tests, iPhone/iPad simulator compilation, native screen and Keychain tests, unsigned device release compilation, and macOS compilation. The [capture build](https://codemagic.io/app/6aa168715f5464a1c485054c/build/6ab339cea56dee762d5d9344) succeeded. Its iPhone 17 Pro simulator screen was inspected after the Games/Films alignment fix and is saved in [Google Drive](https://docs.google.com/document/d/17OvnsHBGy17-HmG7loyA98pkR4x34ZSfHiNvxc7AeRE/edit?tab=t.0). This proves the iOS 26.5 simulator result, not behavior on a physical iOS 27 beta device.
 
-App Store Connect still has no signed Ryhze TestFlight build. Apple API access, distribution signing, signed upload, and physical-device testing remain open. The internal tester email will receive an invitation only after a build is assigned to its group. Do not advertise an iOS download before that build is available and verified.
+App Store Connect approved API access on 23 September 2026, but still has no signed Ryhze TestFlight build. The dedicated key, Codemagic integration, distribution signing, signed upload, and physical-device testing remain open. The internal tester email will receive an invitation only after a build is assigned to its group. Do not advertise an iOS download before that build is available and verified.
 
 ## Native test runner update
 

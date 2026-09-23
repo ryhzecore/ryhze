@@ -3,8 +3,25 @@ import 'dart:async';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
+import 'package:crypto/crypto.dart';
 import 'package:ryhze/core/api.dart';
 import 'support.dart';
+
+class FakeWebsiteAuthenticator implements WebsiteAuthenticator {
+  Uri? opened;
+  final bool badState;
+  FakeWebsiteAuthenticator({this.badState = false});
+  @override
+  bool get supported => true;
+  @override
+  Future<Uri> authenticate(Uri url) async {
+    opened = url;
+    return Uri.parse('ryhze://auth/callback').replace(queryParameters: {
+      'code': 'd' * 64,
+      'state': badState ? 'e' * 64 : url.queryParameters['state'],
+    });
+  }
+}
 
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
@@ -103,6 +120,46 @@ void main() {
       expect(store.value, isNot(contains('password')));
     },
   );
+  test('website sign-in uses PKCE, verifies state and remembers the app session', () async {
+    final store = MemorySession();
+    final authenticator = FakeWebsiteAuthenticator();
+    late Map<String, dynamic> redeemed;
+    final api = RyhzeApi(
+      store: store,
+      websiteAuthenticator: authenticator,
+      client: MockClient((request) async {
+        expect(request.url.path, '/api/app/session-redeem');
+        redeemed = jsonDecode(request.body);
+        final challenge = base64UrlEncode(
+          sha256.convert(utf8.encode(redeemed['verifier'])).bytes,
+        ).replaceAll('=', '');
+        expect(authenticator.opened?.queryParameters['challenge'], challenge);
+        expect(redeemed['code'], 'd' * 64);
+        return http.Response(
+          '{"ok":true}',
+          200,
+          headers: {'set-cookie': '__Host-ryhze_session=$token; Path=/; Secure; HttpOnly'},
+        );
+      }),
+    );
+    await api.websiteSignIn();
+    expect(authenticator.opened?.path, '/app/connect');
+    expect(authenticator.opened?.queryParameters['state'], hasLength(64));
+    expect(redeemed['verifier'], hasLength(43));
+    expect(api.authHeaders['Cookie'], '__Host-ryhze_session=$token');
+    expect(jsonDecode(store.value!)['token'], token);
+  });
+  test('website sign-in rejects a callback with a different state', () async {
+    final api = RyhzeApi(
+      store: MemorySession(),
+      websiteAuthenticator: FakeWebsiteAuthenticator(badState: true),
+      client: MockClient((_) async => throw StateError('must not redeem')),
+    );
+    await expectLater(
+      api.websiteSignIn(),
+      throwsA(isA<ApiException>().having((error) => error.message, 'message', contains('verified'))),
+    );
+  });
   test('remembered session survives a new API instance', () async {
     final store = MemorySession()
       ..value = jsonEncode({

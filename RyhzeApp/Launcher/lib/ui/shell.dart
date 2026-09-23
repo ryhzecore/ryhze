@@ -36,6 +36,7 @@ class RyhzeShell extends StatefulWidget {
   final GameLibrary? gameLibrary;
   final bool startupBlocked;
   final bool initialBigPicture;
+  final bool initialSignIn;
   const RyhzeShell({
     super.key,
     required this.state,
@@ -43,6 +44,7 @@ class RyhzeShell extends StatefulWidget {
     this.gameLibrary,
     this.startupBlocked = false,
     this.initialBigPicture = false,
+    this.initialSignIn = false,
   });
   @override
   State<RyhzeShell> createState() => _RyhzeShellState();
@@ -50,6 +52,8 @@ class RyhzeShell extends StatefulWidget {
 
 class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   String page = 'games';
+  bool startupAuthResolved = false;
+  bool automaticWebsiteSignIn = false;
   final navigationHistory = <String>[];
   String gameCategory = 'All games';
   GameMediaStore? gameMedia;
@@ -147,6 +151,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     state.addListener(changed);
+    resolveStartupAuth();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         unawaited(syncAudio());
@@ -183,6 +188,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
   }
 
   void changed() {
+    resolveStartupAuth();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         unawaited(maybeShowAgreement());
@@ -202,6 +208,19 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
       });
     }
     unawaited(syncAudio());
+  }
+
+  void resolveStartupAuth() {
+    if (startupAuthResolved || state.loading) return;
+    startupAuthResolved = true;
+    if (widget.initialSignIn &&
+        state.api.websiteSignInSupported &&
+        state.user == null) {
+      page = 'login';
+      automaticWebsiteSignIn =
+          state.api.websiteSignInSupported &&
+          !(state.prefs.getBool('website-sign-in-shown') ?? false);
+    }
   }
 
   Future<void> syncAudio() => audioSync = audioSync.then((_) => updateAudio());
@@ -833,6 +852,8 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
                                   AuthPage(
                                     state: state,
                                     activation: page == 'activate',
+                                    automaticWebsiteSignIn:
+                                        page == 'login' && automaticWebsiteSignIn,
                                     onNavigate: navigate,
                                   )
                                 else if (page == 'engine')

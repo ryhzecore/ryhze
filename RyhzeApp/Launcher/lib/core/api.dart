@@ -1,6 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'dart:math';
+import 'package:crypto/crypto.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,6 +20,34 @@ abstract class SessionStore {
   Future<String?> read();
   Future<void> write(String value);
   Future<void> clear();
+}
+
+abstract class WebsiteAuthenticator {
+  bool get supported;
+  Future<Uri> authenticate(Uri url);
+}
+
+class IOSWebsiteAuthenticator implements WebsiteAuthenticator {
+  static const channel = MethodChannel('ryhze/web-auth');
+  @override
+  bool get supported => !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
+  @override
+  Future<Uri> authenticate(Uri url) async {
+    if (!supported) throw const ApiException('Website sign-in is available on iPhone and iPad.');
+    try {
+      final callback = await channel.invokeMethod<String>('authenticate', {
+        'url': url.toString(),
+        'callbackScheme': 'ryhze',
+      });
+      final parsed = callback == null ? null : Uri.tryParse(callback);
+      if (parsed == null) throw const ApiException('Website sign-in did not finish.');
+      return parsed;
+    } on PlatformException catch (error) {
+      if (error.code == 'cancelled') throw const ApiException('Website sign-in was cancelled.');
+      throw const ApiException('Website sign-in could not open. Please try again.');
+    }
+  }
 }
 
 class SecureSessionStore implements SessionStore {
@@ -41,8 +73,14 @@ class RyhzeApi {
   Uri get origin => _origin;
   final http.Client client;
   final SessionStore store;
+  final WebsiteAuthenticator websiteAuthenticator;
   String? _token;
-  RyhzeApi({Uri? origin, http.Client? client, SessionStore? store})
+  RyhzeApi({
+    Uri? origin,
+    http.Client? client,
+    SessionStore? store,
+    WebsiteAuthenticator? websiteAuthenticator,
+  })
     : _origin =
           origin ??
           Uri.parse(
@@ -52,7 +90,8 @@ class RyhzeApi {
             ),
           ),
       client = client ?? http.Client(),
-      store = store ?? SecureSessionStore() {
+      store = store ?? SecureSessionStore(),
+      websiteAuthenticator = websiteAuthenticator ?? IOSWebsiteAuthenticator() {
     if (this.origin.scheme != 'https' &&
         !['127.0.0.1', 'localhost'].contains(this.origin.host)) {
       throw ArgumentError('Ryhze requires HTTPS.');
@@ -108,6 +147,43 @@ class RyhzeApi {
   Map<String, String> get authHeaders => {
     if (_token != null) 'Cookie': '__Host-ryhze_session=$_token',
   };
+  bool get websiteSignInSupported => websiteAuthenticator.supported;
+
+  String _randomHex(int bytes) {
+    final random = Random.secure();
+    return List.generate(bytes, (_) => random.nextInt(256).toRadixString(16).padLeft(2, '0')).join();
+  }
+
+  String _randomUrlSafe(int bytes) {
+    final random = Random.secure();
+    return base64UrlEncode(List.generate(bytes, (_) => random.nextInt(256))).replaceAll('=', '');
+  }
+
+  Future<void> websiteSignIn() async {
+    if (!websiteSignInSupported) throw const ApiException('Website sign-in is unavailable on this device.');
+    final state = _randomHex(32);
+    final verifier = _randomUrlSafe(32);
+    final challenge = base64UrlEncode(sha256.convert(utf8.encode(verifier)).bytes).replaceAll('=', '');
+    final start = origin.resolve('/app/connect').replace(
+      queryParameters: {'state': state, 'challenge': challenge},
+    );
+    final callback = await websiteAuthenticator.authenticate(start);
+    if (callback.scheme != 'ryhze' ||
+        callback.host != 'auth' ||
+        callback.path != '/callback' ||
+        callback.queryParameters['state'] != state) {
+      throw const ApiException('Website sign-in could not be verified.');
+    }
+    final code = callback.queryParameters['code'] ?? '';
+    if (!RegExp(r'^[a-f0-9]{64}$').hasMatch(code)) {
+      throw const ApiException('Website sign-in could not be verified.');
+    }
+    await request(
+      '/api/app/session-redeem',
+      body: {'code': code, 'verifier': verifier},
+      remember: true,
+    );
+  }
   Uri resource(String path) {
     final url = origin.resolve(path);
     if (url.origin != origin.origin || url.userInfo.isNotEmpty) {

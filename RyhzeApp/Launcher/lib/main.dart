@@ -87,6 +87,7 @@ class RyhzeApp extends StatelessWidget {
                   gameLibrary: gameLibrary,
                   startupBlocked: playing || pending,
                   initialBigPicture: bigPicture,
+                  initialSignIn: true,
                 ),
               ),
             ),

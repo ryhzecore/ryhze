@@ -318,6 +318,17 @@ class RyhzeState extends ChangeNotifier {
     }
   }
 
+  Future<void> websiteLogin() async {
+    await api.websiteSignIn();
+    titles = [];
+    await refresh();
+    if (user == null) {
+      throw const ApiException(
+        'Your website session could not be confirmed. Please sign in again.',
+      );
+    }
+  }
+
   Future<void> logout() async {
     user = null;
     pendingAgreement = null;

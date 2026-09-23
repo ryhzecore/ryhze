@@ -103,8 +103,8 @@ workflows:
       - name: Build signed release
         script: |
           set -euo pipefail
-          : "${PROJECT_BUILD_NUMBER:?Codemagic project build number is required}"
-          flutter build ipa --release --build-number="$((PROJECT_BUILD_NUMBER + 34))" --export-options-plist="$HOME/export_options.plist"
+          : "${BUILD_NUMBER:?Codemagic workflow build number is required}"
+          flutter build ipa --release --build-number="$((BUILD_NUMBER + 33))" --export-options-plist="$HOME/export_options.plist"
     artifacts:
       - RyhzeApp/Launcher/build/ios/ipa/*.ipa
       - RyhzeApp/Launcher/build/ios/archive/*.xcarchive

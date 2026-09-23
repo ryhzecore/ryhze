@@ -9,9 +9,60 @@ import 'package:ryhze/core/api.dart';
 import 'package:ryhze/core/state.dart';
 import 'package:ryhze/main.dart';
 import 'package:ryhze/ui/design.dart';
+import 'package:ryhze/ui/shell.dart';
 import 'support.dart';
 
+class PendingWebsiteAuthenticator implements WebsiteAuthenticator {
+  final callback = Completer<Uri>();
+  bool started = false;
+  @override
+  bool get supported => true;
+  @override
+  Future<Uri> authenticate(Uri url) {
+    started = true;
+    return callback.future;
+  }
+}
+
 void main() {
+  testWidgets('first iOS launch opens website recognition and shows sign-in', (tester) async {
+    SharedPreferences.setMockInitialValues({});
+    final authenticator = PendingWebsiteAuthenticator();
+    final api = RyhzeApi(
+      store: MemorySession(),
+      websiteAuthenticator: authenticator,
+      client: MockClient((_) async => http.Response('{}', 500)),
+    );
+    final state = RyhzeState(
+      api,
+      await SharedPreferences.getInstance(),
+      libraryAutoSync: false,
+      featuredMotion: false,
+    )
+      ..loading = false
+      ..titles = [sample];
+    await tester.pumpWidget(
+      MaterialApp(
+        theme: ryhzeTheme(),
+        home: RyhzeShell(state: state, initialSignIn: true),
+      ),
+    );
+    await tester.pump();
+    await tester.pump();
+    expect(
+      find.byWidgetPredicate(
+        (widget) => widget is Pill && widget.label.contains('Ryhze.com'),
+      ),
+      findsOneWidget,
+    );
+    expect(find.text('User ID'), findsOneWidget);
+    expect(authenticator.started, isTrue);
+    expect(state.prefs.getBool('website-sign-in-shown'), isTrue);
+    authenticator.callback.complete(Uri.parse('ryhze://auth/callback?code=bad&state=bad'));
+    await tester.pumpWidget(const SizedBox());
+    state.dispose();
+    api.close();
+  });
   testWidgets(
     'successful sign-in survives catalogue refresh and leaves the form',
     (tester) async {

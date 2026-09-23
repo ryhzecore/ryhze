@@ -8,11 +8,13 @@ import 'design.dart';
 class AuthPage extends StatefulWidget {
   final RyhzeState state;
   final bool activation;
+  final bool automaticWebsiteSignIn;
   final ValueChanged<String> onNavigate;
   const AuthPage({
     super.key,
     required this.state,
     required this.activation,
+    this.automaticWebsiteSignIn = false,
     required this.onNavigate,
   });
   @override
@@ -24,8 +26,41 @@ class _AuthPageState extends State<AuthPage> {
   final username = TextEditingController(),
       password = TextEditingController(),
       invitation = TextEditingController();
-  bool remember = true, visible = false, busy = false, done = false;
+  bool remember = true,
+      visible = false,
+      busy = false,
+      websiteBusy = false,
+      done = false;
   String? error;
+  @override
+  void initState() {
+    super.initState();
+    if (widget.automaticWebsiteSignIn && widget.state.api.websiteSignInSupported) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) websiteSignIn(automatic: true);
+      });
+    }
+  }
+
+  Future<void> websiteSignIn({bool automatic = false}) async {
+    if (websiteBusy || busy || !widget.state.api.websiteSignInSupported) return;
+    setState(() {
+      websiteBusy = true;
+      error = null;
+    });
+    if (automatic) {
+      await widget.state.prefs.setBool('website-sign-in-shown', true);
+    }
+    try {
+      await widget.state.websiteLogin();
+      if (!mounted) return;
+      widget.onNavigate('games');
+    } catch (exception) {
+      if (mounted) setState(() => error = exception.toString());
+    } finally {
+      if (mounted) setState(() => websiteBusy = false);
+    }
+  }
   @override
   void dispose() {
     username.dispose();
@@ -116,6 +151,38 @@ class _AuthPageState extends State<AuthPage> {
                     onPressed: () => widget.onNavigate('login'),
                   ),
                 ] else ...[
+                  if (!widget.activation &&
+                      widget.state.api.websiteSignInSupported) ...[
+                    SizedBox(
+                      width: double.infinity,
+                      child: Pill(
+                        websiteBusy
+                            ? 'Opening Ryhze.comâ€¦'
+                            : 'Continue with Ryhze.com',
+                        primary: true,
+                        icon: Icons.open_in_browser,
+                        onPressed: busy || websiteBusy ? null : websiteSignIn,
+                      ),
+                    ),
+                    const SizedBox(height: 22),
+                    const Row(
+                      children: [
+                        Expanded(child: Divider()),
+                        Flexible(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 12),
+                            child: Text(
+                              'or sign in with your User ID',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(fontSize: 11, color: muted),
+                            ),
+                          ),
+                        ),
+                        Expanded(child: Divider()),
+                      ],
+                    ),
+                    const SizedBox(height: 22),
+                  ],
                   if (widget.activation)
                     TextFormField(
                       controller: invitation,
