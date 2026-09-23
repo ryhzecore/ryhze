@@ -41,3 +41,14 @@ mkdir -p build/ios-test-results
 run_test screens integration_test/website_parity_test.dart
 run_test session-seed integration_test/remember_session_test.dart --dart-define=RYHZE_SESSION_PHASE=seed
 run_test session-restore integration_test/remember_session_test.dart --dart-define=RYHZE_SESSION_PHASE=restore
+
+# Keep a screenshot from the real simulator compositor. Flutter's
+# RenderRepaintBoundary capture can omit native UIKit platform views, including
+# the Liquid Glass surface, so this is the visual review artifact.
+python3 ../Build/run-bounded.py 600 flutter build ios --simulator --debug --target=lib/main.dart
+xcrun simctl terminate "$RYHZE_SIMULATOR_ID" com.ryhze.ryhze 2>/dev/null || true
+xcrun simctl install "$RYHZE_SIMULATOR_ID" build/ios/iphonesimulator/Runner.app
+xcrun simctl launch "$RYHZE_SIMULATOR_ID" com.ryhze.ryhze
+sleep 6
+mkdir -p .private/qa
+xcrun simctl io "$RYHZE_SIMULATOR_ID" screenshot .private/qa/ios-glass-home.png

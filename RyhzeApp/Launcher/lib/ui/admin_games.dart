@@ -361,7 +361,7 @@ class _GamePublishingPageState extends State<GamePublishingPage> {
     final yes = await showDialog<bool>(
       context: context,
       builder: (context) => StatefulBuilder(
-        builder: (context, updateReview) => AlertDialog(
+        builder: (context, updateReview) => RyhzeAlertDialog(
           title: const Text('Publish to Ryhze'),
           content: SizedBox(
             width: 600,

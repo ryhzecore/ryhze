@@ -636,7 +636,7 @@ class _EngineVersionsState extends State<EngineVersions> {
         confirmedByUser ||
         await showDialog<bool>(
               context: context,
-              builder: (dialogContext) => AlertDialog(
+              builder: (dialogContext) => RyhzeAlertDialog(
                 title: Text('Uninstall RACE ${build.displayVersion}?'),
                 content: SingleChildScrollView(
                   child: Column(

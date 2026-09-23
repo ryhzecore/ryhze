@@ -694,7 +694,7 @@ class _AdminPageState extends State<AdminPage> {
   Future<void> disable(Map<String, dynamic> member) async {
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => RyhzeAlertDialog(
         title: Text('Disable ${member['username']}?'),
         content: const Text(
           'Their active sessions will end and they will no longer be able to sign in.',

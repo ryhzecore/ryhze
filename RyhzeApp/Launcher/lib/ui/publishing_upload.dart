@@ -5,6 +5,7 @@ import 'package:file_selector/file_selector.dart';
 import 'package:http/http.dart' as http;
 import 'package:image/image.dart' as img;
 import '../core/state.dart';
+import 'design.dart';
 
 Future<Map<String, dynamic>?> uploadPublishingFile(
   BuildContext context,
@@ -65,7 +66,7 @@ Future<Map<String, dynamic>?> uploadPublishingFile(
             (engine ? state.adminAccess : state.publishingAccess) &&
                 state.scope == account
             ? StatefulBuilder(
-                builder: (context, setLocal) => AlertDialog(
+                builder: (context, setLocal) => RyhzeAlertDialog(
                   title: const Text('Crop artwork'),
                   content: SizedBox(
                     width: 320,
@@ -105,7 +106,7 @@ Future<Map<String, dynamic>?> uploadPublishingFile(
                   ],
                 ),
               )
-            : AlertDialog(
+            : RyhzeAlertDialog(
                 title: const Text('Administrator access is off.'),
                 actions: [
                   TextButton(

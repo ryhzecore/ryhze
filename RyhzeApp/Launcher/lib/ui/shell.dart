@@ -141,6 +141,7 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
       agreementShowing = false;
     }
   }
+
   @override
   void initState() {
     super.initState();
@@ -650,131 +651,136 @@ class _RyhzeShellState extends State<RyhzeShell> with WidgetsBindingObserver {
               }
               return Column(
                 children: [
-                  Container(
-                    height: bigPicture
-                        ? 88
-                        : mobile
-                        ? 88
-                        : 104,
-                    padding: EdgeInsets.symmetric(
-                      horizontal: width <= 350 ? 14 : gutter,
-                    ),
-                    decoration: const BoxDecoration(
-                      color: canvas,
-                      border: Border(
-                        bottom: BorderSide(color: Color(0x0cffffff)),
+                  IOSGlassChrome(
+                    radius: 0,
+                    child: Container(
+                      height: bigPicture
+                          ? 88
+                          : mobile
+                          ? 88
+                          : 104,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: width <= 350 ? 14 : gutter,
                       ),
-                    ),
-                    child: Builder(
-                      builder: (context) {
-                        final brand = Semantics(
-                          label: 'Ryhze Games',
-                          button: true,
-                          child: InkWell(
-                            onTap: () => navigate('games'),
-                            borderRadius: BorderRadius.circular(8),
-                            child: BetaBrand(
-                              compact: mobile,
-                              width: mobile ? (width <= 350 ? 34 : 40) : 124,
+                      decoration: BoxDecoration(
+                        color: usesIOSLiquidGlass ? Colors.transparent : canvas,
+                        border: const Border(
+                          bottom: BorderSide(color: Color(0x0cffffff)),
+                        ),
+                      ),
+                      child: Builder(
+                        builder: (context) {
+                          final brand = Semantics(
+                            label: 'Ryhze Games',
+                            button: true,
+                            child: InkWell(
+                              onTap: () => navigate('games'),
+                              borderRadius: BorderRadius.circular(8),
+                              child: BetaBrand(
+                                compact: mobile,
+                                width: mobile ? (width <= 350 ? 34 : 40) : 124,
+                              ),
                             ),
-                          ),
-                        );
-                        final actions = Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (width > 480 &&
-                                widget.gameLibrary?.isLinux == true)
-                              Pill(
-                                bigPicture ? 'Exit Big Picture' : 'Big Picture',
-                                icon: bigPicture
-                                    ? Icons.fullscreen_exit
-                                    : Icons.fullscreen,
-                                iconOnly: true,
-                                onPressed: () => setBigPicture(!bigPicture),
-                              ),
-                            if (width > 480 && state.catalogueUpdateAvailable)
-                              Pill(
-                                'Apply catalogue update',
-                                icon: Icons.refresh,
-                                iconOnly: true,
-                                onPressed: state.applyCatalogueUpdate,
-                              ),
-                            if (width > 480)
-                              Opacity(
-                                opacity: expandedSource == 'search' ? 0 : 1,
-                                child: Pill(
-                                  key: searchSource,
-                                  'Search Ryhze',
-                                  height: mobile ? 44 : 48,
-                                  icon: Icons.search,
+                          );
+                          final actions = Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (width > 480 &&
+                                  widget.gameLibrary?.isLinux == true)
+                                Pill(
+                                  bigPicture
+                                      ? 'Exit Big Picture'
+                                      : 'Big Picture',
+                                  icon: bigPicture
+                                      ? Icons.fullscreen_exit
+                                      : Icons.fullscreen,
                                   iconOnly: true,
-                                  onPressed: search,
+                                  onPressed: () => setBigPicture(!bigPicture),
+                                ),
+                              if (width > 480 && state.catalogueUpdateAvailable)
+                                Pill(
+                                  'Apply catalogue update',
+                                  icon: Icons.refresh,
+                                  iconOnly: true,
+                                  onPressed: state.applyCatalogueUpdate,
+                                ),
+                              if (width > 480)
+                                Opacity(
+                                  opacity: expandedSource == 'search' ? 0 : 1,
+                                  child: Pill(
+                                    key: searchSource,
+                                    'Search Ryhze',
+                                    height: mobile ? 44 : 48,
+                                    icon: Icons.search,
+                                    iconOnly: true,
+                                    onPressed: search,
+                                    reduced: state.reduced,
+                                  ),
+                                ),
+                              if (width > 480)
+                                SizedBox(
+                                  width: width <= 350
+                                      ? 4
+                                      : mobile
+                                      ? 7
+                                      : 10,
+                                ),
+                              Opacity(
+                                opacity: expandedSource == 'menu' ? 0 : 1,
+                                child: Pill(
+                                  key: menuSource,
+                                  'Account and settings',
+                                  height: mobile ? 44 : 48,
+                                  icon: Icons.menu,
+                                  iconOnly: true,
+                                  onPressed: menu,
                                   reduced: state.reduced,
                                 ),
                               ),
-                            if (width > 480)
-                              SizedBox(
-                                width: width <= 350
-                                    ? 4
-                                    : mobile
-                                    ? 7
-                                    : 10,
-                              ),
-                            Opacity(
-                              opacity: expandedSource == 'menu' ? 0 : 1,
-                              child: Pill(
-                                key: menuSource,
-                                'Account and settings',
-                                height: mobile ? 44 : 48,
-                                icon: Icons.menu,
-                                iconOnly: true,
-                                onPressed: menu,
-                                reduced: state.reduced,
-                              ),
-                            ),
-                            if (width > 480) const SizedBox(width: 10),
-                            if (width > 480)
-                              Pill(
-                                'Game library',
-                                height: mobile ? 44 : 48,
-                                icon: Icons.library_books_outlined,
-                                iconOnly: true,
-                                onPressed: () => navigate('library'),
-                                reduced: state.reduced,
-                              ),
-                            if (!mobile && state.user == null) ...[
-                              const SizedBox(width: 14),
-                              Pill(
-                                'Sign in',
-                                icon: Icons.arrow_forward,
-                                onPressed: () => navigate('login'),
-                              ),
+                              if (width > 480) const SizedBox(width: 10),
+                              if (width > 480)
+                                Pill(
+                                  'Game library',
+                                  height: mobile ? 44 : 48,
+                                  icon: Icons.library_books_outlined,
+                                  iconOnly: true,
+                                  onPressed: () => navigate('library'),
+                                  reduced: state.reduced,
+                                ),
+                              if (!mobile && state.user == null) ...[
+                                const SizedBox(width: 14),
+                                Pill(
+                                  'Sign in',
+                                  icon: Icons.arrow_forward,
+                                  onPressed: () => navigate('login'),
+                                ),
+                              ],
                             ],
-                          ],
-                        );
-                        final tabs = BrowseTabs(
-                          page: page,
-                          onChanged: navigate,
-                          engineAvailable: state.engineAccess,
-                        );
-                        return Row(
-                          children: [
-                            brand,
-                            SizedBox(
-                              width: width <= 480
-                                  ? 8
-                                  : mobile
-                                  ? 15
-                                  : width <= 1000
-                                  ? 20
-                                  : 30,
-                            ),
-                            tabs,
-                            const Spacer(),
-                            actions,
-                          ],
-                        );
-                      },
+                          );
+                          final tabs = BrowseTabs(
+                            page: page,
+                            onChanged: navigate,
+                            engineAvailable: state.engineAccess,
+                          );
+                          return Row(
+                            children: [
+                              brand,
+                              SizedBox(
+                                width: width <= 480
+                                    ? 8
+                                    : mobile
+                                    ? 15
+                                    : width <= 1000
+                                    ? 20
+                                    : 30,
+                              ),
+                              tabs,
+                              const Spacer(),
+                              actions,
+                            ],
+                          );
+                        },
+                      ),
                     ),
                   ),
                   if (widget.updates?.supported == true)

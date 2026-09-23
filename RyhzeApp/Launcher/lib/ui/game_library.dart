@@ -19,7 +19,7 @@ Future<void> gamePermission(BuildContext context, GameLibrary library) async {
   final allow = await showDialog<bool>(
     context: context,
     barrierDismissible: false,
-    builder: (context) => AlertDialog(
+    builder: (context) => RyhzeAlertDialog(
       title: const Text('Bring your games to Ryhze'),
       content: SizedBox(
         width: 460,
@@ -61,7 +61,7 @@ Future<void> editLocalGame(
   await showDialog<void>(
     context: context,
     builder: (context) => StatefulBuilder(
-      builder: (context, update) => AlertDialog(
+      builder: (context, update) => RyhzeAlertDialog(
         title: Text(game == null ? 'Add a game' : 'Edit game'),
         content: SizedBox(
           width: 500,
@@ -200,7 +200,7 @@ class _GameLibraryToolsState extends State<GameLibraryTools> {
     final input = TextEditingController();
     final path = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => RyhzeAlertDialog(
         title: const Text('Add a Steam library folder'),
         content: SizedBox(
           width: 460,
@@ -234,7 +234,7 @@ class _GameLibraryToolsState extends State<GameLibraryTools> {
       context: context,
       builder: (context) => ListenableBuilder(
         listenable: library,
-        builder: (context, _) => AlertDialog(
+        builder: (context, _) => RyhzeAlertDialog(
           title: const Text('Game library preferences'),
           content: SizedBox(
             width: 440,
@@ -559,7 +559,7 @@ class GameControls extends StatelessWidget {
   Future<void> stop(BuildContext context) async {
     final force = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => RyhzeAlertDialog(
         title: Text('Stop ${game.name}?'),
         content: const Text(
           'Close game asks it to exit normally. Force stop ends the detected game processes immediately and can lose unsaved progress.',

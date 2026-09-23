@@ -110,7 +110,7 @@ class _LauncherChoiceDialogState extends State<LauncherChoiceDialog> {
   @override
   Widget build(BuildContext context) => PopScope(
     canPop: !busy,
-    child: AlertDialog(
+    child: RyhzeAlertDialog(
       title: const Text('Choose your home'),
       content: SizedBox(
         width: 460,

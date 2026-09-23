@@ -173,7 +173,7 @@ class _EngineEditorState extends State<EngineEditor> {
       context: context,
       builder: (dialog) => ListenableBuilder(
         listenable: widget.state,
-        builder: (_, _) => AlertDialog(
+        builder: (_, _) => RyhzeAlertDialog(
           title: const Text('Delete selected version?'),
           content: Text(
             allowed

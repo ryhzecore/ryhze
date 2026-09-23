@@ -24,38 +24,41 @@ class RyhzePageHeader extends StatelessWidget implements PreferredSizeWidget {
         : compact
         ? 22.0
         : (width * .045).clamp(20.0, 88.0);
-    return ColoredBox(
-      color: canvas,
-      child: SafeArea(
-        bottom: false,
-        child: Container(
-          height: preferredSize.height,
-          padding: EdgeInsets.symmetric(horizontal: gutter),
-          decoration: const BoxDecoration(
-            border: Border(bottom: BorderSide(color: Color(0x0cffffff))),
-          ),
-          child: Row(
-            children: [
-              Pill(
-                'Back',
-                icon: Icons.arrow_back,
-                iconOnly: true,
-                height: compact ? 44 : 48,
-                onPressed: () => Navigator.maybePop(context),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Text(
-                  title,
-                  maxLines: 2,
-                  style: heading(compact ? 20 : 24),
+    return IOSGlassChrome(
+      radius: 0,
+      child: ColoredBox(
+        color: usesIOSLiquidGlass ? Colors.transparent : canvas,
+        child: SafeArea(
+          bottom: false,
+          child: Container(
+            height: preferredSize.height,
+            padding: EdgeInsets.symmetric(horizontal: gutter),
+            decoration: const BoxDecoration(
+              border: Border(bottom: BorderSide(color: Color(0x0cffffff))),
+            ),
+            child: Row(
+              children: [
+                Pill(
+                  'Back',
+                  icon: Icons.arrow_back,
+                  iconOnly: true,
+                  height: compact ? 44 : 48,
+                  onPressed: () => Navigator.maybePop(context),
                 ),
-              ),
-              for (final action in actions) ...[
-                const SizedBox(width: 12),
-                action,
+                const SizedBox(width: 16),
+                Expanded(
+                  child: Text(
+                    title,
+                    maxLines: 2,
+                    style: heading(compact ? 20 : 24),
+                  ),
+                ),
+                for (final action in actions) ...[
+                  const SizedBox(width: 12),
+                  action,
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),

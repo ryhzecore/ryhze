@@ -93,7 +93,7 @@ class _AgreementDialogState extends State<AgreementDialog> {
     super.dispose();
   }
 
-  Widget body(BuildContext context) => AlertDialog(
+  Widget body(BuildContext context) => RyhzeAlertDialog(
     title: Text(widget.title),
     content: SizedBox(
       width: 640,

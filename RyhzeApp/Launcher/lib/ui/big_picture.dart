@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'controller_focus.dart';
+import 'design.dart';
 
 /// Adds fullscreen and controller input to the regular Ryhze interface.
 class BigPicture extends StatefulWidget {
@@ -96,7 +97,7 @@ class _BigPictureState extends State<BigPicture> {
     exitOpen = true;
     final exit = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => RyhzeAlertDialog(
         title: const Text('Leave Big Picture?'),
         content: const Text(
           'Return to the regular Ryhze window in Desktop Mode.',

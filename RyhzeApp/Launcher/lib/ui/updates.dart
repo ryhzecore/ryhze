@@ -11,9 +11,13 @@ class UpdateBanner extends StatelessWidget {
     listenable: updates,
     builder: (_, _) => !updates.showBanner
         ? const SizedBox.shrink()
-        : Material(
-            color: const Color(0xff201337),
-            child: Padding(
+        : IOSGlassChrome(
+            radius: 0,
+            child: Material(
+              color: usesIOSLiquidGlass
+                  ? Colors.transparent
+                  : const Color(0xff201337),
+              child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
               child: Row(
                 children: [
@@ -32,6 +36,7 @@ class UpdateBanner extends StatelessWidget {
                     icon: const Icon(Icons.close, size: 18),
                   ),
                 ],
+              ),
               ),
             ),
           ),

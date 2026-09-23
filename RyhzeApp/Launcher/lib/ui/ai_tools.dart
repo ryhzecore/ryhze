@@ -776,7 +776,7 @@ class _ReportDialog extends StatelessWidget {
         review = aiObject(detail['review']);
     return ListenableBuilder(
       listenable: ai,
-      builder: (context, _) => AlertDialog(
+      builder: (context, _) => RyhzeAlertDialog(
         title: Text(ai.allowed ? aiText(report['gpuName']) : 'AI access ended'),
         content: SizedBox(
           width: 620,

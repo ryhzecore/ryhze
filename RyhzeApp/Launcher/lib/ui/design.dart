@@ -1,5 +1,7 @@
 import 'dart:ui';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:real_liquid_glass/real_liquid_glass.dart';
 import '../core/state.dart';
 import 'controller_focus.dart';
 
@@ -10,6 +12,41 @@ const ryhzeEase = Cubic(.22, .68, .18, 1);
 const surfaceTransitionMilliseconds = 280;
 const surfaceRadius = 32.0;
 const popoverRadius = surfaceRadius;
+
+/// The native effect is intentionally limited to iOS. The package also
+/// supports macOS, but Ryhze's existing macOS and other platform visuals must
+/// stay unchanged.
+bool get usesIOSLiquidGlass =>
+    !kIsWeb && defaultTargetPlatform == TargetPlatform.iOS;
+
+Widget _iosGlassButtonLayer(
+  BuildContext context,
+  Set<WidgetState> states,
+  Widget? child,
+) => LiquidGlassContainer(
+  shape: const LiquidGlassShape.capsule(),
+  style: LiquidGlassStyle.regular,
+  interactive: false,
+  child: child,
+);
+
+Widget _iosPrimaryGlassButtonLayer(
+  BuildContext context,
+  Set<WidgetState> states,
+  Widget? child,
+) => LiquidGlassContainer(
+  shape: const LiquidGlassShape.capsule(),
+  style: LiquidGlassStyle.regular,
+  tint: const Color(0x405500ff),
+  interactive: false,
+  child: child,
+);
+
+Widget _buttonLayerPassthrough(
+  BuildContext context,
+  Set<WidgetState> states,
+  Widget? child,
+) => child ?? const SizedBox.shrink();
 
 /// A status surface, never an action: real progress or a slow unknown-duration fill.
 class StatusProgress extends StatefulWidget {
@@ -191,95 +228,140 @@ TextStyle heading(double size) => TextStyle(
   height: 1.04,
   color: const Color(0xfff8f7fa),
 );
-ThemeData ryhzeTheme() => ThemeData(
-  brightness: Brightness.dark,
-  scaffoldBackgroundColor: canvas,
-  hoverColor: Colors.transparent,
-  highlightColor: Colors.transparent,
-  focusColor: Colors.transparent,
-  fontFamily: 'Inter',
-  visualDensity: VisualDensity.standard,
-  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-  colorScheme: const ColorScheme.dark(
-    primary: Color(0xfff9f8fb),
-    onPrimary: Color(0xff19131f),
-    secondary: Color(0xffbf70ff),
-    surface: Color(0xff17171d),
-  ),
-  textTheme: const TextTheme(
-    bodyMedium: TextStyle(fontSize: 14, height: 1.75, color: Color(0xffbdbbc8)),
-  ),
-  tooltipTheme: const TooltipThemeData(
-    waitDuration: Duration(milliseconds: 600),
-  ),
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.transparent,
-    surfaceTintColor: Colors.transparent,
-    elevation: 0,
-    scrolledUnderElevation: 0,
-    centerTitle: false,
-    foregroundColor: Color(0xfff8f7fa),
-  ),
-  filledButtonTheme: const FilledButtonThemeData(
-    style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
-  ),
-  outlinedButtonTheme: const OutlinedButtonThemeData(
-    style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
-  ),
-  elevatedButtonTheme: const ElevatedButtonThemeData(
-    style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
-  ),
-  segmentedButtonTheme: const SegmentedButtonThemeData(
-    style: ButtonStyle(shape: WidgetStatePropertyAll(StadiumBorder())),
-  ),
-  popupMenuTheme: PopupMenuThemeData(
-    position: PopupMenuPosition.over,
-    color: const Color(0xff202026),
-    surfaceTintColor: Colors.transparent,
-    shape: RoundedSuperellipseBorder(
-      borderRadius: BorderRadius.circular(popoverRadius),
-      side: const BorderSide(color: Color(0x22ffffff)),
+ThemeData ryhzeTheme() {
+  final iosGlass = usesIOSLiquidGlass;
+  final glassButtonStyle = ButtonStyle(
+    shape: const WidgetStatePropertyAll(StadiumBorder()),
+    backgroundColor: iosGlass
+        ? const WidgetStatePropertyAll(Colors.transparent)
+        : null,
+    side: iosGlass
+        ? const WidgetStatePropertyAll(BorderSide(color: Color(0x38ffffff)))
+        : null,
+    surfaceTintColor: iosGlass
+        ? const WidgetStatePropertyAll(Colors.transparent)
+        : null,
+    backgroundBuilder: iosGlass ? _iosGlassButtonLayer : null,
+  );
+  return ThemeData(
+    brightness: Brightness.dark,
+    scaffoldBackgroundColor: canvas,
+    hoverColor: Colors.transparent,
+    highlightColor: Colors.transparent,
+    focusColor: Colors.transparent,
+    fontFamily: 'Inter',
+    visualDensity: VisualDensity.standard,
+    materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    colorScheme: const ColorScheme.dark(
+      primary: Color(0xfff9f8fb),
+      onPrimary: Color(0xff19131f),
+      secondary: Color(0xffbf70ff),
+      surface: Color(0xff17171d),
     ),
-  ),
-  dialogTheme: DialogThemeData(
-    shape: RoundedSuperellipseBorder(
-      borderRadius: BorderRadius.circular(surfaceRadius),
-      side: const BorderSide(color: Color(0x22ffffff)),
-    ),
-  ),
-  textButtonTheme: TextButtonThemeData(
-    style: ButtonStyle(
-      foregroundColor: WidgetStateProperty.resolveWith(
-        (s) => s.contains(WidgetState.disabled)
-            ? const Color(0xff77737e)
-            : s.contains(WidgetState.hovered) || s.contains(WidgetState.focused)
-            ? Colors.white
-            : const Color(0xffdad8e2),
+    textTheme: const TextTheme(
+      bodyMedium: TextStyle(
+        fontSize: 14,
+        height: 1.75,
+        color: Color(0xffbdbbc8),
       ),
-      overlayColor: const WidgetStatePropertyAll(Color(0x0cffffff)),
-      shape: const WidgetStatePropertyAll(StadiumBorder()),
     ),
-  ),
-  inputDecorationTheme: InputDecorationTheme(
-    filled: true,
-    fillColor: const Color(0x07ffffff),
-    contentPadding: const EdgeInsets.all(16),
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(popoverRadius),
-      borderSide: const BorderSide(color: Color(0x28ffffff)),
+    tooltipTheme: const TooltipThemeData(
+      waitDuration: Duration(milliseconds: 600),
     ),
-    enabledBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(popoverRadius),
-      borderSide: const BorderSide(color: Color(0x28ffffff)),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+      centerTitle: false,
+      foregroundColor: Color(0xfff8f7fa),
     ),
-    focusedBorder: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(popoverRadius),
-      borderSide: const BorderSide(color: Color(0xffd3c6ec)),
+    filledButtonTheme: FilledButtonThemeData(
+      style: glassButtonStyle.copyWith(
+        foregroundColor: iosGlass
+            ? const WidgetStatePropertyAll(Colors.white)
+            : null,
+        backgroundBuilder: iosGlass ? _iosPrimaryGlassButtonLayer : null,
+      ),
     ),
-  ),
-  dividerColor: const Color(0x20ffffff),
-  splashFactory: NoSplash.splashFactory,
-);
+    outlinedButtonTheme: OutlinedButtonThemeData(style: glassButtonStyle),
+    elevatedButtonTheme: ElevatedButtonThemeData(
+      style: glassButtonStyle.copyWith(
+        elevation: iosGlass ? const WidgetStatePropertyAll(0) : null,
+      ),
+    ),
+    segmentedButtonTheme: SegmentedButtonThemeData(style: glassButtonStyle),
+    popupMenuTheme: PopupMenuThemeData(
+      position: PopupMenuPosition.over,
+      color: iosGlass ? const Color(0xd9202026) : const Color(0xff202026),
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedSuperellipseBorder(
+        borderRadius: BorderRadius.circular(popoverRadius),
+        side: const BorderSide(color: Color(0x22ffffff)),
+      ),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: iosGlass ? const Color(0xd91b1b21) : null,
+      surfaceTintColor: iosGlass ? Colors.transparent : null,
+      shape: RoundedSuperellipseBorder(
+        borderRadius: BorderRadius.circular(surfaceRadius),
+        side: const BorderSide(color: Color(0x22ffffff)),
+      ),
+    ),
+    textButtonTheme: TextButtonThemeData(
+      style: ButtonStyle(
+        foregroundColor: WidgetStateProperty.resolveWith(
+          (s) => s.contains(WidgetState.disabled)
+              ? const Color(0xff77737e)
+              : s.contains(WidgetState.hovered) ||
+                    s.contains(WidgetState.focused)
+              ? Colors.white
+              : const Color(0xffdad8e2),
+        ),
+        backgroundColor: iosGlass
+            ? const WidgetStatePropertyAll(Colors.transparent)
+            : null,
+        overlayColor: const WidgetStatePropertyAll(Color(0x0cffffff)),
+        side: iosGlass
+            ? const WidgetStatePropertyAll(BorderSide(color: Color(0x32ffffff)))
+            : null,
+        backgroundBuilder: iosGlass ? _iosGlassButtonLayer : null,
+        shape: const WidgetStatePropertyAll(StadiumBorder()),
+      ),
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: iosGlass
+          ? const ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(Colors.transparent),
+              side: WidgetStatePropertyAll(
+                BorderSide(color: Color(0x32ffffff)),
+              ),
+              shape: WidgetStatePropertyAll(CircleBorder()),
+              backgroundBuilder: _iosGlassButtonLayer,
+            )
+          : null,
+    ),
+    inputDecorationTheme: InputDecorationTheme(
+      filled: true,
+      fillColor: iosGlass ? const Color(0x14ffffff) : const Color(0x07ffffff),
+      contentPadding: const EdgeInsets.all(16),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(popoverRadius),
+        borderSide: const BorderSide(color: Color(0x28ffffff)),
+      ),
+      enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(popoverRadius),
+        borderSide: const BorderSide(color: Color(0x28ffffff)),
+      ),
+      focusedBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(popoverRadius),
+        borderSide: const BorderSide(color: Color(0xffd3c6ec)),
+      ),
+    ),
+    dividerColor: const Color(0x20ffffff),
+    splashFactory: NoSplash.splashFactory,
+  );
+}
 
 class MotionSettings extends InheritedWidget {
   final bool reduced;
@@ -326,34 +408,122 @@ class Glass extends StatelessWidget {
     this.frameVisible = true,
   });
   @override
-  Widget build(BuildContext context) => ClipRSuperellipse(
-    borderRadius: BorderRadius.circular(radius),
-    child: BackdropFilter(
-      enabled: frameVisible,
-      filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
-      child: Container(
+  Widget build(BuildContext context) {
+    final content = Material(type: MaterialType.transparency, child: child);
+    if (usesIOSLiquidGlass && frameVisible) {
+      return LiquidGlassContainer(
+        shape: LiquidGlassShape.roundedRectangle(radius),
+        style: LiquidGlassStyle.regular,
         padding: padding,
-        decoration: ShapeDecoration(
-          shape: RoundedSuperellipseBorder(
-            borderRadius: BorderRadius.circular(radius),
-            side: BorderSide(
-              color: frameVisible
-                  ? const Color(0x22ffffff)
-                  : Colors.transparent,
+        // Flutter keeps ownership of hit testing and semantics. The native
+        // view remains a bounded, non-intercepting material behind the child.
+        interactive: false,
+        child: content,
+      );
+    }
+    return ClipRSuperellipse(
+      borderRadius: BorderRadius.circular(radius),
+      child: BackdropFilter(
+        enabled: frameVisible,
+        filter: ImageFilter.blur(sigmaX: 24, sigmaY: 24),
+        child: Container(
+          padding: padding,
+          decoration: ShapeDecoration(
+            shape: RoundedSuperellipseBorder(
+              borderRadius: BorderRadius.circular(radius),
+              side: BorderSide(
+                color: frameVisible
+                    ? const Color(0x22ffffff)
+                    : Colors.transparent,
+              ),
+            ),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: frameVisible
+                  ? const [Color(0xe027272e), Color(0xe01a1a20)]
+                  : const [Colors.transparent, Colors.transparent],
             ),
           ),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: frameVisible
-                ? const [Color(0xe027272e), Color(0xe01a1a20)]
-                : const [Colors.transparent, Colors.transparent],
+          child: content,
+        ),
+      ),
+    );
+  }
+}
+
+/// Adds native glass to shared chrome on iOS while returning the original
+/// widget unchanged everywhere else.
+class IOSGlassChrome extends StatelessWidget {
+  final Widget child;
+  final double radius;
+  const IOSGlassChrome({
+    super.key,
+    required this.child,
+    this.radius = surfaceRadius,
+  });
+
+  @override
+  Widget build(BuildContext context) =>
+      usesIOSLiquidGlass ? Glass(radius: radius, child: child) : child;
+}
+
+/// Alert dialogs keep the exact Material implementation off iOS and use one
+/// bounded native glass surface for their frame on iOS.
+class RyhzeAlertDialog extends StatelessWidget {
+  final Widget? title;
+  final Widget? content;
+  final List<Widget>? actions;
+  const RyhzeAlertDialog({super.key, this.title, this.content, this.actions});
+
+  @override
+  Widget build(BuildContext context) {
+    if (!usesIOSLiquidGlass) {
+      return AlertDialog(title: title, content: content, actions: actions);
+    }
+    final theme = Theme.of(context);
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      surfaceTintColor: Colors.transparent,
+      shadowColor: Colors.transparent,
+      child: Glass(
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 720),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (title != null)
+                DefaultTextStyle(
+                  style: theme.textTheme.headlineSmall!,
+                  child: title!,
+                ),
+              if (title != null && content != null) const SizedBox(height: 16),
+              if (content != null)
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: DefaultTextStyle(
+                    style: theme.textTheme.bodyMedium!,
+                    child: content!,
+                  ),
+                ),
+              if (actions case final actions? when actions.isNotEmpty) ...[
+                const SizedBox(height: 20),
+                OverflowBar(
+                  alignment: MainAxisAlignment.end,
+                  spacing: 8,
+                  overflowAlignment: OverflowBarAlignment.end,
+                  overflowSpacing: 8,
+                  children: actions,
+                ),
+              ],
+            ],
           ),
         ),
-        child: Material(type: MaterialType.transparency, child: child),
       ),
-    ),
-  );
+    );
+  }
 }
 
 class Pill extends StatefulWidget {
@@ -377,6 +547,24 @@ class Pill extends StatefulWidget {
   });
   @override
   State<Pill> createState() => _PillState();
+}
+
+class _IOSGlassPill extends StatelessWidget {
+  final Widget child;
+  final bool primary;
+  const _IOSGlassPill({required this.child, required this.primary});
+
+  @override
+  Widget build(BuildContext context) {
+    if (!usesIOSLiquidGlass) return child;
+    return LiquidGlassContainer(
+      shape: const LiquidGlassShape.capsule(),
+      style: LiquidGlassStyle.regular,
+      tint: primary ? const Color(0x405500ff) : null,
+      interactive: false,
+      child: child,
+    );
+  }
 }
 
 class _PillState extends State<Pill> {
@@ -446,97 +634,110 @@ class _PillState extends State<Pill> {
                     ]
                   : const [],
             ),
-            child: Tooltip(
-              message: widget.iconOnly ? widget.label : '',
-              child: Semantics(
-                button: true,
-                label: widget.iconOnly ? widget.label : null,
-                child: TextButton(
-                  statesController: states,
-                  onPressed: widget.onPressed,
-                  style: ButtonStyle(
-                    visualDensity: VisualDensity.standard,
-                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    alignment: Alignment.center,
-                    animationDuration: duration,
-                    overlayColor: const WidgetStatePropertyAll(
-                      Colors.transparent,
-                    ),
-                    fixedSize: widget.iconOnly
-                        ? WidgetStatePropertyAll(Size.square(widget.height))
-                        : null,
-                    minimumSize: WidgetStatePropertyAll(
-                      Size(widget.iconOnly ? widget.height : 0, widget.height),
-                    ),
-                    padding: WidgetStatePropertyAll(
-                      widget.iconOnly
-                          ? EdgeInsets.zero
-                          : const EdgeInsets.symmetric(
-                              horizontal: 21,
-                              vertical: 13,
-                            ),
-                    ),
-                    foregroundColor: WidgetStatePropertyAll(
-                      !enabled
-                          ? const Color(0xff77737e)
-                          : widget.primary
-                          ? const Color(0xff19131f)
-                          : const Color(0xfff8f7fa),
-                    ),
-                    backgroundColor: WidgetStateProperty.resolveWith(
-                      (states) => widget.primary
-                          ? (hover
-                                ? const Color(0xffe9e1f8)
-                                : const Color(0xfff9f8fb))
-                          : hover
-                          ? const Color(0x16ffffff)
-                          : widget.quiet
-                          ? Colors.transparent
-                          : const Color(0x08ffffff),
-                    ),
-                    side: WidgetStateProperty.resolveWith(
-                      (states) => BorderSide(
-                        width: focus && !controller && widget.backStyle ? 2 : 1,
-                        color: focus && !controller
-                            ? Colors.white
-                            : hover
-                            ? const Color(0x60ffffff)
+            child: _IOSGlassPill(
+              primary: widget.primary,
+              child: Tooltip(
+                message: widget.iconOnly ? widget.label : '',
+                child: Semantics(
+                  button: true,
+                  label: widget.iconOnly ? widget.label : null,
+                  child: TextButton(
+                    statesController: states,
+                    onPressed: widget.onPressed,
+                    style: ButtonStyle(
+                      visualDensity: VisualDensity.standard,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      alignment: Alignment.center,
+                      animationDuration: duration,
+                      overlayColor: const WidgetStatePropertyAll(
+                        Colors.transparent,
+                      ),
+                      backgroundBuilder: usesIOSLiquidGlass
+                          ? _buttonLayerPassthrough
+                          : null,
+                      fixedSize: widget.iconOnly
+                          ? WidgetStatePropertyAll(Size.square(widget.height))
+                          : null,
+                      minimumSize: WidgetStatePropertyAll(
+                        Size(
+                          widget.iconOnly ? widget.height : 0,
+                          widget.height,
+                        ),
+                      ),
+                      padding: WidgetStatePropertyAll(
+                        widget.iconOnly
+                            ? EdgeInsets.zero
+                            : const EdgeInsets.symmetric(
+                                horizontal: 21,
+                                vertical: 13,
+                              ),
+                      ),
+                      foregroundColor: WidgetStatePropertyAll(
+                        !enabled
+                            ? const Color(0xff77737e)
+                            : widget.primary && !usesIOSLiquidGlass
+                            ? const Color(0xff19131f)
+                            : const Color(0xfff8f7fa),
+                      ),
+                      backgroundColor: WidgetStateProperty.resolveWith(
+                        (states) => usesIOSLiquidGlass
+                            ? Colors.transparent
                             : widget.primary
-                            ? const Color(0xfff9f8fb)
+                            ? (hover
+                                  ? const Color(0xffe9e1f8)
+                                  : const Color(0xfff9f8fb))
+                            : hover
+                            ? const Color(0x16ffffff)
                             : widget.quiet
                             ? Colors.transparent
-                            : const Color(0x26ffffff),
+                            : const Color(0x08ffffff),
                       ),
+                      side: WidgetStateProperty.resolveWith(
+                        (states) => BorderSide(
+                          width: focus && !controller && widget.backStyle
+                              ? 2
+                              : 1,
+                          color: focus && !controller
+                              ? Colors.white
+                              : hover
+                              ? const Color(0x60ffffff)
+                              : widget.primary && !usesIOSLiquidGlass
+                              ? const Color(0xfff9f8fb)
+                              : widget.quiet
+                              ? Colors.transparent
+                              : const Color(0x26ffffff),
+                        ),
+                      ),
+                      shape: const WidgetStatePropertyAll(StadiumBorder()),
                     ),
-                    shape: const WidgetStatePropertyAll(StadiumBorder()),
-                  ),
-                  child: widget.iconOnly
-                      ? Icon(widget.icon, size: 20)
-                      : Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            if (widget.icon != null && widget.iconFirst) ...[
-                              Icon(widget.icon, size: 19),
-                              const SizedBox(width: 10),
-                            ],
-                            Flexible(
-                              child: Text(
-                                widget.label,
-                                style: const TextStyle(
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.3,
-                                  leadingDistribution:
-                                      TextLeadingDistribution.even,
+                    child: widget.iconOnly
+                        ? Icon(widget.icon, size: 20)
+                        : Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              if (widget.icon != null && widget.iconFirst) ...[
+                                Icon(widget.icon, size: 19),
+                                const SizedBox(width: 10),
+                              ],
+                              Flexible(
+                                child: Text(
+                                  widget.label,
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.3,
+                                    leadingDistribution:
+                                        TextLeadingDistribution.even,
+                                  ),
                                 ),
                               ),
-                            ),
-                            if (widget.icon != null && !widget.iconFirst) ...[
-                              const SizedBox(width: 10),
-                              Icon(widget.icon, size: 19),
+                              if (widget.icon != null && !widget.iconFirst) ...[
+                                const SizedBox(width: 10),
+                                Icon(widget.icon, size: 19),
+                              ],
                             ],
-                          ],
-                        ),
+                          ),
+                  ),
                 ),
               ),
             ),

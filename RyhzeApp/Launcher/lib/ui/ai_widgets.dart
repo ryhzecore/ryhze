@@ -7,14 +7,22 @@ class AiCard extends StatelessWidget {
   final Widget child;
   const AiCard({super.key, required this.child});
   @override
-  Widget build(BuildContext context) => Container(
-    padding: const EdgeInsets.all(20),
-    decoration: BoxDecoration(
-      color: const Color(0xff111115),
-      borderRadius: BorderRadius.circular(surfaceRadius),
-      border: Border.all(color: const Color(0x26ffffff)),
+  Widget build(BuildContext context) => IOSGlassChrome(
+    child: Container(
+      padding: const EdgeInsets.all(20),
+      decoration: BoxDecoration(
+        color: usesIOSLiquidGlass
+            ? Colors.transparent
+            : const Color(0xff111115),
+        borderRadius: BorderRadius.circular(surfaceRadius),
+        border: Border.all(
+          color: usesIOSLiquidGlass
+              ? Colors.transparent
+              : const Color(0x26ffffff),
+        ),
+      ),
+      child: Material(type: MaterialType.transparency, child: child),
     ),
-    child: Material(type: MaterialType.transparency, child: child),
   );
 }
 
@@ -142,7 +150,7 @@ class _AiEditorState extends State<_AiEditor> {
   @override
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: widget.ai,
-    builder: (context, _) => AlertDialog(
+    builder: (context, _) => RyhzeAlertDialog(
       title: Text(widget.ai.allowed ? widget.title : 'AI access ended'),
       content: SizedBox(
         width: 560,

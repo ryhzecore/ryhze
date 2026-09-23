@@ -184,7 +184,7 @@ class _RyhzeDropdownState<T> extends State<RyhzeDropdown<T>> {
         ],
       ),
     );
-    if (widget.fullWidthMenu) {
+    if (widget.fullWidthMenu || usesIOSLiquidGlass) {
       return Semantics(
         button: true,
         enabled: onChanged != null,

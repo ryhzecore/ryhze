@@ -84,7 +84,7 @@ class _PersonalLibraryState extends State<PersonalLibrary> {
     var input = name ?? '';
     final result = await showDialog<String>(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (context) => RyhzeAlertDialog(
         title: Text(id == null ? 'New collection' : 'Rename collection'),
         content: TextFormField(
           initialValue: input,
@@ -415,7 +415,7 @@ class _PersonalLibraryState extends State<PersonalLibrary> {
                   onPressed: () => attempt(context, () async {
                     final yes = await showDialog<bool>(
                       context: context,
-                      builder: (c) => AlertDialog(
+                      builder: (c) => RyhzeAlertDialog(
                         title: const Text('Delete collection?'),
                         content: const Text(
                           'Titles and installed files will remain available.',

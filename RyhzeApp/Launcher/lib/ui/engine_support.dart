@@ -44,7 +44,7 @@ Future<bool> confirmUnsupportedEngineRemoval(
     context: context,
     builder: (dialog) => ListenableBuilder(
       listenable: state,
-      builder: (_, _) => AlertDialog(
+      builder: (_, _) => RyhzeAlertDialog(
         title: Text(
           allowed()
               ? 'Old version is no longer supported'
