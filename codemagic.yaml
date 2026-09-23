@@ -34,6 +34,35 @@ workflows:
       - RyhzeApp/Launcher/build/ios-test-results/*.xcresult
       - RyhzeApp/Launcher/build/ios-test-results/*.log
 
+  ios-glass-capture:
+    name: Ryhze iOS native glass capture
+    working_directory: RyhzeApp/Launcher
+    max_build_duration: 30
+    instance_type: mac_mini_m2
+    environment:
+      flutter: 3.47.2
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Capture actual iPhone simulator display
+        script: |
+          set -euo pipefail
+          flutter config --enable-swift-package-manager
+          flutter pub get
+          flutter build ios --simulator --debug
+          SIM_ID="$(xcrun simctl list devices available -j | python3 -c 'import json,sys; print(next(d["udid"] for r,group in json.load(sys.stdin)["devices"].items() if "iOS" in r for d in group if d.get("isAvailable") and "iPhone" in d["name"]))')"
+          if ! xcrun simctl list devices booted | grep -Fq "$SIM_ID"; then
+            xcrun simctl boot "$SIM_ID"
+          fi
+          python3 ../Build/run-bounded.py 300 xcrun simctl bootstatus "$SIM_ID" -b
+          xcrun simctl install "$SIM_ID" build/ios/iphonesimulator/Runner.app
+          xcrun simctl launch "$SIM_ID" com.ryhze.ryhze
+          sleep 8
+          mkdir -p "$CM_EXPORT_DIR"
+          xcrun simctl io "$SIM_ID" screenshot "$CM_EXPORT_DIR/ios-glass-home.png"
+    artifacts:
+      - $CM_EXPORT_DIR/ios-glass-home.png
+
   ios-testflight:
     name: Ryhze TestFlight release
     working_directory: RyhzeApp/Launcher
