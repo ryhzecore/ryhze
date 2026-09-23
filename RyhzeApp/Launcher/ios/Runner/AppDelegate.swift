@@ -18,7 +18,10 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
-    let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "RyhzeWebAuth")
+    guard let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "RyhzeWebAuth") else {
+      assertionFailure("Ryhze website sign-in registrar is unavailable")
+      return
+    }
     let channel = FlutterMethodChannel(
       name: "ryhze/web-auth",
       binaryMessenger: registrar.messenger()
