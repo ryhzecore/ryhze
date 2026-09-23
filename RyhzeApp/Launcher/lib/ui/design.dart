@@ -917,6 +917,10 @@ class _BrowseTabsState extends State<BrowseTabs> {
                             }
                           },
                           style: ButtonStyle(
+                            // The track already owns the native glass layer.
+                            backgroundBuilder: usesIOSLiquidGlass
+                                ? _buttonLayerPassthrough
+                                : null,
                             animationDuration: Duration.zero,
                             padding: const WidgetStatePropertyAll(
                               EdgeInsets.zero,
