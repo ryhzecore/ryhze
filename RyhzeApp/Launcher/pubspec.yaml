@@ -35,7 +35,14 @@ flutter:
     - assets/brand/
     - assets/audio/
     - assets/art/
-    - assets/update/
+    - path: assets/update/update-linux.py
+      platforms: [linux]
+    - path: assets/update/update-windows.ps1
+      platforms: [windows]
+    - path: assets/update/install-race-version.ps1
+      platforms: [windows]
+    - path: assets/update/uninstall-race-version.ps1
+      platforms: [windows]
     - assets/catalog.json
     - assets/fonts/Inter-LICENSE.txt
     - assets/fonts/SpaceGrotesk-LICENSE.txt

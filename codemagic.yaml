@@ -111,6 +111,7 @@ workflows:
             echo "Expected one signed iPhone package; found ${#packages[@]}." >&2
             exit 1
           fi
+          python3 ../Build/verify-ios-package.py "${packages[0]}"
           mkdir -p "$CM_EXPORT_DIR"
           cp "${packages[0]}" "$CM_EXPORT_DIR/"
           test -s "$CM_EXPORT_DIR/$(basename "${packages[0]}")"
