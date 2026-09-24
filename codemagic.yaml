@@ -31,8 +31,8 @@ workflows:
       - RyhzeApp/Launcher/build/ios/iphonesimulator/*.app
       - RyhzeApp/Launcher/build/macos/Build/Products/Release/*.app
       - RyhzeApp/Launcher/.private/qa/*.png
-      - RyhzeApp/Launcher/build/ios-test-results/*.xcresult
-      - RyhzeApp/Launcher/build/ios-test-results/*.log
+      - $CM_BUILD_DIR/RyhzeApp/Launcher/build/ios-test-results/*.xcresult
+      - $CM_BUILD_DIR/RyhzeApp/Launcher/build/ios-test-results/*.log
 
   ios-glass-capture:
     name: Ryhze iOS native glass capture
@@ -105,11 +105,20 @@ workflows:
           set -euo pipefail
           : "${BUILD_NUMBER:?Codemagic workflow build number is required}"
           flutter build ipa --release --build-number="$((BUILD_NUMBER + 33))" --export-options-plist="$HOME/export_options.plist"
+          shopt -s nullglob
+          packages=(build/ios/ipa/*.ipa)
+          if [[ ${#packages[@]} -ne 1 ]]; then
+            echo "Expected one signed iPhone package; found ${#packages[@]}." >&2
+            exit 1
+          fi
+          mkdir -p "$CM_EXPORT_DIR"
+          cp "${packages[0]}" "$CM_EXPORT_DIR/"
+          test -s "$CM_EXPORT_DIR/$(basename "${packages[0]}")"
     artifacts:
-      - RyhzeApp/Launcher/build/ios/ipa/*.ipa
-      - RyhzeApp/Launcher/build/ios/archive/*.xcarchive
-      - RyhzeApp/Launcher/build/ios-test-results/*.xcresult
-      - RyhzeApp/Launcher/build/ios-test-results/*.log
+      - $CM_EXPORT_DIR/*.ipa
+      - $CM_BUILD_DIR/RyhzeApp/Launcher/build/ios/archive/*.xcarchive
+      - $CM_BUILD_DIR/RyhzeApp/Launcher/build/ios-test-results/*.xcresult
+      - $CM_BUILD_DIR/RyhzeApp/Launcher/build/ios-test-results/*.log
     publishing:
       app_store_connect:
         auth: integration
